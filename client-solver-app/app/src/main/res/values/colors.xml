@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="burgundy">#FF800020</color>
+    <color name="burgundy_dark">#FF5C0016</color>
+    <color name="burgundy_deep">#FF1B1216</color>
+    <color name="gold">#FFD4AF37</color>
+    <color name="cream">#FFF5EFE0</color>
+    <color name="muted">#FFB8A89A</color>
+    <color name="terminal_bg">#FF0D0A0C</color>
+    <color name="stop_bg">#FF4A1414</color>
+    <color name="stop_text">#FFFF9E8A</color>
+    <color name="gold_dim">#66D4AF37</color>
+</resources>

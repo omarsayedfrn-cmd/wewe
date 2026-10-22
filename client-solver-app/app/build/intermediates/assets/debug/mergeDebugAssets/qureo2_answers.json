@@ -1,0 +1,892 @@
+{
+ "511001": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511001010,
+    "qtype": "choice",
+    "choice_id": 5110010101
+   },
+   {
+    "qid": 511001020,
+    "qtype": "description",
+    "answer_code": "print(\"Good morning\")"
+   },
+   {
+    "qid": 511001030,
+    "qtype": "description",
+    "answer_code": "print(\"programming\")"
+   },
+   {
+    "qid": 511001040,
+    "qtype": "description",
+    "answer_code": "print(\"hello\")"
+   },
+   {
+    "qid": 511001050,
+    "qtype": "choice",
+    "choice_id": 5110010501
+   },
+   {
+    "qid": 511001060,
+    "qtype": "description",
+    "answer_code": "print(\"Hello\")\nprint(\"My name is\")\n#print(\"Rick\")\nprint(\"Cody\")"
+   }
+  ]
+ },
+ "511002": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511002010,
+    "qtype": "choice",
+    "choice_id": 5110020101
+   },
+   {
+    "qid": 511002020,
+    "qtype": "choice",
+    "choice_id": 5110020201
+   },
+   {
+    "qid": 511002030,
+    "qtype": "description",
+    "answer_code": "print(19+40)"
+   },
+   {
+    "qid": 511002040,
+    "qtype": "description",
+    "answer_code": "print(7-2)"
+   },
+   {
+    "qid": 511002050,
+    "qtype": "description",
+    "answer_code": "print(15/5)"
+   },
+   {
+    "qid": 511002060,
+    "qtype": "choice",
+    "choice_id": 5110020601
+   },
+   {
+    "qid": 511002070,
+    "qtype": "description",
+    "answer_code": "print(\"The answer is \" + str(2 * 5) + \".\")"
+   },
+   {
+    "qid": 511002080,
+    "qtype": "choice",
+    "choice_id": 5110020801
+   },
+   {
+    "qid": 511002090,
+    "qtype": "choice",
+    "choice_id": 5110020901
+   }
+  ]
+ },
+ "511003": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511003010,
+    "qtype": "choice",
+    "choice_id": 5110030101
+   },
+   {
+    "qid": 511003020,
+    "qtype": "choice",
+    "choice_id": 5110030201
+   },
+   {
+    "qid": 511003030,
+    "qtype": "description",
+    "answer_code": "number = 0"
+   },
+   {
+    "qid": 511003040,
+    "qtype": "description",
+    "answer_code": "number = 0\nnumber = 100"
+   },
+   {
+    "qid": 511003050,
+    "qtype": "description",
+    "answer_code": "number = 0\nnumber = 10\nprint(number)"
+   },
+   {
+    "qid": 511003060,
+    "qtype": "description",
+    "answer_code": "number = 3\nnumber = number + 10\nprint(number)"
+   }
+  ]
+ },
+ "511004": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511004010,
+    "qtype": "choice",
+    "choice_id": 5110040101
+   },
+   {
+    "qid": 511004020,
+    "qtype": "description",
+    "answer_code": "print(\"hello\")"
+   },
+   {
+    "qid": 511004030,
+    "qtype": "description",
+    "answer_code": "#Leave this text\nprint(\"Make the first line a comment\")"
+   },
+   {
+    "qid": 511004040,
+    "qtype": "choice",
+    "choice_id": 5110040401
+   },
+   {
+    "qid": 511004050,
+    "qtype": "choice",
+    "choice_id": 5110040501
+   },
+   {
+    "qid": 511004060,
+    "qtype": "description",
+    "answer_code": "print(\"The answer is \" + str(3 * 4))"
+   },
+   {
+    "qid": 511004070,
+    "qtype": "choice",
+    "choice_id": 5110040701
+   },
+   {
+    "qid": 511004080,
+    "qtype": "description",
+    "answer_code": "num = 5\nprint(num)"
+   }
+  ]
+ },
+ "511005": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511005010,
+    "qtype": "choice",
+    "choice_id": 5110050101
+   },
+   {
+    "qid": 511005020,
+    "qtype": "choice",
+    "choice_id": 5110050201
+   },
+   {
+    "qid": 511005030,
+    "qtype": "description",
+    "answer_code": "num = 100\nif num == 100:\n    print(\"Correct\")"
+   },
+   {
+    "qid": 511005040,
+    "qtype": "choice",
+    "choice_id": 5110050401
+   }
+  ]
+ },
+ "511006": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511006010,
+    "qtype": "choice",
+    "choice_id": 5110060101
+   },
+   {
+    "qid": 511006020,
+    "qtype": "description",
+    "answer_code": "num = 5\nif num == 10:\n    print(\"Win\")\nelse:\n    print(\"No prize\")"
+   },
+   {
+    "qid": 511006030,
+    "qtype": "choice",
+    "choice_id": 5110060301
+   },
+   {
+    "qid": 511006040,
+    "qtype": "choice",
+    "choice_id": 5110060401
+   },
+   {
+    "qid": 511006050,
+    "qtype": "description",
+    "answer_code": "score = 80\nif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")"
+   }
+  ]
+ },
+ "511007": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511007010,
+    "qtype": "choice",
+    "choice_id": 5110070101
+   },
+   {
+    "qid": 511007020,
+    "qtype": "description",
+    "answer_code": "num=2\nif num == 1:\n    print(\"It's 1\")\nelif num == 2:\n    print(\"It's 2\")"
+   },
+   {
+    "qid": 511007030,
+    "qtype": "description",
+    "answer_code": "score = 82\nif score == 100:\n    print(\"Perfect score\")\nelif score >= 80:\n    print(\"Pass\")"
+   },
+   {
+    "qid": 511007040,
+    "qtype": "choice",
+    "choice_id": 5110070401
+   },
+   {
+    "qid": 511007050,
+    "qtype": "description",
+    "answer_code": "egg = 5\nif egg == 0:\n    print(\"Out of stock\")\nelif egg <= 3:\n    print(\"Low stock\")\nelse:\n    print(\"In stock\")"
+   }
+  ]
+ },
+ "511008": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511008010,
+    "qtype": "description",
+    "answer_code": "num = 7\nif num == 7:\n    print(\"Win\")"
+   },
+   {
+    "qid": 511008020,
+    "qtype": "choice",
+    "choice_id": 5110080201
+   },
+   {
+    "qid": 511008030,
+    "qtype": "description",
+    "answer_code": "score = 70\nif score >= 60:\n    print(\"Pass\")\nelse:\n    print(\"Fail\")"
+   },
+   {
+    "qid": 511008040,
+    "qtype": "choice",
+    "choice_id": 5110080401
+   },
+   {
+    "qid": 511008050,
+    "qtype": "description",
+    "answer_code": "num = 100\nif num == 100:\n    print(\"Win\")\nelse:\n    print(\"No prize\")"
+   },
+   {
+    "qid": 511008060,
+    "qtype": "choice",
+    "choice_id": 5110080601
+   },
+   {
+    "qid": 511008070,
+    "qtype": "description",
+    "answer_code": "num = 4\nif num <= 3:\n    print(\"It's A\")\nelif num >= 6:\n    print(\"It's B\")\nelse:\n    print(\"It's C\")"
+   }
+  ]
+ },
+ "511009": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511009010,
+    "qtype": "choice",
+    "choice_id": 5110090101
+   },
+   {
+    "qid": 511009020,
+    "qtype": "choice",
+    "choice_id": 5110090201
+   },
+   {
+    "qid": 511009030,
+    "qtype": "choice",
+    "choice_id": 5110090301
+   },
+   {
+    "qid": 511009040,
+    "qtype": "description",
+    "answer_code": "a = 5\nb = 10\n\nif a == 5 or b == 10:\n    print(\"The condition is met\")"
+   },
+   {
+    "qid": 511009050,
+    "qtype": "description",
+    "answer_code": "a = 4\nb = 3\nif a >= 2 and b >= 3:\n    print(\"The condition is met\")"
+   }
+  ]
+ },
+ "511010": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511010010,
+    "qtype": "choice",
+    "choice_id": 5110100101
+   },
+   {
+    "qid": 511010020,
+    "qtype": "choice",
+    "choice_id": 5110100201
+   },
+   {
+    "qid": 511010030,
+    "qtype": "choice",
+    "choice_id": 5110100301
+   },
+   {
+    "qid": 511010040,
+    "qtype": "description",
+    "answer_code": "for i in range(5):\n    print(\"Hello\")"
+   },
+   {
+    "qid": 511010050,
+    "qtype": "description",
+    "answer_code": "for i in range(7):\n    print(\"Hello\")"
+   }
+  ]
+ },
+ "511011": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511011010,
+    "qtype": "choice",
+    "choice_id": 5110110101
+   },
+   {
+    "qid": 511011020,
+    "qtype": "choice",
+    "choice_id": 5110110201
+   },
+   {
+    "qid": 511011030,
+    "qtype": "choice",
+    "choice_id": 5110110301
+   },
+   {
+    "qid": 511011040,
+    "qtype": "choice",
+    "choice_id": 5110110401
+   },
+   {
+    "qid": 511011050,
+    "qtype": "choice",
+    "choice_id": 5110110501
+   },
+   {
+    "qid": 511011060,
+    "qtype": "description",
+    "answer_code": "for i in range(10):\n    print(\"Good morning\")"
+   },
+   {
+    "qid": 511011070,
+    "qtype": "description",
+    "answer_code": "a = 4\nb = 3\nif a >= 2 and b >= 3:\n    print(\"the condition is met\")"
+   },
+   {
+    "qid": 511011080,
+    "qtype": "description",
+    "answer_code": "for i in range(3):\n    print(\"Hello\")"
+   }
+  ]
+ },
+ "511012": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511012010,
+    "qtype": "choice",
+    "choice_id": 5110120101
+   },
+   {
+    "qid": 511012020,
+    "qtype": "choice",
+    "choice_id": 5110120201
+   },
+   {
+    "qid": 511012030,
+    "qtype": "choice",
+    "choice_id": 5110120301
+   },
+   {
+    "qid": 511012040,
+    "qtype": "description",
+    "answer_code": "import math\nprint(round(5.5))\nprint(math.floor(8.8))"
+   },
+   {
+    "qid": 511012050,
+    "qtype": "description",
+    "answer_code": "import random\nif random.random() >= 0.5:\n    print(\"A bright day\")\nelse:\n    print(\"Take it slow and do your best\")"
+   },
+   {
+    "qid": 511012060,
+    "qtype": "description",
+    "answer_code": "print(math.floor(random.random() * 10))"
+   }
+  ]
+ },
+ "511013": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511013010,
+    "qtype": "choice",
+    "choice_id": 5110130101
+   },
+   {
+    "qid": 511013020,
+    "qtype": "choice",
+    "choice_id": 5110130201
+   },
+   {
+    "qid": 511013030,
+    "qtype": "choice",
+    "choice_id": 5110130301
+   },
+   {
+    "qid": 511013040,
+    "qtype": "description",
+    "answer_code": "def calc(num):\n    result = num * 5\n    return result\nprint(calc(3))"
+   },
+   {
+    "qid": 511013050,
+    "qtype": "description",
+    "answer_code": "def calc(num):\n    result = num * 7\n    return result\nprint(calc(10))"
+   }
+  ]
+ },
+ "511014": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511014010,
+    "qtype": "choice",
+    "choice_id": 5110140101
+   },
+   {
+    "qid": 511014020,
+    "qtype": "choice",
+    "choice_id": 5110140201
+   },
+   {
+    "qid": 511014030,
+    "qtype": "choice",
+    "choice_id": 5110140301
+   },
+   {
+    "qid": 511014040,
+    "qtype": "choice",
+    "choice_id": 5110140401
+   },
+   {
+    "qid": 511014050,
+    "qtype": "description",
+    "answer_code": "import math\nimport random\nprint(math.floor(random.random() * 10))"
+   },
+   {
+    "qid": 511014060,
+    "qtype": "choice",
+    "choice_id": 5110140601
+   },
+   {
+    "qid": 511014070,
+    "qtype": "description",
+    "answer_code": "def calc(num):\n    result = num * 7\n    return result\nprint(calc(10))"
+   },
+   {
+    "qid": 511014080,
+    "qtype": "description",
+    "answer_code": "def calc(num):\n    result = num * 5\n    return result\nprint(calc(3))"
+   }
+  ]
+ },
+ "511015": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511015010,
+    "qtype": "description",
+    "answer_code": "num = [5, 10, 15]"
+   },
+   {
+    "qid": 511015020,
+    "qtype": "choice",
+    "choice_id": 5110150201
+   },
+   {
+    "qid": 511015030,
+    "qtype": "description",
+    "answer_code": "num = [5, 10, 15, 20, 25]\nprint(num)"
+   },
+   {
+    "qid": 511015040,
+    "qtype": "choice",
+    "choice_id": 5110150401
+   },
+   {
+    "qid": 511015050,
+    "qtype": "description",
+    "answer_code": "num = [5, 10, 15, 20, 25]\nprint(len(num))"
+   }
+  ]
+ },
+ "511016": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511016010,
+    "qtype": "choice",
+    "choice_id": 5110160101
+   },
+   {
+    "qid": 511016020,
+    "qtype": "choice",
+    "choice_id": 5110160201
+   },
+   {
+    "qid": 511016030,
+    "qtype": "description",
+    "answer_code": "import array\n\nround_array = array.array('i', [1, 2, 3, 4, 5])\nprint(round_array[1])\nprint(round_array[4])"
+   },
+   {
+    "qid": 511016040,
+    "qtype": "choice",
+    "choice_id": 5110160401
+   },
+   {
+    "qid": 511016050,
+    "qtype": "choice",
+    "choice_id": 5110160501
+   }
+  ]
+ },
+ "511017": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511017010,
+    "qtype": "choice",
+    "choice_id": 5110170101
+   },
+   {
+    "qid": 511017020,
+    "qtype": "description",
+    "answer_code": "num = [5, 10, 15, 20, 25]\nprint(num)"
+   },
+   {
+    "qid": 511017030,
+    "qtype": "choice",
+    "choice_id": 5110170301
+   },
+   {
+    "qid": 511017040,
+    "qtype": "choice",
+    "choice_id": 5110170401
+   },
+   {
+    "qid": 511017050,
+    "qtype": "choice",
+    "choice_id": 5110170501
+   },
+   {
+    "qid": 511017060,
+    "qtype": "choice",
+    "choice_id": 5110170601
+   }
+  ]
+ },
+ "511018": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511018010,
+    "qtype": "choice",
+    "choice_id": 5110180101
+   },
+   {
+    "qid": 511018020,
+    "qtype": "choice",
+    "choice_id": 5110180201
+   },
+   {
+    "qid": 511018030,
+    "qtype": "choice",
+    "choice_id": 5110180301
+   },
+   {
+    "qid": 511018040,
+    "qtype": "choice",
+    "choice_id": 5110180401
+   },
+   {
+    "qid": 511018050,
+    "qtype": "choice",
+    "choice_id": 5110180501
+   }
+  ]
+ },
+ "511019": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511019010,
+    "qtype": "choice",
+    "choice_id": 5110190101
+   },
+   {
+    "qid": 511019020,
+    "qtype": "choice",
+    "choice_id": 5110190201
+   },
+   {
+    "qid": 511019030,
+    "qtype": "choice",
+    "choice_id": 5110190301
+   },
+   {
+    "qid": 511019040,
+    "qtype": "description",
+    "answer_code": "import math\nimport random\nprint(math.floor(random.random() * 10))"
+   },
+   {
+    "qid": 511019050,
+    "qtype": "description",
+    "answer_code": "import random\nif random.random() >= 0.7:\n    print(\"Grand prize!\")\nelse:\n    print(\"Consolation prize\")"
+   }
+  ]
+ },
+ "511020": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511020010,
+    "qtype": "choice",
+    "choice_id": 5110200101
+   },
+   {
+    "qid": 511020020,
+    "qtype": "choice",
+    "choice_id": 5110200201
+   },
+   {
+    "qid": 511020030,
+    "qtype": "choice",
+    "choice_id": 5110200301
+   },
+   {
+    "qid": 511020040,
+    "qtype": "choice",
+    "choice_id": 5110200401
+   },
+   {
+    "qid": 511020050,
+    "qtype": "description",
+    "answer_code": "import math\nimport random\nprint(math.floor(random.random() * 10))"
+   },
+   {
+    "qid": 511020060,
+    "qtype": "description",
+    "answer_code": "import random\nif random.random() >= 0.7:\n    print(\"Grand prize!\")\nelse:\n    print(\"Consolation prize\")"
+   }
+  ]
+ },
+ "511021": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511021010,
+    "qtype": "description",
+    "answer_code": "A = 5\nB = 10\nif A > B:\n    print(\"A is bigger\")\nelif A < B:\n    print(\"B is bigger\")"
+   },
+   {
+    "qid": 511021020,
+    "qtype": "choice",
+    "choice_id": 5110210201
+   },
+   {
+    "qid": 511021030,
+    "qtype": "description",
+    "answer_code": "math = 100\nenglish = 100\nif math == 100:\n    print(\"Math is 100 points\")\nif english == 100:\n    print(\"Math and English are 100 points\")"
+   },
+   {
+    "qid": 511021040,
+    "qtype": "description",
+    "answer_code": "for i in range(7):\n    print(\"Good morning\")"
+   },
+   {
+    "qid": 511021050,
+    "qtype": "choice",
+    "choice_id": 5110210501
+   },
+   {
+    "qid": 511021060,
+    "qtype": "choice",
+    "choice_id": 5110210601
+   },
+   {
+    "qid": 511021070,
+    "qtype": "choice",
+    "choice_id": 5110210701
+   },
+   {
+    "qid": 511021080,
+    "qtype": "description",
+    "answer_code": "def divide3(num):\n    result = num / 3\n    return result\nprint(divide3(12345))"
+   },
+   {
+    "qid": 511021090,
+    "qtype": "choice",
+    "choice_id": 5110210901
+   },
+   {
+    "qid": 511021100,
+    "qtype": "description",
+    "answer_code": "def mul(num1, num2):\n    result = num1 * num2\n    return result\nprint(mul(9, 7))"
+   }
+  ]
+ },
+ "511022": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511022010,
+    "qtype": "description",
+    "answer_code": "num = 1\nfor i in range(5):\n    num = num * 7\nprint(num)"
+   },
+   {
+    "qid": 511022020,
+    "qtype": "choice",
+    "choice_id": 5110220201
+   },
+   {
+    "qid": 511022030,
+    "qtype": "description",
+    "answer_code": "num = 5040\nfor i in range(1, 6):\n    num = num / i\nprint(num)"
+   },
+   {
+    "qid": 511022040,
+    "qtype": "description",
+    "answer_code": "mark_list = [48, 55, 74, 85, 63, 57, 91]\nprint(mark_list[5])"
+   },
+   {
+    "qid": 511022050,
+    "qtype": "description",
+    "answer_code": "mark_list = [48, 55, 74, 85, 63, 57, 91]\nprint(len(mark_list))"
+   },
+   {
+    "qid": 511022060,
+    "qtype": "description",
+    "answer_code": "mark_list = [48, 55, 74, 85, 63, 57, 91]\nfor i in range(len(mark_list)):\n    if mark_list[i] >= 85:\n        print(\"85 or above\")"
+   }
+  ]
+ },
+ "511023": {
+  "type": "review",
+  "questions": [
+   {
+    "qid": 511023010,
+    "qtype": "choice",
+    "choice_id": 5110230101
+   },
+   {
+    "qid": 511023020,
+    "qtype": "choice",
+    "choice_id": 5110230201
+   },
+   {
+    "qid": 511023030,
+    "qtype": "choice",
+    "choice_id": 5110230301
+   },
+   {
+    "qid": 511023040,
+    "qtype": "description",
+    "answer_code": "point_list = [2, 5, 8, 11]\nfor point in point_list:\n    print(point)"
+   },
+   {
+    "qid": 511023050,
+    "qtype": "description",
+    "answer_code": "word_list = [\"Good morning\", \"Good night\", \"Hello\"]\nfor word in word_list:\n    print(word)"
+   }
+  ]
+ },
+ "511024": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511024010,
+    "qtype": "choice",
+    "choice_id": 5110240101
+   },
+   {
+    "qid": 511024020,
+    "qtype": "description",
+    "answer_code": "point_list = [2, 5, 8, 11]\nfor point in point_list:\n    print(point)"
+   },
+   {
+    "qid": 511024030,
+    "qtype": "description",
+    "answer_code": "word_list = [\"good morning\", \"good night\", \"hello\"]\nfor word in word_list:\n    print(word)"
+   },
+   {
+    "qid": 511024040,
+    "qtype": "choice",
+    "choice_id": 5110240401
+   },
+   {
+    "qid": 511024050,
+    "qtype": "choice",
+    "choice_id": 5110240501
+   },
+   {
+    "qid": 511024060,
+    "qtype": "description",
+    "answer_code": "weather = \"rainy\"\ntime = \"morning\"\nif weather == \"rainy\":\n    if time == \"morning\":\n        print(\"Let's go to the movie theater\")\n    elif time == \"noon\":\n        print(\"Let's go to the library\")\n    else:\n        print(\"Let's stay home\")\nelse:\n    print(\"Let's go for a walk\")"
+   }
+  ]
+ },
+ "511025": {
+  "type": "test",
+  "questions": [
+   {
+    "qid": 511025010,
+    "qtype": "choice",
+    "choice_id": 5110250101
+   },
+   {
+    "qid": 511025020,
+    "qtype": "description",
+    "answer_code": "def calculation3(a, b, c):\n    result = a * b * c\n    return result\nnum1 = calculation3(5, 10, 15)\nprint(num1)"
+   },
+   {
+    "qid": 511025030,
+    "qtype": "description",
+    "answer_code": "def calculation3(a, b, c):\n    result = a * b * c\n    return result\nnum1 = calculation3(5, 10, 15)\nprint(num1)\nnum2 = calculation3(4, 4, 4)\nprint(num2)"
+   },
+   {
+    "qid": 511025040,
+    "qtype": "choice",
+    "choice_id": 5110250401
+   },
+   {
+    "qid": 511025050,
+    "qtype": "choice",
+    "choice_id": 5110250501
+   },
+   {
+    "qid": 511025060,
+    "qtype": "description",
+    "answer_code": "score_list = [70, 80, 66, 88, 92]\n\nfor score in score_list:\n    if score >= 80:\n        print(score)"
+   },
+   {
+    "qid": 511025070,
+    "qtype": "choice",
+    "choice_id": 5110250701
+   }
+  ]
+ }
+}

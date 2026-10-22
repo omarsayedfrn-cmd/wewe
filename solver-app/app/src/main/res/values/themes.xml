@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SolverApp" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="colorPrimary">@color/burgundy</item>
+        <item name="colorOnPrimary">@color/cream</item>
+        <item name="colorSecondary">@color/gold</item>
+    </style>
+</resources>

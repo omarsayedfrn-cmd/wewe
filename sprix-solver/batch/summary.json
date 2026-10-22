@@ -1,0 +1,182 @@
+[
+  {
+    "code": "464484256",
+    "name": "يوسف محمد حمام عبد الحليم",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "471352766",
+    "name": "ايمن احمد نشأت قياتي",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "480809684",
+    "name": "احمد هاني عبد العزيز محمد محمود",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/480809684.log",
+    "duration_s": 356
+  },
+  {
+    "code": "472035057",
+    "name": "محمد ياسر محمد صلاح",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/472035057.log",
+    "duration_s": 356
+  },
+  {
+    "code": "473691703",
+    "name": "احمد محمد احمد يوسف",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473691703.log",
+    "duration_s": 357
+  },
+  {
+    "code": "473399868",
+    "name": "عاصم محمد فايز ثابت",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473399868.log",
+    "duration_s": 356
+  },
+  {
+    "code": "472927586",
+    "name": "علي ناصر محمد علي محمد",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/472927586.log",
+    "duration_s": 358
+  },
+  {
+    "code": "472037762",
+    "name": "جاسم محمد راشد كامل",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/472037762.log",
+    "duration_s": 358
+  },
+  {
+    "code": "473187866",
+    "name": "معتز رضا السيد محمود عبد المنعم",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473187866.log",
+    "duration_s": 356
+  },
+  {
+    "code": "480351299",
+    "name": "حمدي احمد محمد السعودى عبد القادر احمد",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/480351299.log",
+    "duration_s": 356
+  },
+  {
+    "code": "472980760",
+    "name": "يوسف محمد عبدالله عبد الرحيم محمود",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "473380907",
+    "name": "احمد سعيد محمد كامل ظايط",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "485583718",
+    "name": "ايمن جمال ابو بكر السيد حسين",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "473377793",
+    "name": "يوسف احمد على محمد محمد",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473377793.log",
+    "duration_s": 339
+  },
+  {
+    "code": "473203497",
+    "name": "علي محمد علي محمد محمود",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473203497.log",
+    "duration_s": 338
+  },
+  {
+    "code": "486559024",
+    "name": "عصام حسان عاشور جمعه",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/486559024.log",
+    "duration_s": 339
+  },
+  {
+    "code": "471352647",
+    "name": "احمد سلامه صالح احمد جهمى",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/471352647.log",
+    "duration_s": 338
+  },
+  {
+    "code": "472669911",
+    "name": "حازم محمد أحمد صابر فرج الله",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/472669911.log",
+    "duration_s": 337
+  },
+  {
+    "code": "473069486",
+    "name": "محمود محمد محمد محمود ابراهيم",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473069486.log",
+    "duration_s": 338
+  },
+  {
+    "code": "464000122",
+    "name": "عبدالله محمد شعبان محمدعبدالمالك",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/464000122.log",
+    "duration_s": 338
+  },
+  {
+    "code": "471352567",
+    "name": "محمد حمدي عبد الفتاح عبد الباقي",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "473183303",
+    "name": "عمر خالد محمد امان ذكي محمد امان",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "473691928",
+    "name": "احمد وليد ابوحامد محمدمحمد",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "473371805",
+    "name": "محمود ربيع محمد ابراهيم",
+    "status": "already_done",
+    "duration_s": 1
+  },
+  {
+    "code": "471352583",
+    "name": "حمزه عيسى محمد كامل محمد",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/471352583.log",
+    "duration_s": 338
+  },
+  {
+    "code": "473379768",
+    "name": "ابراهيم رمضان عيد ابراهيم علي",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473379768.log",
+    "duration_s": 334
+  },
+  {
+    "code": "473777620",
+    "name": "احمد محمد ماهر ناجح ابراهيم",
+    "status": "done",
+    "detail": "log=/home/omsa/Projects/solver-project/sprix-solver/batch/logs/473777620.log",
+    "duration_s": 334
+  }
+]

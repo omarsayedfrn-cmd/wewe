@@ -1,0 +1,4 @@
+[14:49:04] batch start: 1 students workers=1 START=1
+[14:49:09] start 471352766 (ايمن احمد نشأت قياتي)
+[14:57:10] [1/1] 471352766 -> done (481s)
+[14:57:12] batch end: {'done': 1}

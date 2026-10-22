@@ -1,0 +1,1 @@
+/home/omsa/Projects/solver-project/client-solver-app/app/src/test/java/com/solver/app/LicenseTest.kt

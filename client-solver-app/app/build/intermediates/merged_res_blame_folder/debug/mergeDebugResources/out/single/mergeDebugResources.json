@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/layout_activity_main.xml.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/font_poppins_regular.ttf.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/font/poppins_regular.ttf"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/color_boost_track.xml.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/color/boost_track.xml"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/font_jetbrains_mono.ttf.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/font/jetbrains_mono.ttf"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/font_poppins_bold.ttf.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/font/poppins_bold.ttf"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/color_boost_thumb.xml.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/color/boost_thumb.xml"
+    },
+    {
+        "merged": "/home/omsa/.gradle/daemon/8.9/com.solver.app-debug-31:/font_poppins.xml.flat",
+        "source": "/home/omsa/.gradle/daemon/8.9/com.solver.app-main-33:/font/poppins.xml"
+    },
+    {
+        "merged": "com.solver.app-debug-31:/layout_activity_main.xml.flat",
+        "source": "com.solver.app-main-33:/layout/activity_main.xml"
+    }
+]

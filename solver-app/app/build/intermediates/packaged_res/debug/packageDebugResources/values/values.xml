@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="burgundy">#FF800020</color>
+    <color name="burgundy_dark">#FF5C0016</color>
+    <color name="burgundy_deep">#FF1B1216</color>
+    <color name="cream">#FFF5EFE0</color>
+    <color name="gold">#FFD4AF37</color>
+    <color name="gold_dim">#66D4AF37</color>
+    <color name="muted">#FFB8A89A</color>
+    <color name="stop_bg">#FF4A1414</color>
+    <color name="stop_text">#FFFF9E8A</color>
+    <color name="terminal_bg">#FF0D0A0C</color>
+    <string name="app_name">Solver App</string>
+    <string name="back_btn">‹ Back</string>
+    <string name="boost_hint">Faster solving for the selected platform (jitter + 429 guard)</string>
+    <string name="boost_label">⚡ Boost mode — %1$s</string>
+    <string name="boost_on_log">⚡ Boost ON — solver steps ×%1$s, jitter ±25%%, 429 rate guard armed</string>
+    <string name="footer_by">Developed by</string>
+    <string name="footer_name">Omar Sayed</string>
+    <string name="login_id">Login ID</string>
+    <string name="need_login">Login ID and password are required.</string>
+    <string name="need_start">Invalid start point.</string>
+    <string name="new_session_btn">＋ New</string>
+    <string name="no_sessions">No sessions yet — start one below.</string>
+    <string name="notif_channel">Chapter solving</string>
+    <string name="notif_channel_done">Session finished alerts</string>
+    <string name="notif_text">Solving chapters…</string>
+    <string name="notif_title">Solver is running</string>
+    <string name="notif_title_multi">Solver running (%1$d sessions)</string>
+    <string name="password">Password</string>
+    <string name="platform">Platform</string>
+    <string name="progress_starting">Starting…</string>
+    <string name="queued_msg">Queued — max 3 sessions in parallel</string>
+    <string name="retry_btn">↻ Retry from last point</string>
+    <string name="retry_nopass">Password unavailable — re-enter login to retry.</string>
+    <string name="retry_nothing">Nothing to retry — session already finished.</string>
+    <string name="retry_running">Session is still running.</string>
+    <string name="session_done_title">Session %1$s finished</string>
+    <string name="sessions_title">Sessions</string>
+    <string name="start_btn">▶  Start Solving</string>
+    <string name="start_point">Start point</string>
+    <string name="start_qureo2_hint">Chapter 1–25 (e.g. 1)</string>
+    <string name="start_qureo_hint">Chapter 1–54 (e.g. 1)</string>
+    <string name="start_sprix_hint">Unit 1–6 (e.g. 1)</string>
+    <string name="stop_all_btn">■ Stop all</string>
+    <string name="stop_btn">■ Stop</string>
+    <string name="subtitle">Auto-solve QUREO, QUREO2 &amp; SPRIX chapters</string>
+    <string name="terminal_title">● Live run log</string>
+    <string name="view_log">View live log</string>
+    <style name="Theme.SolverApp" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="colorPrimary">@color/burgundy</item>
+        <item name="colorOnPrimary">@color/cream</item>
+        <item name="colorSecondary">@color/gold</item>
+    </style>
+</resources>

@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "com.solver.app-release-31:/color_boost_track.xml.flat",
+        "source": "com.solver.app-main-32:/color/boost_track.xml"
+    },
+    {
+        "merged": "com.solver.app-release-31:/color_boost_thumb.xml.flat",
+        "source": "com.solver.app-main-32:/color/boost_thumb.xml"
+    },
+    {
+        "merged": "com.solver.app-release-31:/font_poppins_bold.ttf.flat",
+        "source": "com.solver.app-main-32:/font/poppins_bold.ttf"
+    },
+    {
+        "merged": "com.solver.app-release-31:/font_jetbrains_mono.ttf.flat",
+        "source": "com.solver.app-main-32:/font/jetbrains_mono.ttf"
+    },
+    {
+        "merged": "com.solver.app-release-31:/font_poppins.xml.flat",
+        "source": "com.solver.app-main-32:/font/poppins.xml"
+    },
+    {
+        "merged": "com.solver.app-release-31:/layout_activity_main.xml.flat",
+        "source": "com.solver.app-main-32:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.solver.app-release-31:/font_poppins_regular.ttf.flat",
+        "source": "com.solver.app-main-32:/font/poppins_regular.ttf"
+    }
+]
