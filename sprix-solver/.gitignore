@@ -1,0 +1,9 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Logs, results and temp files
+*.log
+results/
+temp_*
+*.cookie

@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.env
+.venv/
+env/
+venv/
+ENV/
+
+# Large binaries and packages
+releases/*.apk
+releases/*.zip
+*.apk
+*.aab
+
+# OS & IDE
+.idea/
+.vscode/
+*.DS_Store
