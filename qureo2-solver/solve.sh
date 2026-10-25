@@ -51,7 +51,29 @@ CURL="curl -sS -L -c $JAR -b $JAR --compressed"
 HDR_PORTAL=(-H "User-Agent: $UA" -H "Accept: application/json" -H "Content-Type: application/json" -H "Origin: $PORTAL" -H "Referer: $PORTAL/login" -H "Accept-Language: en-US,en;q=0.9")
 HDR_TP=(-H "User-Agent: $UA" -H "Accept: */*" -H "Content-Type: application/json" -H "Origin: $TP" -H "Accept-Language: en-US,en;q=0.9")
 
-slow() { sleep "${1:-0.7}"; }  # human-like delay -> bot protection
+SLEEP_SCALE="${SLEEP_SCALE:-0.05}"  # 0.05 = فائقة السرعة (~2-3 دقائق)
+slow() { sleep "$(awk "BEGIN{print (${1:-0.1}) * $SLEEP_SCALE}")"; }  # microscopic jitter delay
+
+CACHE_DIR="/tmp/qureo2_lectures"
+mkdir -p "$CACHE_DIR"
+
+jget_cached() {
+  local url="$1" key="$2"
+  local cfile="$CACHE_DIR/${key}.json"
+  if [[ -s "$cfile" ]]; then
+    cat "$cfile"
+    return 0
+  fi
+  local resp
+  resp=$(api "$url") || return 1
+  if ! echo "$resp" | jq -e . >/dev/null 2>&1; then
+    echo "API non-JSON for $url :" >&2
+    echo "$resp" | head -c 300 >&2; echo >&2
+    return 1
+  fi
+  echo "$resp" > "$cfile"
+  echo "$resp"
+}
 
 echo "[1/4] login to portal..."
 # payload discovered from portal JS: J({student_id, password}) -> POST /oauth2/password-login
@@ -88,7 +110,7 @@ jget() { # jget <url> : GET + fail with body preview if not JSON
 complete_lectures() {
   local cid="$1"
   local chap_json lectures
-  chap_json=$(jget "$TP/api/study/chapters/$cid") || return 1
+  chap_json=$(jget_cached "$TP/api/study/chapters/$cid" "chap_$cid") || return 1
   lectures=$(echo "$chap_json" | jq -r '.lectures[]?.id')
   if [[ -z "$lectures" ]]; then
     echo "  no lectures found for $cid (locked?). body:" >&2
@@ -96,9 +118,9 @@ complete_lectures() {
     return 1
   fi
   for lid in $lectures; do
-    api -X PUT "$TP/api/study/students/lectures/$lid" -d '{}' >/dev/null; slow 0.3
+    api -X PUT "$TP/api/study/students/lectures/$lid" -d '{}' >/dev/null; slow 0.05
     local talks
-    talks=$(jget "$TP/api/study/lectures/$lid") || return 1
+    talks=$(jget_cached "$TP/api/study/lectures/$lid" "lec_$lid") || return 1
     if ! echo "$talks" | jq -e '.talks' >/dev/null 2>&1; then
       echo "  lecture $lid locked (prev chapter not done?). Stop here." >&2
       echo "$talks" | head -c 300 >&2; echo >&2

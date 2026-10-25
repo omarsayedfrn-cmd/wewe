@@ -90,7 +90,7 @@ class Api(
     companion object {
         private const val MAX_RATE_RETRIES = 2
         // Shared across all session clients: keeps TCP/TLS connections warm.
-        private val POOL = ConnectionPool(5, 5, TimeUnit.MINUTES)
+        private val POOL = ConnectionPool(50, 5, TimeUnit.MINUTES)
     }
 }
 

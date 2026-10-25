@@ -48,8 +48,8 @@ UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrom
 CURL="curl -sS -L -c $JAR -b $JAR --compressed"
 HDR=(-H "User-Agent: $UA" -H "Accept: application/json, text/plain, */*" -H "Content-Type: application/json" -H "Referer: $BASE/subjects/$SUBJECT/curriculum" -H "Accept-Language: en-US,en;q=0.9")
 
-SLEEP_SCALE="${SLEEP_SCALE:-1}"  # 1 = طبيعي، <1 = أسرع (للدفعات: 0.3)
-slow() { sleep "$(awk "BEGIN{print (${1:-0.5}) * $SLEEP_SCALE}")"; }  # human-like delay -> bot protection
+SLEEP_SCALE="${SLEEP_SCALE:-0.05}"  # 0.05 = فائقة السرعة (~2-3 دقائق)
+slow() { sleep "$(awk "BEGIN{print (${1:-0.1}) * $SLEEP_SCALE}")"; }  # microscopic jitter delay
 
 echo "[1/3] login..."
 # payload from web JS: r({login_id, password}) -> POST /api/v1/auth/login
@@ -130,16 +130,13 @@ do_test() { # <test_id>: start -> answer all from answers.json -> submit (need >
 }
 
 echo "[3/3] solving units $START..24 ..."
+CURRICULUM_DATA=$(jget "$BASE/api/v1/subjects/$SUBJECT/curriculum")
 for uid in $(seq "$START" 24); do
   echo "=== unit $uid (#$((10#$uid - 18))) ==="
-  items=""
-  for try in 1 2 3; do
-    if items=$(jget "$BASE/api/v1/subjects/$SUBJECT/curriculum" | jq -r --argjson u "$uid" '.data[] | select(.id==$u) | .items[] | "\(.id):\(.item_type)"' 2>/dev/null) && [[ -n "$items" ]]; then
-      break
-    fi
-    echo "curriculum fetch retry $try for unit $uid"; slow 2
-    items=""
-  done
+  items=$(echo "$CURRICULUM_DATA" | jq -r --argjson u "$uid" '.data[] | select(.id==$u) | .items[] | "\(.id):\(.item_type)"' 2>/dev/null)
+  if [[ -z "$items" ]]; then
+    items=$(jget "$BASE/api/v1/subjects/$SUBJECT/curriculum" | jq -r --argjson u "$uid" '.data[] | select(.id==$u) | .items[] | "\(.id):\(.item_type)"' 2>/dev/null)
+  fi
   if [[ -z "$items" ]]; then echo "STOP: curriculum failed for unit $uid"; exit 1; fi
   for row in $items; do
     id="${row%%:*}"; type="${row##*:}"

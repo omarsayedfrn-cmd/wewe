@@ -48,7 +48,7 @@ data class SessionInfo(
  */
 class SolverService : Service() {
     companion object {
-        const val EXTRA_PLATFORM = "platform" // "sprix" | "qureo" | "qureo2"
+        const val EXTRA_PLATFORM = "platform" // "sprix" | "sprix_en" | "qureo" | "qureo_en" | "qureo2" | "qureo2_en"
         const val EXTRA_LOGIN = "login"
         const val EXTRA_PASSWORD = "password"
         const val EXTRA_START = "start"
@@ -223,8 +223,11 @@ class SolverService : Service() {
 
     private fun isValidStart(platform: String, start: String): Boolean = when (platform) {
         "sprix" -> start.toIntOrNull() in 19..24
+        "sprix_en" -> start.toIntOrNull() in 1..6
         "qureo" -> start.matches(QureoCourse.QUREO.startRegex)
         "qureo2" -> start.matches(QureoCourse.QUREO2.startRegex)
+        "qureo_en" -> start.matches(QureoCourse.QUREO_EN.startRegex)
+        "qureo2_en" -> start.matches(QureoCourse.QUREO2_EN.startRegex)
         else -> false
     }
 
@@ -241,7 +244,7 @@ class SolverService : Service() {
                 val fromRaw = s.resumeStart.takeIf { it.isNotEmpty() && it != "done" } ?: s.start
                 val from = fromRaw.toIntOrNull() ?: s.start.toInt()
                 try {
-                    if (s.platform == "sprix") runSprix(s.login, s.password, from, s.id, pace)
+                    if (s.platform == "sprix" || s.platform == "sprix_en") runSprix(s.login, s.password, from, s.id, pace, s.platform)
                     else runQureo(s.platform, s.login, s.password, from, s.id, pace)
                     s.result = "DONE"
                     break
@@ -461,20 +464,21 @@ class SolverService : Service() {
         }
     }
 
-    private suspend fun runSprix(login: String, password: String, start: Int, sessionId: String, pace: Pace) {
+    private suspend fun runSprix(login: String, password: String, start: Int, sessionId: String, pace: Pace, platform: String) {
+        val subject = if (platform == "sprix_en") 3 else 7
         val api = Api(
             mapOf(
                 "User-Agent" to UA,
                 "Accept" to "application/json, text/plain, */*",
                 "Content-Type" to "application/json",
-                "Referer" to "https://egy.app.spx-learning-square.com/subjects/7/curriculum",
+                "Referer" to "https://egy.app.spx-learning-square.com/subjects/$subject/curriculum",
                 "Accept-Language" to "en-US,en;q=0.9",
             ),
             pace = pace,
         )
         val log: (String) -> Unit = { push(sessionId, it) }
         val trialMode = !LicenseEngine.isActivated(this)
-        SprixSolver(api, log, pace).runWith(
+        SprixSolver(api, log, pace, subject).runWith(
             login, password, start,
             Answers.sprixChapters(this), Answers.sprixTests(this),
             trialMode = trialMode,
@@ -488,7 +492,8 @@ class SolverService : Service() {
 
     private suspend fun runQureo(platform: String, login: String, password: String, start: Int, sessionId: String, pace: Pace) {
         val course = QureoCourse.of(platform)
-        val asset = if (platform == "qureo2") "qureo2_answers.json" else "qureo_answers.json"
+        val isEn = QureoCourse.isEn(course)
+        val asset = if (platform == "qureo2" || platform == "qureo2_en") "qureo2_answers.json" else "qureo_answers.json"
         val store = CookieStore()
         val portal = Api(
             mapOf(
@@ -512,8 +517,9 @@ class SolverService : Service() {
         )
         val log: (String) -> Unit = { push(sessionId, it) }
         val trialMode = !LicenseEngine.isActivated(this)
+        val answers = if (isEn) emptyMap() else Answers.qureo(this, asset)
         QureoSolver(portal, tp, store, log, pace, course).runWith(
-            login, password, start, Answers.qureo(this, asset),
+            login, password, start, answers,
             trialMode = trialMode,
             onProgress = { d, t, l -> updateProgress(sessionId, d, t, l) },
             onResume = { nx -> sessions[sessionId]?.resumeStart = nx },

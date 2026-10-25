@@ -46,8 +46,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var sessionBar: LinearLayout
     private lateinit var boostSwitch: SwitchMaterial
     private lateinit var platformGroup: MaterialButtonToggleGroup
-    // Boost is stored independently per platform section (sprix/qureo/qureo2).
-    private val boostState = mutableMapOf("sprix" to false, "qureo" to false, "qureo2" to false)
+    private lateinit var langGroup: MaterialButtonToggleGroup
+    // Boost is stored independently per engine (sprix/sprix_en/qureo/qureo_en/qureo2/qureo2_en).
+    private val boostState = mutableMapOf(
+        "sprix" to false, "sprix_en" to false,
+        "qureo" to false, "qureo_en" to false,
+        "qureo2" to false, "qureo2_en" to false
+    )
     private var updatingBoost = false
 
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -93,37 +98,31 @@ class MainActivity : AppCompatActivity() {
         sessionBar = findViewById(R.id.sessionBar)
 
         platformGroup = findViewById(R.id.platformGroup)
+        langGroup = findViewById(R.id.langGroup)
         val inputStart: EditText = findViewById(R.id.inputStart)
         boostSwitch = findViewById(R.id.boostSwitch)
         val prefs = getSharedPreferences("solver", MODE_PRIVATE)
         boostState["sprix"] = prefs.getBoolean("boost_sprix", false)
+        boostState["sprix_en"] = prefs.getBoolean("boost_sprix_en", false)
         boostState["qureo"] = prefs.getBoolean("boost_qureo", false)
+        boostState["qureo_en"] = prefs.getBoolean("boost_qureo_en", false)
         boostState["qureo2"] = prefs.getBoolean("boost_qureo2", false)
-        // The switch only edits the Boost flag of the currently selected platform.
+        boostState["qureo2_en"] = prefs.getBoolean("boost_qureo2_en", false)
+        // The switch only edits the Boost flag of the currently selected engine (platform+language).
         boostSwitch.setOnCheckedChangeListener { _, checked ->
             if (updatingBoost) return@setOnCheckedChangeListener
-            val p = selectedPlatform()
+            val p = enginePlatform()
             boostState[p] = checked
             prefs.edit().putBoolean("boost_$p", checked).apply()
         }
         syncBoostSwitch()
-        platformGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+        platformGroup.addOnButtonCheckedListener { _, _, isChecked ->
             if (!isChecked) return@addOnButtonCheckedListener
-            when (checkedId) {
-                R.id.btnQureo -> {
-                    inputStart.setText(QureoCourse.QUREO.defaultStart)
-                    startLayout.helperText = getString(R.string.start_qureo_hint)
-                }
-                R.id.btnQureo2 -> {
-                    inputStart.setText(QureoCourse.QUREO2.defaultStart)
-                    startLayout.helperText = getString(R.string.start_qureo2_hint)
-                }
-                else -> {
-                    inputStart.setText("1")
-                    startLayout.helperText = getString(R.string.start_sprix_hint)
-                }
-            }
-            syncBoostSwitch()
+            applySelection(inputStart)
+        }
+        langGroup.addOnButtonCheckedListener { _, _, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            applySelection(inputStart)
         }
 
         if (Build.VERSION.SDK_INT >= 33 &&
@@ -133,7 +132,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnStart).setOnClickListener {
-            val platform = selectedPlatform()
+            val platform = enginePlatform()
             val boost = boostState[platform] == true
             val login = findViewById<EditText>(R.id.inputLogin).text.toString().trim()
             val pass = findViewById<EditText>(R.id.inputPassword).text.toString()
@@ -143,8 +142,11 @@ class MainActivity : AppCompatActivity() {
             }
             val okStart = when (platform) {
                 "sprix" -> startRaw.toIntOrNull() in 1..6
+                "sprix_en" -> startRaw.toIntOrNull() in 1..6
                 "qureo" -> startRaw.toIntOrNull() in QureoCourse.QUREO.inputRange
-                else -> startRaw.toIntOrNull() in QureoCourse.QUREO2.inputRange
+                "qureo_en" -> startRaw.toIntOrNull() in QureoCourse.QUREO_EN.inputRange
+                "qureo2" -> startRaw.toIntOrNull() in QureoCourse.QUREO2.inputRange
+                else -> startRaw.toIntOrNull() in QureoCourse.QUREO2_EN.inputRange
             }
             if (!okStart) {
                 Toast.makeText(this, R.string.need_start, Toast.LENGTH_SHORT).show(); return@setOnClickListener
@@ -152,8 +154,11 @@ class MainActivity : AppCompatActivity() {
             // Map natural numbers (1-based) to raw platform ids; service works with raw ids only.
             val rawStart = when (platform) {
                 "sprix" -> (18 + startRaw.toInt()).toString()
+                "sprix_en" -> startRaw
                 "qureo" -> QureoCourse.QUREO.rawOf(startRaw.toInt()) ?: startRaw
-                else -> QureoCourse.QUREO2.rawOf(startRaw.toInt()) ?: startRaw
+                "qureo_en" -> QureoCourse.QUREO_EN.rawOf(startRaw.toInt()) ?: startRaw
+                "qureo2" -> QureoCourse.QUREO2.rawOf(startRaw.toInt()) ?: startRaw
+                else -> QureoCourse.QUREO2_EN.rawOf(startRaw.toInt()) ?: startRaw
             }
             if (bound && svc != null) {
                 // Fast path: service already alive -> new session (runs now or queues).
@@ -272,15 +277,39 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectedPlatform(): String = when (platformGroup.checkedButtonId) {
+    /** Base platform chosen by the platform buttons (sprix/qureo/qureo2). */
+    private fun selectedBase(): String = when (platformGroup.checkedButtonId) {
         R.id.btnQureo -> "qureo"
         R.id.btnQureo2 -> "qureo2"
         else -> "sprix"
     }
 
-    /** Mirror the selected platform's Boost flag into the switch (no listener loop). */
+    /** Language chosen by the language buttons ("ar" or "en"). */
+    private fun selectedLang(): String =
+        if (langGroup.checkedButtonId == R.id.btnLangEn) "en" else "ar"
+
+    /** Final engine key = platform + language (e.g. "qureo_en"), what the service runs. */
+    private fun enginePlatform(): String {
+        val base = selectedBase()
+        return if (selectedLang() == "en") "${base}_en" else base
+    }
+
+    /** Reflect the chosen language+platform in the start field, hint and boost switch. */
+    private fun applySelection(inputStart: EditText) {
+        val en = selectedLang() == "en"
+        val hint = when (selectedBase()) {
+            "qureo" -> if (en) R.string.start_qureo_en_hint else R.string.start_qureo_hint
+            "qureo2" -> if (en) R.string.start_qureo2_en_hint else R.string.start_qureo2_hint
+            else -> if (en) R.string.start_sprix_en_hint else R.string.start_sprix_hint
+        }
+        inputStart.setText("1")
+        startLayout.helperText = getString(hint)
+        syncBoostSwitch()
+    }
+
+    /** Mirror the selected engine's Boost flag into the switch (no listener loop). */
     private fun syncBoostSwitch() {
-        val p = selectedPlatform()
+        val p = enginePlatform()
         updatingBoost = true
         boostSwitch.isChecked = boostState[p] == true
         boostSwitch.text = getString(R.string.boost_label, p.uppercase())
@@ -360,8 +389,11 @@ class MainActivity : AppCompatActivity() {
     /** Raw platform ids -> friendly numbers: QUREO #1..54, QUREO2 #1..25, SPRIX #1..6. */
     private fun friendlyStart(platform: String, start: String): String = when (platform) {
         "qureo" -> QureoCourse.QUREO.displayStart(start)
+        "qureo_en" -> QureoCourse.QUREO_EN.displayStart(start)
         "qureo2" -> QureoCourse.QUREO2.displayStart(start)
+        "qureo2_en" -> QureoCourse.QUREO2_EN.displayStart(start)
         "sprix" -> start.toIntOrNull()?.let { (it - 18).takeIf { n -> n in 1..6 } }?.let { "#$it" } ?: start
+        "sprix_en" -> start.toIntOrNull()?.takeIf { n -> n in 1..6 }?.let { "#$it" } ?: start
         else -> start
     }
 

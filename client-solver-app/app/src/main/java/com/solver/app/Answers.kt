@@ -46,7 +46,7 @@ object Answers {
                         q.getLong("qid"),
                         q.getString("qtype"),
                         if (q.has("choice_id")) q.getLong("choice_id") else null,
-                        q.optString("answer_code", null),
+                        q.optString("answer_code", "").ifEmpty { null },
                     )
                 },
             )

@@ -12,9 +12,13 @@
 | :--- | :--- | :--- | :--- |
 | **[`solver-android-apk/`](solver-android-apk/)** | Python / Kivy / Buildozer | **المشروع الأساسي الموصى به**: تطبيق أندرويد يعمل كـ Residential Mobile IP Relay لمنع حظر 403، ويشغّل بوت التيليجرام ومحركات الحل محلياً | [دليل APK](solver-android-apk/README.md) |
 | **[`telegram-bot/`](telegram-bot/)** | Python / Aiogram 3 / Gradio | بوت تيليجرام مستقل ومصمم للعمل على سيرفرات سحابية (Hugging Face Spaces / VPS) لإدارة الأكواد والعملاء | [دليل البوت](telegram-bot/README.md) |
-| **[`qureo-solver/`](qureo-solver/)** | Bash / curl / Python | سكربت طرفية (CLI) فائق السرعة لحل منهاج **QUREO JavaScript** (54 فصلاً - 270 ماسة) | [دليل Qureo](qureo-solver/README.md) |
-| **[`qureo2-solver/`](qureo2-solver/)** | Bash / curl / Python | سكربت طرفية (CLI) فائق السرعة لحل منهاج **QUREO2 Python** (25 فصلاً - 125 ماسة) | [دليل Qureo2](qureo2-solver/README.md) |
-| **[`sprix-solver/`](sprix-solver/)** | Bash / curl / Python | محرك حل مادة الثقافة المالية **SPRIX** (الوحدات 19–24) مع أدوات المعالجة الدفعية للمدارس | [دليل Sprix](sprix-solver/README.md) |
+| **[`qureo-solver/`](qureo-solver/)** | Bash / curl / Python | سكربت طرفية (CLI) فائق السرعة لحل منهاج **QUREO JavaScript** العربي (54 فصلاً - 270 ماسة) | [دليل Qureo](qureo-solver/README.md) |
+| **[`qureo-js-en-solver/`](qureo-js-en-solver/)** | Bash / curl / Python | محرّك ذاتي الاكتشاف لحل منهاج **QUREO JavaScript الإنجليزي** (54 فصلاً - 270 ماسة) — بدون answers.json | [دليل Qureo JS EN](qureo-js-en-solver/README.md) |
+| **[`qureo2-solver/`](qureo2-solver/)** | Bash / curl / Python | سكربت طرفية (CLI) فائق السرعة لحل منهاج **QUREO2 Python** العربي (25 فصلاً - 125 ماسة) | [دليل Qureo2](qureo2-solver/README.md) |
+| **[`qureo2-en-solver/`](qureo2-en-solver/)** | Bash / curl / Python | محرّك ذاتي الاكتشاف لحل منهاج **QUREO2 Python الإنجليزي** (10 فصول - 50 ماسة) — بدون answers.json | [دليل Qureo2 EN](qureo2-en-solver/README.md) |
+| **[`sprix-solver/`](sprix-solver/)** | Bash / curl / Python | محرك حل مادة الثقافة المالية **SPRIX** العربية (الوحدات 19–24) مع أدوات المعالجة الدفعية للمدارس | [دليل Sprix](sprix-solver/README.md) |
+| **[`sprix-en-solver/`](sprix-en-solver/)** | Bash / curl / Python | محرّك ذاتي الاكتشاف لحل مادة **Financial Literacy الإنجليزية** على SPRIX (الوحدات 1–6، 100%) — بدون answers.json | [دليل Sprix EN](sprix-en-solver/README.md) |
+| **[`sphinx-solver/`](sphinx-solver/)** | Bash / curl / Python | محرّك ذاتي الاكتشاف لخّلعبة **Sphinx / Global Finance Quest** على SPRIX (المادة 8) — لعبة محفظة أسهم 30 يوم بدرجة **SS (100/100)** | [دليل Sphinx](sphinx-solver/README.md) |
 | **[`solver-app/`](solver-app/)** | Native Android / Kotlin | تطبيق أندرويد نيتف أصلي بواجهات كوتلن ونظام بناء Gradle | [دليل Kotlin App](solver-app/README.md) |
 | **[`client-solver-app/`](client-solver-app/)** | Native Android / Kotlin | تطبيق العميل التجريبي على أندرويد للاتصال وإدخال الأكواد | [دليل Client App](client-solver-app/README.md) |
 | **[`docs/`](docs/)** | Markdown / Data | المخططات الهندسية، وثائق بنية النظام، دليل الـ Relay، والخطة التشغيلية للـ SaaS | [دليل الوثائق](docs/README.md) |

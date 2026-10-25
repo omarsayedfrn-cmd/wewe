@@ -23,15 +23,15 @@ class Pace(
     private val log: (String) -> Unit,
 ) {
     companion object {
-        const val SCALE_SPRIX = 0.3
-        const val SCALE_QUREO = 0.4
-        const val FLOOR_MS = 120L
-        const val JITTER = 0.25
+        const val SCALE_SPRIX = 0.03
+        const val SCALE_QUREO = 0.04
+        const val FLOOR_MS = 20L
+        const val JITTER = 0.20
         const val MAX_INCIDENTS = 3
         const val BACKOFF_BASE_MS = 15_000L
 
         fun scaleFor(platform: String): Double =
-            if (platform == "sprix") SCALE_SPRIX else SCALE_QUREO
+            if (platform == "sprix" || platform == "sprix_en") SCALE_SPRIX else SCALE_QUREO
 
         /** "0.3" / "0.6" / "1" — locale-safe display for logs. */
         fun fmtScale(v: Double): String = ((v * 100).roundToInt() / 100.0).toString()
