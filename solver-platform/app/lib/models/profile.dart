@@ -11,6 +11,11 @@ class Profile {
   final String? referredBy;
   final bool trialUsed;
   final bool onboardLocked;
+
+  /// Platform account (student login code) bound to this profile. Shared across
+  /// every engine the student owns; set on the first solve and then locked.
+  final String? platformLogin;
+  final DateTime? platformBoundAt;
   final DateTime createdAt;
 
   const Profile({
@@ -25,6 +30,8 @@ class Profile {
     this.referredBy,
     this.trialUsed = false,
     this.onboardLocked = false,
+    this.platformLogin,
+    this.platformBoundAt,
     required this.createdAt,
   });
 
@@ -40,6 +47,10 @@ class Profile {
         referredBy: json['referred_by'] as String?,
         trialUsed: json['trial_used'] as bool? ?? false,
         onboardLocked: json['onboard_locked'] as bool? ?? false,
+        platformLogin: json['platform_login'] as String?,
+        platformBoundAt: json['platform_bound_at'] != null
+            ? DateTime.tryParse(json['platform_bound_at'] as String)
+            : null,
         createdAt: DateTime.parse(
             json['created_at'] as String? ?? DateTime.now().toIso8601String()),
       );
@@ -55,6 +66,9 @@ class Profile {
         if (referredBy != null) 'referred_by': referredBy,
         'trial_used': trialUsed,
         'onboard_locked': onboardLocked,
+        if (platformLogin != null) 'platform_login': platformLogin,
+        if (platformBoundAt != null)
+          'platform_bound_at': platformBoundAt!.toIso8601String(),
       };
 
   Profile copyWith({
@@ -68,6 +82,8 @@ class Profile {
     String? referredBy,
     bool? trialUsed,
     bool? onboardLocked,
+    String? platformLogin,
+    DateTime? platformBoundAt,
   }) =>
       Profile(
         id: id,
@@ -81,6 +97,8 @@ class Profile {
         referredBy: referredBy ?? this.referredBy,
         trialUsed: trialUsed ?? this.trialUsed,
         onboardLocked: onboardLocked ?? this.onboardLocked,
+        platformLogin: platformLogin ?? this.platformLogin,
+        platformBoundAt: platformBoundAt ?? this.platformBoundAt,
         createdAt: createdAt,
       );
 
@@ -88,4 +106,8 @@ class Profile {
   bool get isMerchant => role == 'merchant';
   bool get isAdmin => role == 'admin';
   bool get needsOnboarding => !onboardLocked;
+
+  /// True once a platform account has been bound to this profile.
+  bool get hasBoundAccount =>
+      platformLogin != null && platformLogin!.trim().isNotEmpty;
 }

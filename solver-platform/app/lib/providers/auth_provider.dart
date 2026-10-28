@@ -90,4 +90,20 @@ class ProfileNotifier extends AsyncNotifier<Profile?> {
     state = AsyncData(profile);
     return profile;
   }
+
+  /// Bind the platform account (student login code) to the profile.
+  Future<Profile> bindPlatformAccount(String login) async {
+    final profile =
+        await ref.read(profileServiceProvider).bindPlatformAccount(login);
+    state = AsyncData(profile);
+    return profile;
+  }
+
+  /// Remove the bound platform account.
+  Future<Profile> unbindPlatformAccount() async {
+    final profile =
+        await ref.read(profileServiceProvider).unbindPlatformAccount();
+    state = AsyncData(profile);
+    return profile;
+  }
 }

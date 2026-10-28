@@ -60,4 +60,21 @@ class ProfileService {
         .single();
     return Profile.fromJson(data);
   }
+
+  /// Bind the platform account (student login code) to the profile.
+  ///
+  /// Throws `ACCOUNT_LOCKED` when the profile is already bound to a different
+  /// login, so callers can show the matching message.
+  Future<Profile> bindPlatformAccount(String login) async {
+    final data = await _client.rpc('bind_platform_account', params: {
+      'p_login': login.trim(),
+    });
+    return Profile.fromJson(Map<String, dynamic>.from(data as Map));
+  }
+
+  /// Remove the bound platform account (after the user's confirmation).
+  Future<Profile> unbindPlatformAccount() async {
+    final data = await _client.rpc('unbind_platform_account');
+    return Profile.fromJson(Map<String, dynamic>.from(data as Map));
+  }
 }

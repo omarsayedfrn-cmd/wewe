@@ -99,7 +99,11 @@ export default async function UserDetailPage({
               مراسلة عبر WhatsApp
             </a>
           )}
-          <UserActions userId={profile.id} engines={engines} />
+          <UserActions
+            userId={profile.id}
+            engines={engines}
+            platformLogin={profile.platform_login}
+          />
         </div>
       </div>
 
@@ -144,6 +148,12 @@ export default async function UserDetailPage({
             <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
               <span className="text-[#9E9E9E]">كود الإحالة:</span>
               <span className="font-mono text-[#D4AF37] font-bold">{profile.referral_code}</span>
+            </div>
+            <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
+              <span className="text-[#9E9E9E]">حساب المنصة المربوط:</span>
+              <span className="font-mono font-bold text-[#D4AF37]" dir="ltr">
+                {profile.platform_login || '—'}
+              </span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
               <span className="text-[#9E9E9E]">قفل الاختيار (Onboard):</span>

@@ -6,6 +6,7 @@ import '../../core/constants.dart';
 import '../../core/theme.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/wallet_provider.dart';
+import '../../services/secure_credentials.dart';
 import '../../widgets/error_view.dart';
 
 /// Profile tab — user info, referral code, settings.
@@ -189,6 +190,62 @@ class ProfileTab extends ConsumerWidget {
 
                 const SizedBox(height: 24),
 
+                // Bound platform account
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: context.t.surface,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: context.t.line),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(Icons.badge_outlined,
+                              color: context.t.onSurfaceVariant, size: 20),
+                          const SizedBox(width: 8),
+                          Text(
+                            'حساب المنصة المربوط',
+                            style: TextStyle(
+                              color: context.t.onSurface,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        profile.hasBoundAccount
+                            ? profile.platformLogin!
+                            : 'لم يتم الربط بعد',
+                        style: TextStyle(
+                          color: profile.hasBoundAccount
+                              ? context.t.onSurface
+                              : context.t.onSurface.withValues(alpha: 0.5),
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'يُربط تلقائيًا عند أول حل، ويُستخدم لكل المنصات المفتوحة.',
+                        style: TextStyle(
+                          color: context.t.onSurface.withValues(alpha: 0.5),
+                          fontSize: 12,
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
                 // Menu items
                 _MenuTile(
                   icon: Icons.support_agent,
@@ -226,6 +283,11 @@ class ProfileTab extends ConsumerWidget {
                       ),
                     );
                     if (confirm == true) {
+                      final userId =
+                          ref.read(supabaseProvider).auth.currentUser?.id;
+                      if (userId != null) {
+                        await SecureCredentials.clear(userId);
+                      }
                       await ref.read(authServiceProvider).signOut();
                     }
                   },

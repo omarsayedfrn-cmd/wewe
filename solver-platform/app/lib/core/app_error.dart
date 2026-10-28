@@ -200,6 +200,17 @@ const _fullOnly = AppError(
   hint: 'اختر «فتح المنصة كاملة» لإتمام الشراء.',
 );
 
+const _accountLocked = AppError(
+  title: 'الحساب مربوط بكود آخر',
+  message: 'هذا الحساب مربوط بكود طالب مختلف بالفعل ولا يمكن تغييره.',
+  hint: 'لفك الربط والتغيير تواصل مع الدعم الفني.',
+);
+
+const _accountRequired = AppError(
+  title: 'أدخل كود الطالب',
+  message: 'يجب إدخال كود الطالب الخاص بالمنصة للمتابعة.',
+);
+
 const _trialDisabled = AppError(
   title: 'التجربة المجانية غير متاحة',
   message: 'التجربة المجانية غير مفعّلة حاليًا.',
@@ -299,6 +310,12 @@ AppError _postgrest(PostgrestException error, String details) {
   }
   if (m.contains('only full-engine purchases')) {
     return _withDetails(_fullOnly, details);
+  }
+  if (m.contains('account_locked')) {
+    return _withDetails(_accountLocked, details);
+  }
+  if (m.contains('account_required')) {
+    return _withDetails(_accountRequired, details);
   }
   if (m.contains('trial is disabled')) {
     return _withDetails(_trialDisabled, details);

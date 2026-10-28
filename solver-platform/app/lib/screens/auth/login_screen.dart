@@ -205,6 +205,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   }
 
   /// Google Sign-In (Code preserved)
+  // ignore: unused_element
   Future<void> _signInGoogle() async {
     setState(() => _loading = true);
     try {
@@ -507,14 +508,42 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       ),
                       const SizedBox(height: 20),
 
-                      // Google Sign-In Secondary Option (Preserved)
-                      TextButton.icon(
-                        onPressed: _loading ? null : _signInGoogle,
-                        icon: const Icon(
-                          Icons.account_circle_outlined,
-                          size: 20,
-                        ),
-                        label: const Text('أو تسجيل الدخول بحساب Google'),
+                      // Google Sign-In Secondary Option (disabled — coming soon)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextButton.icon(
+                            onPressed: null,
+                            style: TextButton.styleFrom(
+                              foregroundColor: context.t.onSurfaceVariant
+                                  .withValues(alpha: 0.5),
+                            ),
+                            icon: Icon(
+                              Icons.account_circle_outlined,
+                              size: 20,
+                              color: context.t.onSurfaceVariant
+                                  .withValues(alpha: 0.5),
+                            ),
+                            label: Text(
+                              'أو تسجيل الدخول بحساب Google',
+                              style: TextStyle(
+                                color: context.t.onSurfaceVariant
+                                    .withValues(alpha: 0.5),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'قريبًا',
+                            style: TextStyle(
+                              color: context.t.onSurfaceVariant
+                                  .withValues(alpha: 0.7),
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 12),

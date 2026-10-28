@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/app_error.dart';
 import '../../core/theme.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/engine_provider.dart';
+import '../../services/secure_credentials.dart';
 import '../../solver/api.dart';
 import '../../solver/pace.dart';
 import '../../solver/answers.dart';
@@ -73,6 +75,31 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
   AppError? _lastError;
 
   @override
+  void initState() {
+    super.initState();
+    _loadStoredCredentials();
+  }
+
+  /// Prefills the login (from the bound account) and the cached password.
+  Future<void> _loadStoredCredentials() async {
+    final userId = ref.read(supabaseProvider).auth.currentUser?.id;
+    if (userId == null) return;
+
+    final password = await SecureCredentials.readPassword(userId);
+    if (!mounted) return;
+
+    final login = ref.read(profileProvider).valueOrNull?.platformLogin;
+    setState(() {
+      if (login != null && login.isNotEmpty && _loginController.text.isEmpty) {
+        _loginController.text = login;
+      }
+      if (password != null && password.isNotEmpty) {
+        _passController.text = password;
+      }
+    });
+  }
+
+  @override
   void dispose() {
     _loginController.dispose();
     _passController.dispose();
@@ -109,6 +136,13 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
         const SnackBar(content: Text('يرجى إدخال بيانات الدخول للمنصة')),
       );
       return;
+    }
+
+    if (!await _ensureAccountBound(loginId)) return;
+
+    final userId = ref.read(supabaseProvider).auth.currentUser?.id;
+    if (userId != null) {
+      await SecureCredentials.savePassword(userId, password);
     }
 
     _activeTrial = _effectiveTrialChapters();
@@ -158,6 +192,62 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
         });
       }
     }
+  }
+
+  /// Binds the platform account on the first solve, and blocks a mismatched
+  /// account afterwards. Returns false when solving must not start.
+  Future<bool> _ensureAccountBound(String loginId) async {
+    final profile = ref.read(profileProvider).valueOrNull;
+    final boundLogin = profile?.platformLogin?.trim();
+
+    if (boundLogin != null && boundLogin.isNotEmpty) {
+      if (boundLogin == loginId) return true;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('هذا الحساب مربوط بكود آخر: $boundLogin')),
+      );
+      return false;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.t.surface,
+        title: Text('تأكيد ربط الحساب',
+            style: TextStyle(color: context.t.onSurface)),
+        content: Text(
+          'سيتم ربط كود الطالب «$loginId» بحسابك بشكل نهائي عند بدء الحل، '
+          'ولا يمكن تغييره بعد ذلك إلا بفك الربط.\n\n'
+          'تأكد من صحة الكود قبل المتابعة.',
+          style: TextStyle(color: context.t.onSurface, height: 1.6),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.t.burgundy,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('ربط ومتابعة'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return false;
+
+    try {
+      await ref.read(profileProvider.notifier).bindPlatformAccount(loginId);
+    } catch (e) {
+      if (mounted) {
+        showErrorSnack(context, e, action: 'ربط الحساب');
+      }
+      return false;
+    }
+    return true;
   }
 
   Future<void> _solveQureo(String loginId, String password, Pace pace) async {
@@ -271,6 +361,27 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
   Widget build(BuildContext context) {
     final entitlements = ref.watch(entitlementsProvider);
     final trial = ref.watch(trialInfoProvider);
+    final profile = ref.watch(profileProvider);
+
+    // Keep the login field in sync with the bound account once it is known.
+    ref.listen(profileProvider, (_, next) {
+      final login = next.valueOrNull?.platformLogin?.trim();
+      if (login != null && login.isNotEmpty && _loginController.text.isEmpty) {
+        _loginController.text = login;
+      }
+    });
+
+    final boundLogin = profile.valueOrNull?.platformLogin?.trim();
+    final isBound = boundLogin != null && boundLogin.isNotEmpty;
+    if (isBound && _loginController.text.isEmpty) {
+      final login = boundLogin;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _loginController.text.isEmpty) {
+          _loginController.text = login;
+        }
+      });
+    }
+
     final loading =
         (entitlements.isLoading && !entitlements.hasValue) ||
         (trial.isLoading && !trial.hasValue);
@@ -376,10 +487,15 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                       Expanded(
                         child: TextField(
                           controller: _loginController,
-                          enabled: !_running,
-                          decoration: const InputDecoration(
+                          enabled: !_running && !isBound,
+                          decoration: InputDecoration(
                             labelText: 'كود الطالب',
-                            prefixIcon: Icon(Icons.person_outline),
+                            prefixIcon: const Icon(Icons.person_outline),
+                            helperText: isBound ? 'الحساب المربوط' : null,
+                            helperStyle: TextStyle(
+                              color: context.t.success,
+                              fontSize: 11,
+                            ),
                           ),
                         ),
                       ),

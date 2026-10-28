@@ -12,6 +12,9 @@ export type Profile = {
   referred_by: string | null;
   trial_used: boolean;
   onboard_locked: boolean;
+  platform_login: string | null;
+  platform_login_norm: string | null;
+  platform_bound_at: string | null;
   created_at: string;
 };
 

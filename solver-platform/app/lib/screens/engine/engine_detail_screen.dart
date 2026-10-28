@@ -7,6 +7,7 @@ import '../../models/engine.dart';
 import '../../providers/engine_provider.dart';
 import '../../providers/wallet_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../services/secure_credentials.dart';
 import '../../widgets/error_view.dart';
 
 /// Engine detail screen — full-engine purchase + optional free trial.
@@ -89,6 +90,8 @@ class EngineDetailScreen extends ConsumerWidget {
         final hasFull = ref
             .read(engineServiceProvider)
             .hasEntitlement(userEntitlements, engineCode, null);
+        final boundLogin = profile.valueOrNull?.platformLogin?.trim();
+        final isBound = boundLogin != null && boundLogin.isNotEmpty;
 
         final trialInfo = trial.valueOrNull;
         final trialApplies = trialInfo != null &&
@@ -142,6 +145,9 @@ class EngineDetailScreen extends ConsumerWidget {
 
                 const SizedBox(height: 16),
 
+                if (isBound)
+                  _buildAccountCard(context, ref, boundLogin),
+
                 if (hasFull)
                   _buildFullOpenCard(
                     context,
@@ -179,6 +185,14 @@ class EngineDetailScreen extends ConsumerWidget {
                           ? 'التجربة تحل أول $trialChapters فصول فقط. لفتح باقي المنصة استخدم زر الفتح الكامل.'
                           : 'الفتح الكامل يحل جميع فصول المنصة دفعة واحدة.',
                 ),
+
+                if (!isBound) ...[
+                  const SizedBox(height: 12),
+                  _buildInfoCard(
+                    context,
+                    'سيتم ربط أول كود طالب تحل به بحسابك، ولا يمكن تغييره بعد بدء الحل.',
+                  ),
+                ],
               ],
             ),
           ),
@@ -392,6 +406,119 @@ class EngineDetailScreen extends ConsumerWidget {
                 height: 1.5,
               ),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountCard(
+    BuildContext context,
+    WidgetRef ref,
+    String login,
+  ) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: context.t.surface,
+        borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
+        border: Border.all(color: context.t.gold.withValues(alpha: 0.4)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.badge_outlined, color: context.t.gold, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                'الحساب المربوط',
+                style: TextStyle(
+                  color: context.t.onSurface,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            login,
+            style: TextStyle(
+              color: context.t.onSurface,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 1,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'هذا الحساب مربوط بكل المنصات المفتوحة ويُستخدم عند الحل.',
+            style: TextStyle(
+              color: context.t.onSurface.withValues(alpha: 0.6),
+              fontSize: 12,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 14),
+          OutlinedButton.icon(
+            onPressed: () => _confirmUnbind(context, ref),
+            icon: const Icon(Icons.link_off),
+            label: const Text('فك الربط / حساب جديد'),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _confirmUnbind(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.t.surface,
+        title: Text('فك ربط الحساب',
+            style: TextStyle(color: context.t.onSurface)),
+        content: Text(
+          'سيتم فك ربط الحساب الحالي، وستحتاج إلى ربط حساب جديد عند الحل التالي.\n\n'
+          'تحذير: إذا لم تكن قد أكملت حل المنصة، فلن تعود إليك العملات التي صرفتها.',
+          style: TextStyle(color: context.t.onSurface, height: 1.6),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('إلغاء'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(ctx);
+              try {
+                await ref.read(profileProvider.notifier).unbindPlatformAccount();
+                final userId =
+                    ref.read(supabaseProvider).auth.currentUser?.id;
+                if (userId != null) {
+                  await SecureCredentials.clear(userId);
+                }
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('تم فك ربط الحساب')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  showErrorSnack(context, e, action: 'فك ربط الحساب');
+                }
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: context.t.error,
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('فك الربط'),
           ),
         ],
       ),
