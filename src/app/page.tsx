@@ -1,12 +1,12 @@
 import { createAdminClient } from '@/lib/supabase/server';
-import { Users, Wallet, MessageCircle, Rocket, AlertTriangle } from 'lucide-react';
+import { Users, Wallet, MessageCircle, Rocket, AlertTriangle, Clock } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 async function getStats() {
   const supabase = await createAdminClient();
 
-  const [usersRes, walletsRes, threadsRes, enginesRes] = await Promise.all([
+  const [usersRes, walletsRes, threadsRes, enginesRes, pendingRes] = await Promise.all([
     supabase.from('profiles').select('id', { count: 'exact', head: true }),
     supabase.from('wallets').select('balance'),
     supabase
@@ -14,13 +14,23 @@ async function getStats() {
       .select('id', { count: 'exact', head: true })
       .eq('status', 'open'),
     supabase.from('engines').select('code', { count: 'exact', head: true }),
+    supabase
+      .from('profiles')
+      .select('id, wallets(balance)')
+      .eq('role', 'student'),
   ]);
 
   const totalBalance =
     walletsRes.data?.reduce((sum, w) => sum + (w.balance || 0), 0) ?? 0;
 
+  const pendingUsers =
+    pendingRes.data?.filter(
+      (p: any) => (p.wallets?.[0]?.balance ?? p.wallets?.balance ?? 0) === 0
+    ).length ?? 0;
+
   return {
     totalUsers: usersRes.count ?? 0,
+    pendingUsers,
     totalBalance,
     openTickets: threadsRes.count ?? 0,
     totalEngines: enginesRes.count ?? 0,
@@ -34,7 +44,7 @@ export default async function DashboardPage() {
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')
   );
 
-  let stats = { totalUsers: 0, totalBalance: 0, openTickets: 0, totalEngines: 0 };
+  let stats = { totalUsers: 0, pendingUsers: 0, totalBalance: 0, openTickets: 0, totalEngines: 0 };
 
   if (isConfigured) {
     try {
@@ -50,6 +60,12 @@ export default async function DashboardPage() {
       value: stats.totalUsers,
       icon: Users,
       color: '#D4AF37',
+    },
+    {
+      label: 'طلبات قيد المراجعة',
+      value: stats.pendingUsers,
+      icon: Clock,
+      color: '#FF9800',
     },
     {
       label: 'إجمالي العملات',
