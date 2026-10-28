@@ -87,11 +87,19 @@ class EngineDetailScreen extends ConsumerWidget {
             .map((p) => p.cost)
             .firstOrNull;
 
-        final hasFull = ref
-            .read(engineServiceProvider)
-            .hasEntitlement(userEntitlements, engineCode, null);
         final boundLogin = profile.valueOrNull?.platformLogin?.trim();
         final isBound = boundLogin != null && boundLogin.isNotEmpty;
+        final loginNorm = profile.valueOrNull?.platformLoginNorm;
+
+        final service = ref.read(engineServiceProvider);
+        // Tolerant: shows the engine as open even when the profile is unbound,
+        // so a student can re-bind their account from the solving screen.
+        final hasFull =
+            service.hasEntitlement(userEntitlements, engineCode, null,
+                loginNorm: loginNorm);
+        // Strict: the engine is paid for the account currently bound.
+        final ownsForCurrentAccount =
+            loginNorm != null && hasFull;
 
         final trialInfo = trial.valueOrNull;
         final trialApplies = trialInfo != null &&
@@ -152,10 +160,14 @@ class EngineDetailScreen extends ConsumerWidget {
                   _buildFullOpenCard(
                     context,
                     engine,
+                    note: isBound
+                        ? null
+                        : 'هذه المنصة مفتوحة لحساب محفوظ. اضغط «ابدأ حل المنصة» لإعادة ربط حسابك.',
                     onSolve: () =>
                         context.push('/engine/${engine.code}/solve'),
-                  )
-                else ...[
+                  ),
+
+                if (!hasFull) ...[
                   if (trialApplies)
                     _buildTrialCard(
                       context,
@@ -167,6 +179,9 @@ class EngineDetailScreen extends ConsumerWidget {
                       trialInfo.appliesTo(engineCode) &&
                       !trialInfo.available)
                     _buildTrialFinishedCard(context),
+                ],
+
+                if (!ownsForCurrentAccount) ...[
                   const SizedBox(height: 16),
                   _buildPurchaseCard(
                     context,
@@ -204,6 +219,7 @@ class EngineDetailScreen extends ConsumerWidget {
   Widget _buildFullOpenCard(
     BuildContext context,
     Engine engine, {
+    String? note,
     required VoidCallback onSolve,
   }) {
     return Container(
@@ -229,6 +245,17 @@ class EngineDetailScreen extends ConsumerWidget {
             'يمكنك الآن حل كل فصول المنصة بضغطة واحدة.',
             style: TextStyle(color: context.t.onSurface, fontSize: 14),
           ),
+          if (note != null) ...[
+            const SizedBox(height: 8),
+            Text(
+              note,
+              style: TextStyle(
+                color: context.t.gold,
+                fontSize: 12,
+                height: 1.5,
+              ),
+            ),
+          ],
           const SizedBox(height: 16),
           ElevatedButton.icon(
             onPressed: onSolve,
@@ -484,8 +511,9 @@ class EngineDetailScreen extends ConsumerWidget {
         title: Text('فك ربط الحساب',
             style: TextStyle(color: context.t.onSurface)),
         content: Text(
-          'سيتم فك ربط الحساب الحالي، وستحتاج إلى ربط حساب جديد عند الحل التالي.\n\n'
-          'تحذير: إذا لم تكن قد أكملت حل المنصة، فلن تعود إليك العملات التي صرفتها.',
+          'أنت اشتريت حق استخدام حساب واحد فقط. لو فكّيت الربط — حتى لو لسه '
+          'ما حلّيتش المنصة للحساب ده — الحق هيتلغى وتضطر تشتري لحساب تاني.\n\n'
+          'لو هترجّع نفس الحساب تاني، اشتراكاتك هترجع زي ما هي.',
           style: TextStyle(color: context.t.onSurface, height: 1.6),
         ),
         actions: [

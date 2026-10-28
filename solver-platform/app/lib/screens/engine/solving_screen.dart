@@ -42,9 +42,17 @@ class SolvingScreen extends ConsumerStatefulWidget {
 class _SolvingScreenState extends ConsumerState<SolvingScreen> {
   int _activeTrial = 0;
 
+  String? _boundAccountNorm() =>
+      ref.read(profileProvider).valueOrNull?.platformLoginNorm;
+
   bool _hasFullAccess() {
     final entitlements = ref.read(entitlementsProvider).valueOrNull ?? [];
-    return entitlements.any((e) => e.engineCode == widget.engineCode && e.isFull);
+    return ref.read(engineServiceProvider).hasEntitlement(
+          entitlements,
+          widget.engineCode,
+          null,
+          loginNorm: _boundAccountNorm(),
+        );
   }
 
   int _allowedTrialChapters() {
@@ -140,6 +148,22 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
 
     if (!await _ensureAccountBound(loginId)) return;
 
+    // Strict check: after binding, the current account must actually own an
+    // unlock (or trial) for this engine. Blocks reusing a purchase on another
+    // account.
+    if (!_hasFullAccess() && _effectiveTrialChapters() <= 0) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'هذا الحساب لا يملك فتح هذه المنصة. اشترِ للمنصة بحسابك الحالي.',
+            ),
+          ),
+        );
+      }
+      return;
+    }
+
     final userId = ref.read(supabaseProvider).auth.currentUser?.id;
     if (userId != null) {
       await SecureCredentials.savePassword(userId, password);
@@ -199,48 +223,54 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
   Future<bool> _ensureAccountBound(String loginId) async {
     final profile = ref.read(profileProvider).valueOrNull;
     final boundLogin = profile?.platformLogin?.trim();
+    final isBound = boundLogin != null && boundLogin.isNotEmpty;
 
-    if (boundLogin != null && boundLogin.isNotEmpty) {
-      if (boundLogin == loginId) return true;
+    if (isBound && boundLogin != loginId) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('هذا الحساب مربوط بكود آخر: $boundLogin')),
       );
       return false;
     }
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: context.t.surface,
-        title: Text('تأكيد ربط الحساب',
-            style: TextStyle(color: context.t.onSurface)),
-        content: Text(
-          'سيتم ربط كود الطالب «$loginId» بحسابك بشكل نهائي عند بدء الحل، '
-          'ولا يمكن تغييره بعد ذلك إلا بفك الربط.\n\n'
-          'تأكد من صحة الكود قبل المتابعة.',
-          style: TextStyle(color: context.t.onSurface, height: 1.6),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('إلغاء'),
+    if (!isBound) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          backgroundColor: context.t.surface,
+          title: Text('تأكيد ربط الحساب',
+              style: TextStyle(color: context.t.onSurface)),
+          content: Text(
+            'سيتم ربط كود الطالب «$loginId» بحسابك بشكل نهائي عند بدء الحل، '
+            'ولا يمكن تغييره بعد ذلك إلا بفك الربط.\n\n'
+            'تأكد من صحة الكود قبل المتابعة.',
+            style: TextStyle(color: context.t.onSurface, height: 1.6),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: context.t.burgundy,
-              foregroundColor: Colors.white,
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('إلغاء'),
             ),
-            child: const Text('ربط ومتابعة'),
-          ),
-        ],
-      ),
-    );
+            ElevatedButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: context.t.burgundy,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('ربط ومتابعة'),
+            ),
+          ],
+        ),
+      );
 
-    if (confirmed != true) return false;
+      if (confirmed != true) return false;
+    }
 
+    // Always call the RPC: it validates the account and stamps any newly
+    // created entitlement that does not yet belong to an account.
     try {
       await ref.read(profileProvider.notifier).bindPlatformAccount(loginId);
+      ref.invalidate(entitlementsProvider);
+      ref.invalidate(trialInfoProvider);
     } catch (e) {
       if (mounted) {
         showErrorSnack(context, e, action: 'ربط الحساب');
@@ -403,10 +433,12 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
       );
     }
 
-    final hasFull = entitlements.valueOrNull?.any(
-          (e) => e.engineCode == widget.engineCode && e.isFull,
-        ) ??
-        false;
+    final hasFull = ref.read(engineServiceProvider).hasEntitlement(
+          entitlements.valueOrNull ?? [],
+          widget.engineCode,
+          null,
+          loginNorm: profile.valueOrNull?.platformLoginNorm,
+        );
     final requestedTrial = widget.trialChapters;
     final allowedTrial = (() {
       final info = trial.valueOrNull;

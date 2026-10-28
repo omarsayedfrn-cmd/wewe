@@ -110,4 +110,10 @@ class Profile {
   /// True once a platform account has been bound to this profile.
   bool get hasBoundAccount =>
       platformLogin != null && platformLogin!.trim().isNotEmpty;
+
+  /// Normalized bound account (lowercase, trimmed) or null when unbound.
+  String? get platformLoginNorm {
+    final login = platformLogin?.trim().toLowerCase();
+    return (login == null || login.isEmpty) ? null : login;
+  }
 }

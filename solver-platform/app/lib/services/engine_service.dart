@@ -117,10 +117,19 @@ class EngineService {
   }
 
   /// Check if user has entitlement for a specific engine/chapter.
+  ///
+  /// When [loginNorm] is given, only entitlements stamped with that account (or
+  /// still unstamped) count; passing null means the account is unknown, so
+  /// every entitlement matches (used before the first solve).
   bool hasEntitlement(
-      List<Entitlement> entitlements, String engineCode, int? chapter) {
+    List<Entitlement> entitlements,
+    String engineCode,
+    int? chapter, {
+    String? loginNorm,
+  }) {
     for (final e in entitlements) {
       if (e.engineCode != engineCode) continue;
+      if (!e.matchesAccount(loginNorm)) continue;
       if (e.isFull) return true;
       if (chapter != null && e.hasChapter(chapter)) return true;
     }

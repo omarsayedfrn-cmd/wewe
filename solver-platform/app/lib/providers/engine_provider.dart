@@ -82,7 +82,10 @@ final trialInfoProvider = FutureProvider<TrialInfo?>((ref) async {
 
     final entitlements = await ref.watch(entitlementsProvider.future);
     final trialEntitlement = entitlements
-        .where((e) => e.source == 'trial' && e.engineCode == engineCode)
+        .where((e) =>
+            e.source == 'trial' &&
+            e.engineCode == engineCode &&
+            e.matchesAccount(profile.platformLoginNorm))
         .firstOrNull;
 
     final chapters = trialEntitlement?.chapters.length ?? configured;
