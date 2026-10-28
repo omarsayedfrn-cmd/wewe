@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/server';
 import { gradeLabels, trackLabels, languageLabels, reasonLabels } from '@/lib/types';
 import { UserActions } from '@/components/user-actions';
-import { ArrowRight, User, Wallet, Shield, History, Key } from 'lucide-react';
+import { ArrowRight, User, Wallet, Shield, History, Key, MessageCircle, Phone } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +15,7 @@ export default async function UserDetailPage({
   const { id } = await params;
   const supabase = await createAdminClient();
 
-  const [profileRes, walletRes, txRes, entitlementsRes, accessRes, enginesRes] =
+  const [profileRes, walletRes, txRes, entitlementsRes, accessRes, enginesRes, authUserRes] =
     await Promise.all([
       supabase.from('profiles').select('*').eq('id', id).single(),
       supabase.from('wallets').select('*').eq('user_id', id).single(),
@@ -35,6 +35,7 @@ export default async function UserDetailPage({
         .select('*, engines(*)')
         .eq('user_id', id),
       supabase.from('engines').select('*').order('code'),
+      supabase.auth.admin.getUserById(id).catch(() => ({ data: { user: null } })),
     ]);
 
   if (profileRes.error || !profileRes.data) {
@@ -47,11 +48,30 @@ export default async function UserDetailPage({
   const entitlements = entitlementsRes.data || [];
   const access = accessRes.data || [];
   const engines = enginesRes.data || [];
+  const authUser = authUserRes.data?.user;
+
+  // Extract phone number
+  let phone = (authUser?.user_metadata?.phone as string) || '';
+  if (!phone && profile.display_name) {
+    const match = profile.display_name.match(/\((01[0-9]{9})\)/) || profile.display_name.match(/(01[0-9]{9})/);
+    if (match) phone = match[1];
+  }
+  if (!phone && authUser?.email?.startsWith('user_')) {
+    phone = authUser.email.replace('user_', '').replace('@solver.app', '');
+  }
+
+  const rawPhone = phone.replace(/\D/g, '');
+  const intlPhone = rawPhone.startsWith('01') ? `2${rawPhone}` : rawPhone;
+  const waUrl = intlPhone
+    ? `https://wa.me/${intlPhone}?text=${encodeURIComponent(
+        `مرحباً ${profile.display_name || ''}، معك إدارة منصة Solver بخصوص تفعيل حسابك وشحن رصيدك...`
+      )}`
+    : null;
 
   return (
     <div className="space-y-6">
       {/* Top Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link
             href="/users"
@@ -67,7 +87,20 @@ export default async function UserDetailPage({
           </div>
         </div>
 
-        <UserActions userId={profile.id} engines={engines} />
+        <div className="flex items-center gap-3">
+          {waUrl && (
+            <a
+              href={waUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-xl text-xs font-bold transition-all shadow-md"
+            >
+              <MessageCircle size={15} />
+              مراسلة عبر WhatsApp
+            </a>
+          )}
+          <UserActions userId={profile.id} engines={engines} />
+        </div>
       </div>
 
       {/* Grid Overview */}
@@ -80,6 +113,12 @@ export default async function UserDetailPage({
           </div>
 
           <div className="space-y-3 text-sm">
+            {phone && (
+              <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
+                <span className="text-[#9E9E9E]">رقم الهاتف / واتساب:</span>
+                <span className="font-mono font-bold text-[#25D366]" dir="ltr">{phone}</span>
+              </div>
+            )}
             <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
               <span className="text-[#9E9E9E]">الدور:</span>
               <span className="font-semibold text-[#E0E0E0]">{profile.role}</span>

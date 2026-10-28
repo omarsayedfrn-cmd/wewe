@@ -88,6 +88,9 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
       {/* Trial Limits */}
       <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
         <h3 className="font-bold text-[#D4AF37] mb-4">حدود التجربة المجانية (Trial Limits)</h3>
+        <p className="text-xs text-[#9E9E9E] mb-4">
+          عدد الفصول التي يحلها الطالب مجانًا مرة واحدة. القيمة 0 تعطّل التجربة.
+        </p>
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-[#E0E0E0] mb-1">
@@ -95,7 +98,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
             </label>
             <input
               type="number"
-              min="1"
+              min="0"
               max="54"
               value={form.trial_chapters_grade1}
               onChange={(e) =>
@@ -114,7 +117,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
             </label>
             <input
               type="number"
-              min="1"
+              min="0"
               max="54"
               value={form.trial_chapters_grade2_engineering}
               onChange={(e) =>
@@ -133,7 +136,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
             </label>
             <input
               type="number"
-              min="1"
+              min="0"
               max="54"
               value={form.trial_chapters_grade2_other}
               onChange={(e) =>

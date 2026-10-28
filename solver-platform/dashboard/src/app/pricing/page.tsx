@@ -16,12 +16,12 @@ export default async function PricingPage() {
       <div>
         <h1 className="text-2xl font-bold text-[#D4AF37]">أسعار فتح المحركات</h1>
         <p className="text-sm text-[#9E9E9E] mt-1">
-          تعديل تكلفة الفتح المباشر للمحركات والفصول بالعملات (تنعكس فوراً في التطبيق)
+          تعديل سعر فتح المحرك بالكامل بالعملات (تنعكس فوراً في التطبيق). الأسعار لكل فصل لم تعد تُستخدم.
         </p>
       </div>
 
       <PricingTable
-        pricing={pricingRes.data || []}
+        pricing={(pricingRes.data || []).filter((p: any) => p.kind === 'full')}
         engines={enginesRes.data || []}
       />
     </div>

@@ -38,21 +38,52 @@ export async function updateSession(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser();
 
-    // Redirect to login if not authenticated (except login page)
-    if (!user && !request.nextUrl.pathname.startsWith('/login')) {
+    const isLoginPage = request.nextUrl.pathname.startsWith('/login');
+
+    // Not authenticated → login page only.
+    if (!user) {
+      if (isLoginPage) return supabaseResponse;
       const url = request.nextUrl.clone();
       url.pathname = '/login';
+      url.search = '';
       return NextResponse.redirect(url);
     }
 
-    // Redirect to home if already authenticated and trying to access login page
-    if (user && request.nextUrl.pathname.startsWith('/login')) {
+    // Authenticated → require role = 'admin' in profiles.
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .maybeSingle();
+
+    const isAdmin = profile?.role === 'admin';
+
+    if (!isAdmin) {
+      // Let non-admins reach the login page so they can switch accounts.
+      if (isLoginPage) return supabaseResponse;
+
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.search = '?error=forbidden';
+      return NextResponse.redirect(url);
+    }
+
+    // Admins should not sit on the login page.
+    if (isLoginPage) {
       const url = request.nextUrl.clone();
       url.pathname = '/';
+      url.search = '';
       return NextResponse.redirect(url);
     }
   } catch (err) {
     console.error('Middleware auth check error:', err);
+    // Fail closed: if we cannot verify the session, go to login.
+    if (!request.nextUrl.pathname.startsWith('/login')) {
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.search = '';
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

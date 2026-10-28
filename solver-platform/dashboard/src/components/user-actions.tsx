@@ -16,8 +16,6 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
   // Entitlement Modal State
   const [entOpen, setEntOpen] = useState(false);
   const [selectedEngine, setSelectedEngine] = useState(engines[0]?.code || '');
-  const [scope, setScope] = useState<'full' | 'chapter'>('full');
-  const [chaptersInput, setChaptersInput] = useState('');
   const [entLoading, setEntLoading] = useState(false);
 
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
@@ -57,22 +55,14 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
     setMessage(null);
 
     try {
-      let chapters: number[] = [];
-      if (scope === 'chapter') {
-        chapters = chaptersInput
-          .split(',')
-          .map((c) => parseInt(c.trim(), 10))
-          .filter((n) => !isNaN(n));
-      }
-
       const res = await fetch('/api/admin/set-entitlement', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           engineCode: selectedEngine,
-          scope,
-          chapters,
+          scope: 'full',
+          chapters: [],
         }),
       });
 
@@ -117,7 +107,7 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
           className="flex items-center gap-2 px-4 py-2.5 bg-[#2A2A2A] hover:bg-[#353535] text-[#D4AF37] border border-[#D4AF37]/40 rounded-xl text-sm font-semibold transition-colors shadow-md"
         >
           <Key size={16} />
-          منح محرك / فصل
+          منح فتح كامل
         </button>
       </div>
 
@@ -192,44 +182,9 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm text-[#E0E0E0] mb-1">النطاق</label>
-                <div className="flex gap-4 mt-1">
-                  <label className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input
-                      type="radio"
-                      name="scope"
-                      value="full"
-                      checked={scope === 'full'}
-                      onChange={() => setScope('full')}
-                    />
-                    فتح المحرك بالكامل
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input
-                      type="radio"
-                      name="scope"
-                      value="chapter"
-                      checked={scope === 'chapter'}
-                      onChange={() => setScope('chapter')}
-                    />
-                    فصول معينة
-                  </label>
-                </div>
-              </div>
-
-              {scope === 'chapter' && (
-                <div>
-                  <label className="block text-sm text-[#E0E0E0] mb-1">أرقام الفصول (مفصولة بفاصلة)</label>
-                  <input
-                    type="text"
-                    value={chaptersInput}
-                    onChange={(e) => setChaptersInput(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0]"
-                    placeholder="مثال: 1, 2, 3"
-                  />
-                </div>
-              )}
+              <p className="text-xs text-[#9E9E9E]">
+                سيتم منح فتح المحرك بالكامل. التجربة المجانية تُمنح تلقائيًا للطالب حسب إعدادات الفصول التجريبية.
+              </p>
 
               <div className="flex justify-end gap-2 pt-2">
                 <button

@@ -59,7 +59,7 @@ export function PricingTable({
           <thead className="bg-[#2A2A2A] text-[#E0E0E0] border-b border-[#3A3A3A]">
             <tr>
               <th className="p-4">المحرك</th>
-              <th className="p-4">النوع</th>
+              <th className="p-4">النطاق</th>
               <th className="p-4">السعر بالعملات</th>
               <th className="p-4 text-center">إجراءات</th>
             </tr>
@@ -79,7 +79,7 @@ export function PricingTable({
                   </td>
                   <td className="p-4">
                     <span className="px-2.5 py-1 bg-[#800020]/20 text-[#D4AF37] rounded-lg text-xs font-medium">
-                      {p.kind === 'full' ? 'المحرك بالكامل (Full)' : 'لكل فصل (Per Chapter)'}
+                      المحرك بالكامل (Full)
                     </span>
                   </td>
                   <td className="p-4">
