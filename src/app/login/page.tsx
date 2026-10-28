@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
@@ -10,6 +10,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Shown when the middleware redirects an authenticated non-admin here.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'forbidden') {
+      setError('هذا الحساب ليس حساب إدارة');
+    }
+  }, []);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -25,18 +33,19 @@ export default function LoginPage() {
 
       if (signInError) throw signInError;
 
-      // أي حساب يسجل دخوله بنجاح في الداشبورد، نضمن وجوده كـ admin في جدول profiles
-      if (data.user) {
-        await supabase.from('profiles').upsert({
-          id: data.user.id,
-          role: 'admin',
-          language: 'ar',
-          display_name: data.user.email?.split('@')[0] || 'Admin',
-          onboard_locked: true,
-        }, { onConflict: 'id' });
+      // The dashboard is admin-only. Never auto-promote: verify the role and
+      // sign the user back out if they are not an admin.
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user!.id)
+        .maybeSingle();
+
+      if (profile?.role !== 'admin') {
+        await supabase.auth.signOut();
+        throw new Error('هذا الحساب ليس حساب إدارة');
       }
 
-      // الدخول فوراً
       router.push('/');
       router.refresh();
     } catch (err: unknown) {

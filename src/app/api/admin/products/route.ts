@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient, getAdminUser } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
+    const admin = await getAdminUser();
+    if (!admin) {
+      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+    }
+
     const { name, coins, price, active, sort } = await req.json();
 
     if (!name || typeof coins !== 'number' || typeof price !== 'number') {
       return NextResponse.json({ error: 'بيانات غير مكتملة' }, { status: 400 });
     }
 
+    // Service role: the products table has no admin write RLS policy.
     const supabase = await createAdminClient();
 
     const { data, error } = await supabase.from('products').insert({

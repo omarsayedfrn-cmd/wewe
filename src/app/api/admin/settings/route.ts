@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminClient } from '@/lib/supabase/server';
+import { createAdminClient, getAdminUser } from '@/lib/supabase/server';
 
 export async function POST(req: NextRequest) {
   try {
+    const admin = await getAdminUser();
+    if (!admin) {
+      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+    }
+
     const { settings } = await req.json();
 
     if (!settings || typeof settings !== 'object') {
