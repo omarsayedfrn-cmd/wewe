@@ -2,8 +2,9 @@
 
 import { useState, useMemo, useDeferredValue } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { gradeLabels, trackLabels } from '@/lib/types';
-import { Eye, MessageCircle, Search, CheckCircle, Clock } from 'lucide-react';
+import { Eye, MessageCircle, Search, CheckCircle, Clock, Loader2 } from 'lucide-react';
 
 export interface UserRow {
   id: string;
@@ -20,9 +21,29 @@ export interface UserRow {
 }
 
 export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
+  const router = useRouter();
   const [filter, setFilter] = useState<'all' | 'pending' | 'active'>('all');
   const [search, setSearch] = useState('');
+  const [approvingId, setApprovingId] = useState<string | null>(null);
   const deferredSearch = useDeferredValue(search);
+
+  async function approve(userId: string) {
+    setApprovingId(userId);
+    try {
+      const res = await fetch('/api/admin/set-approval', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, approved: true }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'فشل تفعيل الحساب');
+      }
+      router.refresh();
+    } catch {
+      setApprovingId(null);
+    }
+  }
 
   const filteredUsers = useMemo(() => {
     return initialUsers.filter((user) => {
@@ -194,15 +215,31 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
                         {new Date(user.created_at).toLocaleDateString('ar-EG')}
                       </td>
 
-                      <td className="p-3 sm:p-4 text-center">
-                        <Link
-                          href={`/users/${user.id}`}
-                          prefetch={false}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#800020]/25 hover:bg-[#800020]/50 text-[#D4AF37] rounded-lg transition-colors text-xs font-semibold"
-                        >
-                          <Eye size={13} />
-                          إدارة الحساب
-                        </Link>
+                      <td className="p-3 sm:p-4">
+                        <div className="flex items-center justify-center gap-2">
+                          {user.is_pending && (
+                            <button
+                              onClick={() => approve(user.id)}
+                              disabled={approvingId === user.id}
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#4CAF50]/20 hover:bg-[#4CAF50]/40 text-[#4CAF50] rounded-lg transition-colors text-xs font-semibold disabled:opacity-60"
+                            >
+                              {approvingId === user.id ? (
+                                <Loader2 size={13} className="animate-spin" />
+                              ) : (
+                                <CheckCircle size={13} />
+                              )}
+                              تفعيل
+                            </button>
+                          )}
+                          <Link
+                            href={`/users/${user.id}`}
+                            prefetch={false}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#800020]/25 hover:bg-[#800020]/50 text-[#D4AF37] rounded-lg transition-colors text-xs font-semibold"
+                          >
+                            <Eye size={13} />
+                            إدارة الحساب
+                          </Link>
+                        </div>
                       </td>
                     </tr>
                   );

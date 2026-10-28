@@ -2,16 +2,20 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PlusCircle, Key, Unlink } from 'lucide-react';
+import { PlusCircle, Key, Unlink, CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
 export function UserActions({
   userId,
   engines,
   platformLogin,
+  approved,
+  role,
 }: {
   userId: string;
   engines: any[];
   platformLogin?: string | null;
+  approved?: boolean;
+  role?: string;
 }) {
   const router = useRouter();
 
@@ -30,7 +34,33 @@ export function UserActions({
   const [unbindOpen, setUnbindOpen] = useState(false);
   const [unbindLoading, setUnbindLoading] = useState(false);
 
+  // Approval loading state
+  const [approvalLoading, setApprovalLoading] = useState(false);
+
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
+
+  async function setApproval(next: boolean) {
+    setApprovalLoading(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch('/api/admin/set-approval', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, approved: next }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'فشل تحديث حالة الحساب');
+
+      setMessage({ text: next ? 'تم تفعيل الحساب' : 'تم تعليق الحساب' });
+      router.refresh();
+    } catch (err: any) {
+      setMessage({ text: err.message, error: true });
+    } finally {
+      setApprovalLoading(false);
+    }
+  }
 
   async function handleGrantCoins(e: React.FormEvent) {
     e.preventDefault();
@@ -130,6 +160,27 @@ export function UserActions({
       )}
 
       <div className="flex flex-col gap-3 sm:flex-row">
+        {role === 'student' && (
+          <button
+            onClick={() => setApproval(!approved)}
+            disabled={approvalLoading}
+            className={`flex touch-manipulation items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors active:scale-95 disabled:opacity-60 ${
+              approved
+                ? 'bg-[#CF6679] hover:bg-[#b85566]'
+                : 'bg-[#4CAF50] hover:bg-[#43a047]'
+            }`}
+          >
+            {approvalLoading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : approved ? (
+              <XCircle size={16} />
+            ) : (
+              <CheckCircle size={16} />
+            )}
+            {approved ? 'تعليق الحساب' : 'تفعيل الحساب'}
+          </button>
+        )}
+
         <button
           onClick={() => setCoinsOpen(true)}
           className="flex touch-manipulation items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#A0334A] active:scale-95"
