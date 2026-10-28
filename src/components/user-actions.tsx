@@ -2,9 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PlusCircle, Key } from 'lucide-react';
+import { PlusCircle, Key, Unlink } from 'lucide-react';
 
-export function UserActions({ userId, engines }: { userId: string; engines: any[] }) {
+export function UserActions({
+  userId,
+  engines,
+  platformLogin,
+}: {
+  userId: string;
+  engines: any[];
+  platformLogin?: string | null;
+}) {
   const router = useRouter();
 
   // Coins Modal State
@@ -17,6 +25,10 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
   const [entOpen, setEntOpen] = useState(false);
   const [selectedEngine, setSelectedEngine] = useState(engines[0]?.code || '');
   const [entLoading, setEntLoading] = useState(false);
+
+  // Unbind Account Modal State
+  const [unbindOpen, setUnbindOpen] = useState(false);
+  const [unbindLoading, setUnbindLoading] = useState(false);
 
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
 
@@ -79,6 +91,30 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
     }
   }
 
+  async function handleUnbind() {
+    setUnbindLoading(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch('/api/admin/unbind-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'فشل فك الربط');
+
+      setMessage({ text: 'تم فك ربط الحساب بنجاح' });
+      setUnbindOpen(false);
+      router.refresh();
+    } catch (err: any) {
+      setMessage({ text: err.message, error: true });
+    } finally {
+      setUnbindLoading(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       {message && (
@@ -109,6 +145,16 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
           <Key size={16} />
           منح فتح كامل
         </button>
+
+        {platformLogin && (
+          <button
+            onClick={() => setUnbindOpen(true)}
+            className="flex touch-manipulation items-center justify-center gap-2 rounded-xl border border-[#CF6679]/40 bg-[#2A2A2A] px-4 py-2.5 text-sm font-semibold text-[#CF6679] shadow-md transition-colors hover:bg-[#353535] active:scale-95"
+          >
+            <Unlink size={16} />
+            فك ربط الحساب
+          </button>
+        )}
       </div>
 
       {/* Coins Modal */}
@@ -203,6 +249,41 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Unbind Account Modal */}
+      {unbindOpen && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md max-h-[90dvh] overflow-y-auto p-6">
+            <h3 className="text-lg font-bold text-[#D4AF37] mb-4">فك ربط حساب المنصة</h3>
+            <p className="text-sm text-[#E0E0E0] leading-relaxed">
+              الحساب المربوط:{' '}
+              <span className="font-mono font-bold text-[#D4AF37]" dir="ltr">
+                {platformLogin}
+              </span>
+            </p>
+            <p className="text-xs text-[#9E9E9E] mt-3 leading-relaxed">
+              سيتم فك الربط ليتمكن الطالب من ربط حساب آخر عند الحل التالي. تأكد من أن الطالب على علم بذلك.
+            </p>
+            <div className="flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                onClick={() => setUnbindOpen(false)}
+                className="px-4 py-2 bg-[#2A2A2A] hover:bg-[#353535] text-[#E0E0E0] rounded-xl text-sm"
+              >
+                إلغاء
+              </button>
+              <button
+                type="button"
+                onClick={handleUnbind}
+                disabled={unbindLoading}
+                className="px-4 py-2 bg-[#CF6679] hover:bg-[#b85566] text-white rounded-xl text-sm font-semibold"
+              >
+                {unbindLoading ? 'جاري الفك...' : 'تأكيد فك الربط'}
+              </button>
+            </div>
           </div>
         </div>
       )}
