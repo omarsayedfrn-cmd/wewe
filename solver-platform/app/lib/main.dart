@@ -45,23 +45,23 @@ class _FatalErrorScreen extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Material(
-        color: SolverTheme.background,
+        color: context.t.background,
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
+                Icon(
                   Icons.error_outline,
-                  color: SolverTheme.error,
+                  color: context.t.error,
                   size: 52,
                 ),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'حدث خطأ غير متوقع',
                   style: TextStyle(
-                    color: SolverTheme.onSurface,
+                    color: context.t.onSurface,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -71,7 +71,7 @@ class _FatalErrorScreen extends StatelessWidget {
                   'يرجى إعادة تشغيل التطبيق. إذا استمرت المشكلة تواصل مع الدعم الفني.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: SolverTheme.onSurface.withValues(alpha: 0.7),
+                    color: context.t.onSurface.withValues(alpha: 0.7),
                     fontSize: 14,
                     height: 1.5,
                   ),
@@ -82,7 +82,7 @@ class _FatalErrorScreen extends StatelessWidget {
                     details.exceptionAsString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: SolverTheme.onSurfaceVariant,
+                      color: context.t.onSurfaceVariant,
                       fontSize: 11,
                       fontFamily: 'monospace',
                     ),
@@ -107,7 +107,9 @@ class SolverApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Solver',
       debugShowCheckedModeBanner: false,
-      theme: SolverTheme.darkTheme,
+      theme: SolverTheme.lightTheme,
+      darkTheme: SolverTheme.darkTheme,
+      themeMode: ThemeMode.system,
       routerConfig: router,
       builder: (context, child) {
         return Directionality(

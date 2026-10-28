@@ -89,7 +89,7 @@ export default async function DashboardPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-6">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-bold text-[#D4AF37]">لوحة التحكم</h1>
       </div>
 
@@ -110,13 +110,13 @@ export default async function DashboardPage() {
       )}
 
       {/* Stats cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {cards.map((card) => {
           const Icon = card.icon;
           return (
             <div
               key={card.label}
-              className="bg-[#1E1E1E] rounded-2xl p-6 border border-[#2A2A2A]"
+              className="bg-[#1E1E1E] rounded-2xl p-5 sm:p-6 border border-[#2A2A2A]"
             >
               <div className="flex items-center justify-between mb-4">
                 <div
@@ -126,7 +126,9 @@ export default async function DashboardPage() {
                   <Icon size={20} style={{ color: card.color }} />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-[#E0E0E0]">{card.value}</p>
+              <p className="text-2xl sm:text-3xl font-bold text-[#E0E0E0] tabular-nums break-words">
+                {card.value}
+              </p>
               <p className="text-sm text-[#9E9E9E] mt-1">{card.label}</p>
             </div>
           );
@@ -134,7 +136,7 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick info */}
-      <div className="bg-[#1E1E1E] rounded-2xl p-6 border border-[#2A2A2A]">
+      <div className="bg-[#1E1E1E] rounded-2xl p-4 sm:p-6 border border-[#2A2A2A]">
         <h2 className="text-lg font-semibold text-[#E0E0E0] mb-4">
           ملاحظات تشغيلية
         </h2>

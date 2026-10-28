@@ -28,7 +28,7 @@ class EngineDetailScreen extends ConsumerWidget {
       loading: () => Scaffold(
         appBar: AppBar(),
         body: const Center(
-            child: CircularProgressIndicator(color: SolverTheme.gold)),
+            child: CircularProgressIndicator()),
       ),
       error: (e, _) => Scaffold(
         appBar: AppBar(),
@@ -43,7 +43,7 @@ class EngineDetailScreen extends ConsumerWidget {
           return Scaffold(
             appBar: AppBar(),
             body: const Center(
-              child: CircularProgressIndicator(color: SolverTheme.gold),
+              child: CircularProgressIndicator(),
             ),
           );
         }
@@ -111,33 +111,29 @@ class EngineDetailScreen extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        SolverTheme.burgundy.withValues(alpha: 0.3),
-                        SolverTheme.surface,
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: SolverTheme.surfaceVariant),
+                    color: context.t.surface,
+                    borderRadius:
+                        BorderRadius.circular(SolverTheme.radiusCard),
+                    border: Border.all(color: context.t.line),
                   ),
                   child: Column(
                     children: [
-                      Text(engine.icon,
-                          style: const TextStyle(fontSize: 48)),
+                      Icon(engine.icon,
+                          size: 44, color: context.t.burgundy),
                       const SizedBox(height: 12),
                       Text(
                         engine.displayName(lang),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
-                          color: SolverTheme.onSurface,
+                          color: context.t.onSurface,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        '${engine.maxChapter} فصل • ${engine.platform.toUpperCase()}',
+                        '${engine.maxChapter} فصل · ${engine.platformLabel}',
                         style: TextStyle(
-                          color: SolverTheme.onSurface.withValues(alpha: 0.5),
+                          color: context.t.onSurface.withValues(alpha: 0.5),
                         ),
                       ),
                     ],
@@ -164,7 +160,7 @@ class EngineDetailScreen extends ConsumerWidget {
                   if (trialInfo != null &&
                       trialInfo.appliesTo(engineCode) &&
                       !trialInfo.available)
-                    _buildTrialFinishedCard(),
+                    _buildTrialFinishedCard(context),
                   const SizedBox(height: 16),
                   _buildPurchaseCard(
                     context,
@@ -176,6 +172,7 @@ class EngineDetailScreen extends ConsumerWidget {
 
                 const SizedBox(height: 16),
                 _buildInfoCard(
+                  context,
                   hasFull
                       ? 'سيتم حل جميع فصول المنصة تلقائيًا من البداية حتى النهاية.'
                       : trialApplies
@@ -199,24 +196,24 @@ class EngineDetailScreen extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: SolverTheme.surface,
+        color: context.t.surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SolverTheme.success.withValues(alpha: 0.5)),
+        border: Border.all(color: context.t.success.withValues(alpha: 0.5)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Chip(
+          Chip(
             avatar: Icon(Icons.check_circle,
-                color: SolverTheme.success, size: 18),
+                color: context.t.success, size: 18),
             label: Text('المنصة مفتوحة بالكامل'),
-            backgroundColor: SolverTheme.surfaceVariant,
-            labelStyle: TextStyle(color: SolverTheme.success),
+            backgroundColor: context.t.surfaceVariant,
+            labelStyle: TextStyle(color: context.t.success),
           ),
           const SizedBox(height: 12),
-          const Text(
+          Text(
             'يمكنك الآن حل كل فصول المنصة بضغطة واحدة.',
-            style: TextStyle(color: SolverTheme.onSurface, fontSize: 14),
+            style: TextStyle(color: context.t.onSurface, fontSize: 14),
           ),
           const SizedBox(height: 16),
           ElevatedButton.icon(
@@ -224,8 +221,8 @@ class EngineDetailScreen extends ConsumerWidget {
             icon: const Icon(Icons.play_circle_fill),
             label: const Text('ابدأ حل المنصة كاملة'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: SolverTheme.gold,
-              foregroundColor: Colors.black,
+              backgroundColor: context.t.burgundy,
+              foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
@@ -245,21 +242,21 @@ class EngineDetailScreen extends ConsumerWidget {
       padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: SolverTheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SolverTheme.gold.withValues(alpha: 0.5)),
+        color: context.t.surface,
+        borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
+        border: Border.all(color: context.t.line),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
-              const Icon(Icons.card_giftcard, color: SolverTheme.gold),
+              const Icon(Icons.card_giftcard),
               const SizedBox(width: 8),
               Text(
                 'تجربة مجانية: $chapters فصول',
-                style: const TextStyle(
-                  color: SolverTheme.gold,
+                style: TextStyle(
+                  color: context.t.onSurface,
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
@@ -270,7 +267,7 @@ class EngineDetailScreen extends ConsumerWidget {
           Text(
             'جرّب أول $chapters فصول من المنصة مجانًا قبل الفتح الكامل.',
             style: TextStyle(
-              color: SolverTheme.onSurface.withValues(alpha: 0.75),
+              color: context.t.onSurface.withValues(alpha: 0.75),
               fontSize: 13,
             ),
           ),
@@ -280,8 +277,6 @@ class EngineDetailScreen extends ConsumerWidget {
             icon: const Icon(Icons.rocket_launch),
             label: const Text('ابدأ التجربة المجانية'),
             style: OutlinedButton.styleFrom(
-              foregroundColor: SolverTheme.gold,
-              side: const BorderSide(color: SolverTheme.gold),
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
           ),
@@ -290,24 +285,24 @@ class EngineDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTrialFinishedCard() {
+  Widget _buildTrialFinishedCard(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: SolverTheme.error.withValues(alpha: 0.1),
+        color: context.t.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SolverTheme.error.withValues(alpha: 0.3)),
+        border: Border.all(color: context.t.error.withValues(alpha: 0.3)),
       ),
-      child: const Row(
+      child: Row(
         children: [
-          Icon(Icons.info_outline, color: SolverTheme.error, size: 20),
+          Icon(Icons.info_outline, color: context.t.error, size: 20),
           SizedBox(width: 8),
           Expanded(
             child: Text(
               'تم استخدام التجربة المجانية. افتح المنصة كاملة للمتابعة.',
-              style: TextStyle(color: SolverTheme.error, fontSize: 13),
+              style: TextStyle(color: context.t.error, fontSize: 13),
             ),
           ),
         ],
@@ -325,17 +320,17 @@ class EngineDetailScreen extends ConsumerWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: SolverTheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: SolverTheme.surfaceVariant),
+        color: context.t.surface,
+        borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
+        border: Border.all(color: context.t.line),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
+          Text(
             'فتح المنصة كاملة',
             style: TextStyle(
-              color: SolverTheme.onSurface,
+              color: context.t.onSurface,
               fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
@@ -346,7 +341,7 @@ class EngineDetailScreen extends ConsumerWidget {
                 ? 'افتح جميع فصول ${engine.displayName("ar")} بسعر $fullPrice عملة.'
                 : 'السعر غير متاح حاليًا، يرجى التواصل مع الإدارة.',
             style: TextStyle(
-              color: SolverTheme.onSurface.withValues(alpha: 0.7),
+              color: context.t.onSurface.withValues(alpha: 0.7),
               fontSize: 13,
             ),
           ),
@@ -365,7 +360,7 @@ class EngineDetailScreen extends ConsumerWidget {
                 ? 'فتح الكل بـ $fullPrice عملة'
                 : 'غير متاح'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: SolverTheme.burgundy,
+              backgroundColor: context.t.burgundy,
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
@@ -375,24 +370,24 @@ class EngineDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoCard(String text) {
+  Widget _buildInfoCard(BuildContext context, String text) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: SolverTheme.surfaceVariant.withValues(alpha: 0.4),
+        color: context.t.surfaceVariant.withValues(alpha: 0.4),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
         children: [
           Icon(Icons.info_outline,
-              color: SolverTheme.onSurface.withValues(alpha: 0.6), size: 18),
+              color: context.t.onSurface.withValues(alpha: 0.6), size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
               style: TextStyle(
-                color: SolverTheme.onSurface.withValues(alpha: 0.7),
+                color: context.t.onSurface.withValues(alpha: 0.7),
                 fontSize: 12,
                 height: 1.5,
               ),
@@ -440,12 +435,12 @@ class EngineDetailScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: SolverTheme.surface,
-        title: const Text('تأكيد الشراء',
-            style: TextStyle(color: SolverTheme.onSurface)),
+        backgroundColor: context.t.surface,
+        title: Text('تأكيد الشراء',
+            style: TextStyle(color: context.t.onSurface)),
         content: Text(
           'فتح ${engine.displayName("ar")} بالكامل بـ $cost عملة؟\nسيتم حل جميع الفصول دفعة واحدة.',
-          style: const TextStyle(color: SolverTheme.onSurface),
+          style: TextStyle(color: context.t.onSurface),
         ),
         actions: [
           TextButton(
@@ -465,7 +460,7 @@ class EngineDetailScreen extends ConsumerWidget {
                 ref.invalidate(trialInfoProvider);
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('تم الفتح بنجاح ✅')),
+                    const SnackBar(content: Text('تم فتح المنصة')),
                   );
                 }
               } catch (e) {
@@ -475,10 +470,10 @@ class EngineDetailScreen extends ConsumerWidget {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: SolverTheme.gold,
-              foregroundColor: Colors.black,
+              backgroundColor: context.t.burgundy,
+              foregroundColor: Colors.white,
             ),
-            child: const Text('شراء'),
+            child: const Text('شراء، فتح الكل'),
           ),
         ],
       ),

@@ -98,7 +98,7 @@ class SprixSolver {
 
             if (trialMode) {
               log('--------------------------------------------------');
-              log('⭐ [تمت التجربة بنجاح] تم حل فصل بنجاح للتأكد!');
+              log('التجربة: تم حل فصل التأكيد بنجاح');
               log('--------------------------------------------------');
               onProgress?.call(1, 1, 'تمت التجربة');
               return;
@@ -132,7 +132,7 @@ class SprixSolver {
         if (maxChapters != null && isChapter) {
           chaptersSolved++;
           if (chaptersSolved >= maxChapters) {
-            log('⭐ [انتهت التجربة] تم حل $chaptersSolved فصل تجريبي بنجاح');
+            log('انتهت التجربة: تم حل $chaptersSolved فصل تجريبي بنجاح');
             onProgress?.call(chaptersSolved, total, 'تمت التجربة');
             return;
           }

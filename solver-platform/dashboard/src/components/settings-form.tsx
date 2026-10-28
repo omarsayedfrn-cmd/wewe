@@ -1,11 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Save, Check } from 'lucide-react';
 
 export function SettingsForm({ initialSettings }: { initialSettings: Record<string, any> }) {
-  const router = useRouter();
   const [form, setForm] = useState({
     referral_signup_reward: initialSettings['referral_signup_reward'] ?? 10,
     referral_recharge_reward: initialSettings['referral_recharge_reward'] ?? 20,
@@ -32,7 +30,6 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
       if (!res.ok) throw new Error('فشل حفظ الإعدادات');
 
       setSaved(true);
-      router.refresh();
       setTimeout(() => setSaved(false), 3000);
     } catch (err: any) {
       alert(err.message);
@@ -44,7 +41,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
       {/* Referral Rewards */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <h3 className="font-bold text-[#D4AF37] mb-4">مكافآت الإحالة (Referral Rewards)</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
@@ -86,7 +83,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
       </div>
 
       {/* Trial Limits */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <h3 className="font-bold text-[#D4AF37] mb-4">حدود التجربة المجانية (Trial Limits)</h3>
         <p className="text-xs text-[#9E9E9E] mb-4">
           عدد الفصول التي يحلها الطالب مجانًا مرة واحدة. القيمة 0 تعطّل التجربة.
@@ -154,7 +151,7 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
       <button
         type="submit"
         disabled={saving}
-        className="flex items-center gap-2 px-6 py-3 bg-[#800020] hover:bg-[#A0334A] text-white rounded-xl font-semibold transition-colors shadow-lg disabled:opacity-50"
+        className="flex w-full touch-manipulation items-center justify-center gap-2 rounded-xl bg-[#800020] px-6 py-3 font-semibold text-white shadow-lg transition-colors hover:bg-[#A0334A] active:scale-[0.99] disabled:opacity-50 sm:w-auto"
       >
         {saved ? (
           <>

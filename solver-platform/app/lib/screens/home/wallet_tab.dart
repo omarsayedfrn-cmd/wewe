@@ -22,51 +22,38 @@ class WalletTab extends ConsumerWidget {
             // Balance card
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(28),
+              padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [SolverTheme.burgundy, SolverTheme.burgundyDark],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: SolverTheme.burgundy.withValues(alpha: 0.4),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+                color: context.t.surface,
+                borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
+                border: Border.all(color: context.t.line),
               ),
               child: Column(
                 children: [
                   Text(
                     'الرصيد الحالي',
                     style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 16,
+                      color: context.t.onSurfaceVariant,
+                      fontSize: 15,
                     ),
                   ),
                   const SizedBox(height: 8),
                   walletAsync.when(
-                    loading: () => const CircularProgressIndicator(
-                        color: SolverTheme.gold, strokeWidth: 2),
+                    loading: () => CircularProgressIndicator(
+                        color: context.t.burgundy, strokeWidth: 2),
                     error: (e, _) => Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           'تعذر تحميل الرصيد',
                           style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.8),
+                            color: context.t.onSurfaceVariant,
                             fontSize: 14,
                           ),
                         ),
                         TextButton(
                           onPressed: () => ref.invalidate(walletProvider),
-                          child: const Text(
-                            'إعادة المحاولة',
-                            style: TextStyle(color: SolverTheme.gold),
-                          ),
+                          child: const Text('إعادة المحاولة'),
                         ),
                       ],
                     ),
@@ -77,18 +64,19 @@ class WalletTab extends ConsumerWidget {
                       children: [
                         Text(
                           '${wallet.balance}',
-                          style: const TextStyle(
-                            color: SolverTheme.gold,
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
+                          style: TextStyle(
+                            color: context.t.burgundy,
+                            fontSize: 44,
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           'عملة',
                           style: TextStyle(
-                            color: SolverTheme.gold.withValues(alpha: 0.7),
-                            fontSize: 18,
+                            color: context.t.gold,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -99,19 +87,21 @@ class WalletTab extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.15),
-                      borderRadius: BorderRadius.circular(12),
+                      color: context.t.surfaceVariant,
+                      borderRadius:
+                          BorderRadius.circular(SolverTheme.radiusControl),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.info_outline,
-                            color: Colors.white70, size: 16),
+                            color: context.t.onSurfaceVariant, size: 16),
                         SizedBox(width: 8),
                         Text(
-                          'تواصل مع الدعم للشحن',
-                          style:
-                              TextStyle(color: Colors.white70, fontSize: 13),
+                          'الشحن عن طريق الدعم الفني',
+                          style: TextStyle(
+                              color: context.t.onSurfaceVariant,
+                              fontSize: 13),
                         ),
                       ],
                     ),
@@ -125,19 +115,18 @@ class WalletTab extends ConsumerWidget {
             // Transaction history header
             Row(
               children: [
-                const Text(
+                Text(
                   'سجل العمليات',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: SolverTheme.onSurface,
+                    color: context.t.onSurface,
                   ),
                 ),
                 const Spacer(),
                 TextButton(
                   onPressed: () => ref.invalidate(transactionsProvider),
-                  child: const Text('تحديث',
-                      style: TextStyle(color: SolverTheme.gold)),
+                  child: const Text('تحديث'),
                 ),
               ],
             ),
@@ -147,8 +136,7 @@ class WalletTab extends ConsumerWidget {
             Expanded(
               child: txAsync.when(
                 loading: () => const Center(
-                  child: CircularProgressIndicator(
-                      color: SolverTheme.gold, strokeWidth: 2),
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 ),
                 error: (e, _) => ErrorView(
                   error: e,
@@ -161,14 +149,14 @@ class WalletTab extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.receipt_long,
-                              color: SolverTheme.onSurface
+                              color: context.t.onSurface
                                   .withValues(alpha: 0.3),
                               size: 48),
                           const SizedBox(height: 12),
                           Text(
                             'لا توجد عمليات بعد',
                             style: TextStyle(
-                              color: SolverTheme.onSurface
+                              color: context.t.onSurface
                                   .withValues(alpha: 0.5),
                             ),
                           ),
@@ -180,33 +168,33 @@ class WalletTab extends ConsumerWidget {
                   return ListView.separated(
                     itemCount: txs.length,
                     separatorBuilder: (_, __) =>
-                        const Divider(color: SolverTheme.surfaceVariant),
+                        Divider(color: context.t.surfaceVariant),
                     itemBuilder: (context, index) {
                       final tx = txs[index];
                       return ListTile(
                         leading: CircleAvatar(
                           backgroundColor: tx.isCredit
-                              ? SolverTheme.success.withValues(alpha: 0.2)
-                              : SolverTheme.error.withValues(alpha: 0.2),
+                              ? context.t.success.withValues(alpha: 0.2)
+                              : context.t.error.withValues(alpha: 0.2),
                           child: Icon(
                             tx.isCredit
                                 ? Icons.arrow_downward
                                 : Icons.arrow_upward,
                             color: tx.isCredit
-                                ? SolverTheme.success
-                                : SolverTheme.error,
+                                ? context.t.success
+                                : context.t.error,
                             size: 20,
                           ),
                         ),
                         title: Text(
                           tx.reasonLabel,
-                          style: const TextStyle(
-                              color: SolverTheme.onSurface, fontSize: 15),
+                          style: TextStyle(
+                              color: context.t.onSurface, fontSize: 15),
                         ),
                         subtitle: Text(
                           _formatDate(tx.createdAt),
                           style: TextStyle(
-                            color: SolverTheme.onSurface
+                            color: context.t.onSurface
                                 .withValues(alpha: 0.5),
                             fontSize: 12,
                           ),
@@ -215,8 +203,8 @@ class WalletTab extends ConsumerWidget {
                           '${tx.isCredit ? "+" : ""}${tx.delta}',
                           style: TextStyle(
                             color: tx.isCredit
-                                ? SolverTheme.success
-                                : SolverTheme.error,
+                                ? context.t.success
+                                : context.t.error,
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
                           ),

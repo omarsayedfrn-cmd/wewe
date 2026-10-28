@@ -58,19 +58,19 @@ class Pace {
       if (incidents >= maxIncidents) {
         disabled = true;
         effectiveScale = 1.0;
-        log('⚠ تم الوصول لحد الطلبات ($incidents مرات) — تم تعطيل Boost مؤقتًا');
+        log('تنبيه: تم الوصول لحد الطلبات ($incidents مرات) — تم تعطيل Boost مؤقتًا');
       } else {
         effectiveScale = min(1.0, effectiveScale + 0.2);
-        log('⚠ المنصة طلبت تقليل الطلبات (429) — تم إبطاء Boost إلى ×${fmtScale(effectiveScale)}');
+        log('تنبيه: المنصة طلبت تقليل الطلبات (429) — تم إبطاء Boost إلى ×${fmtScale(effectiveScale)}');
       }
     }
     final backoff = backoffBaseMs + attempt * 5000 + _rnd.nextInt(5000);
-    log('⏸ انتظار ${backoff ~/ 1000} ثانية بسبب حد الطلبات...');
+    log('انتظار ${backoff ~/ 1000} ثانية بسبب حد الطلبات...');
     await Future.delayed(Duration(milliseconds: backoff));
   }
 
   /// Called on HTTP 403 (locked/forbidden): log but NO cooldown, fail fast
   Future<void> onForbidden(String context) async {
-    if (enabled) log('⛔ تم رفض الوصول إلى $context (403) — لن تتم إعادة المحاولة');
+    if (enabled) log('توقف: تم رفض الوصول إلى $context (403) — لن تتم إعادة المحاولة');
   }
 }

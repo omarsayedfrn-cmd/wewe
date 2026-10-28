@@ -30,13 +30,13 @@ class SupportScreen extends ConsumerWidget {
             }
           }
         },
-        backgroundColor: SolverTheme.burgundy,
+        backgroundColor: context.t.burgundy,
         icon: const Icon(Icons.add),
         label: const Text('محادثة جديدة'),
       ),
       body: threadsAsync.when(
         loading: () => const Center(
-          child: CircularProgressIndicator(color: SolverTheme.gold),
+          child: CircularProgressIndicator(strokeWidth: 2),
         ),
         error: (e, _) => ErrorView(
           error: e,
@@ -50,12 +50,12 @@ class SupportScreen extends ConsumerWidget {
                 children: [
                   Icon(Icons.support_agent,
                       size: 64,
-                      color: SolverTheme.onSurface.withValues(alpha: 0.3)),
+                      color: context.t.onSurface.withValues(alpha: 0.3)),
                   const SizedBox(height: 16),
                   Text(
                     'لا توجد محادثات بعد',
                     style: TextStyle(
-                      color: SolverTheme.onSurface.withValues(alpha: 0.5),
+                      color: context.t.onSurface.withValues(alpha: 0.5),
                       fontSize: 16,
                     ),
                   ),
@@ -63,7 +63,7 @@ class SupportScreen extends ConsumerWidget {
                   Text(
                     'اضغط + لبدء محادثة مع فريق الدعم',
                     style: TextStyle(
-                      color: SolverTheme.onSurface.withValues(alpha: 0.3),
+                      color: context.t.onSurface.withValues(alpha: 0.3),
                       fontSize: 13,
                     ),
                   ),
@@ -79,47 +79,47 @@ class SupportScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               final thread = threads[index];
               return ListTile(
-                tileColor: SolverTheme.surface,
+                tileColor: context.t.surface,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
                 leading: CircleAvatar(
                   backgroundColor: thread.isOpen
-                      ? SolverTheme.success.withValues(alpha: 0.2)
-                      : SolverTheme.surfaceVariant,
+                      ? context.t.success.withValues(alpha: 0.2)
+                      : context.t.surfaceVariant,
                   child: Icon(
                     thread.isOpen ? Icons.chat : Icons.chat_outlined,
                     color: thread.isOpen
-                        ? SolverTheme.success
-                        : SolverTheme.onSurfaceVariant,
+                        ? context.t.success
+                        : context.t.onSurfaceVariant,
                     size: 20,
                   ),
                 ),
                 title: Text(
                   thread.isOpen ? 'محادثة مفتوحة' : 'محادثة مغلقة',
-                  style: const TextStyle(
-                      color: SolverTheme.onSurface, fontSize: 15),
+                  style: TextStyle(
+                      color: context.t.onSurface, fontSize: 15),
                 ),
                 subtitle: Text(
                   thread.lastMessageAt != null
                       ? _formatDate(thread.lastMessageAt!)
                       : _formatDate(thread.createdAt),
                   style: TextStyle(
-                    color: SolverTheme.onSurface.withValues(alpha: 0.5),
+                    color: context.t.onSurface.withValues(alpha: 0.5),
                     fontSize: 12,
                   ),
                 ),
                 trailing: thread.unreadUser > 0
                     ? CircleAvatar(
                         radius: 12,
-                        backgroundColor: SolverTheme.burgundy,
+                        backgroundColor: context.t.burgundy,
                         child: Text(
                           '${thread.unreadUser}',
                           style: const TextStyle(
                               color: Colors.white, fontSize: 11),
                         ),
                       )
-                    : const Icon(Icons.arrow_forward_ios,
-                        size: 16, color: SolverTheme.onSurfaceVariant),
+                    : Icon(Icons.chevron_left,
+                        size: 18, color: context.t.onSurfaceVariant),
                 onTap: () => context.push('/support/${thread.id}'),
               );
             },

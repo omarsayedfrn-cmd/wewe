@@ -33,14 +33,15 @@ export default async function SupportPage() {
                 <Link
                   key={th.id}
                   href={`/support/${th.id}`}
-                  className="p-5 flex items-center justify-between hover:bg-[#252525] transition-colors block"
+                  prefetch={false}
+                  className="flex flex-col gap-3 p-4 transition-colors hover:bg-[#252525] sm:flex-row sm:items-center sm:justify-between sm:p-5"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#800020]/20 rounded-2xl flex items-center justify-center text-[#D4AF37]">
+                  <div className="flex min-w-0 items-center gap-4">
+                    <div className="w-12 h-12 shrink-0 bg-[#800020]/20 rounded-2xl flex items-center justify-center text-[#D4AF37]">
                       <MessageCircle size={22} />
                     </div>
-                    <div>
-                      <div className="flex items-center gap-2">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
                         <span className="font-bold text-[#E0E0E0]">
                           {th.profiles?.display_name || 'مستخدم بدون اسم'}
                         </span>
@@ -65,7 +66,7 @@ export default async function SupportPage() {
                     </div>
                   </div>
 
-                  <div className="text-xs text-[#D4AF37] font-semibold bg-[#2A2A2A] px-3 py-1.5 rounded-xl border border-[#3A3A3A]">
+                  <div className="self-start rounded-xl border border-[#3A3A3A] bg-[#2A2A2A] px-3 py-1.5 text-xs font-semibold text-[#D4AF37] sm:self-auto">
                     فتح المحادثة ←
                   </div>
                 </Link>

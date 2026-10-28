@@ -11,6 +11,16 @@ import '../../solver/qureo_solver.dart';
 import '../../solver/sprix_solver.dart';
 import '../../widgets/error_view.dart';
 
+/// Severity of a solver log line — colors the log without emoji sniffing.
+enum _LogLevel { info, success, error }
+
+class _LogLine {
+  final String time;
+  final String message;
+  final _LogLevel level;
+  const _LogLine(this.time, this.message, this.level);
+}
+
 class SolvingScreen extends ConsumerStatefulWidget {
   final String engineCode;
 
@@ -54,7 +64,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
   final _loginController = TextEditingController();
   final _passController = TextEditingController();
   final _scrollController = ScrollController();
-  final List<String> _logs = [];
+  final List<_LogLine> _logs = [];
 
   bool _boost = true;
   bool _running = false;
@@ -70,13 +80,13 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
     super.dispose();
   }
 
-  void _addLog(String msg) {
+  void _addLog(String msg, [_LogLevel level = _LogLevel.info]) {
     if (!mounted) return;
     final time = DateTime.now();
     final timeStr =
         '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}:${time.second.toString().padLeft(2, '0')}';
     setState(() {
-      _logs.add('[$timeStr] $msg');
+      _logs.add(_LogLine(timeStr, msg, level));
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -111,10 +121,12 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
       _logs.clear();
     });
 
-    _addLog(_activeTrial > 0
-        ? '▶ بدء التجربة المجانية: ${widget.engineCode} (أول $_activeTrial فصول)'
-        : '▶ بدء حل المنصة كاملة: ${widget.engineCode}');
-    _addLog('⚡ وضع Boost: ${_boost ? "مفعل" : "معطل"}');
+    _addLog(
+      _activeTrial > 0
+          ? 'بدء التجربة المجانية: ${widget.engineCode} (أول $_activeTrial فصول)'
+          : 'بدء حل المنصة كاملة: ${widget.engineCode}',
+    );
+    _addLog('وضع التسريع (Boost): ${_boost ? 'مفعل' : 'معطل'}');
 
     final pace = Pace(
       enabled: _boost,
@@ -131,13 +143,13 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
         throw SolverStop('محرك غير مدعوم: ${widget.engineCode}');
       }
 
-      _addLog('🎉 اكتملت عملية الحل بنجاح تام 100% PERFECT');
+      _addLog('اكتمل الحل بنجاح', _LogLevel.success);
     } catch (e) {
       final info = describeError(e, action: 'حل ${widget.engineCode}');
-      _addLog('❌ ${info.title}');
-      _addLog('   ${info.message}');
-      if (info.hint != null) _addLog('   ${info.hint}');
-      if (info.details != null) _addLog('🔧 ${info.details}');
+      _addLog(info.title, _LogLevel.error);
+      _addLog(info.message);
+      if (info.hint != null) _addLog(info.hint!);
+      if (info.details != null) _addLog(info.details!);
       if (mounted) setState(() => _lastError = info);
     } finally {
       if (mounted) {
@@ -266,9 +278,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
     if (loading) {
       return Scaffold(
         appBar: AppBar(title: Text(widget.engineCode.toUpperCase())),
-        body: const Center(
-          child: CircularProgressIndicator(color: SolverTheme.gold),
-        ),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -310,13 +320,13 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.lock_outline,
-                    color: SolverTheme.gold, size: 56),
+                Icon(Icons.lock_outline,
+                    color: context.t.onSurfaceVariant, size: 52),
                 const SizedBox(height: 16),
-                const Text(
+                Text(
                   'هذه المنصة غير مفتوحة',
                   style: TextStyle(
-                    color: SolverTheme.onSurface,
+                    color: context.t.onSurface,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
@@ -326,7 +336,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                   'افتح المنصة كاملة أو ابدأ التجربة المجانية من صفحة المحرك.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: SolverTheme.onSurface.withValues(alpha: 0.7),
+                    color: context.t.onSurface.withValues(alpha: 0.7),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -344,7 +354,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(!hasFull && trialChapters > 0
-            ? 'تجربة ${widget.engineCode.toUpperCase()} • $trialChapters فصول'
+            ? 'تجربة ${widget.engineCode.toUpperCase()} ($trialChapters فصول)'
             : 'حل ${widget.engineCode.toUpperCase()} كاملة'),
       ),
       body: Padding(
@@ -355,9 +365,9 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: SolverTheme.surface,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: SolverTheme.surfaceVariant),
+                color: context.t.surface,
+                borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
+                border: Border.all(color: context.t.line),
               ),
               child: Column(
                 children: [
@@ -368,8 +378,8 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                           controller: _loginController,
                           enabled: !_running,
                           decoration: const InputDecoration(
-                            labelText: 'كود الطالب / ID',
-                            prefixIcon: Icon(Icons.person, color: SolverTheme.gold),
+                            labelText: 'كود الطالب',
+                            prefixIcon: Icon(Icons.person_outline),
                           ),
                         ),
                       ),
@@ -381,7 +391,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                           obscureText: true,
                           decoration: const InputDecoration(
                             labelText: 'كلمة السر',
-                            prefixIcon: Icon(Icons.lock, color: SolverTheme.gold),
+                            prefixIcon: Icon(Icons.lock_outline),
                           ),
                         ),
                       ),
@@ -395,18 +405,19 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                         children: [
                           Switch(
                             value: _boost,
-                            activeThumbColor: SolverTheme.gold,
                             onChanged: _running
                                 ? null
                                 : (v) => setState(() => _boost = v),
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            '⚡ وضع Boost (تسريع فائق)',
+                            'وضع التسريع (Boost)',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: _boost ? SolverTheme.gold : SolverTheme.onSurface,
+                              fontWeight: FontWeight.w500,
+                              color: _boost
+                                  ? context.t.onSurface
+                                  : context.t.onSurfaceVariant,
                             ),
                           ),
                         ],
@@ -425,7 +436,7 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
                             : const Icon(Icons.play_arrow),
                         label: Text(_running ? 'جاري الحل...' : 'بدء الحل'),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: SolverTheme.burgundy,
+                          backgroundColor: context.t.burgundy,
                           foregroundColor: Colors.white,
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                         ),
@@ -442,17 +453,22 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
             if (_progress > 0 || _running) ...[
               LinearProgressIndicator(
                 value: _progress > 0 ? _progress : null,
-                backgroundColor: SolverTheme.surfaceVariant,
-                valueColor: const AlwaysStoppedAnimation<Color>(SolverTheme.gold),
+                backgroundColor: context.t.surfaceVariant,
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(context.t.burgundy),
                 minHeight: 6,
                 borderRadius: BorderRadius.circular(3),
               ),
               const SizedBox(height: 6),
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: AlignmentDirectional.centerStart,
                 child: Text(
-                  _progressLabel,
-                  style: const TextStyle(fontSize: 12, color: SolverTheme.gold),
+                  '$_progressLabel ${(_progress * 100).round()}%',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: context.t.onSurfaceVariant,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -468,56 +484,87 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
               const SizedBox(height: 12),
             ],
 
-            // Live Terminal Log Screen
+            // Live log panel
             Expanded(
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: SolverTheme.surfaceVariant),
+                  color: const Color(0xFF1B1917),
+                  borderRadius: BorderRadius.circular(SolverTheme.radiusCard),
                 ),
                 child: _logs.isEmpty
-                  ? Center(
-                      child: Text(
-                        'اضغط "بدء الحل" للتشغيل المباشر على جهازك...',
-                        style: TextStyle(
-                          color: SolverTheme.onSurface.withValues(alpha: 0.3),
-                          fontFamily: 'monospace',
-                          fontSize: 13,
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      controller: _scrollController,
-                      itemCount: _logs.length,
-                      itemBuilder: (context, index) {
-                        final log = _logs[index];
-                        final isError = log.contains('❌') || log.contains('⚠') || log.contains('⛔');
-                        final isSuccess = log.contains('🎉') || log.contains('⭐') || log.contains('صحيح') || log.contains('PERFECT');
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 1.5),
-                          child: Text(
-                            log,
-                            style: TextStyle(
-                              fontFamily: 'monospace',
-                              fontSize: 12,
-                              color: isError
-                                  ? SolverTheme.error
-                                  : isSuccess
-                                      ? SolverTheme.success
-                                      : SolverTheme.onSurface,
-                            ),
+                    ? Center(
+                        child: Text(
+                          'اضغط "بدء الحل" لبدء التشغيل على جهازك.',
+                          style: TextStyle(
+                            color: Colors.white.withValues(alpha: 0.35),
+                            fontSize: 13,
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      )
+                    : ListView.builder(
+                        controller: _scrollController,
+                        itemCount: _logs.length,
+                        itemBuilder: (context, index) {
+                          return _logRow(_logs[index]);
+                        },
+                      ),
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _logRow(_LogLine line) {
+    final Color color;
+    switch (line.level) {
+      case _LogLevel.success:
+        color = const Color(0xFF8FD3B2);
+      case _LogLevel.error:
+        color = const Color(0xFFFF9891);
+      case _LogLevel.info:
+        color = const Color(0xFFD9D6D2);
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 7,
+            height: 7,
+            margin: const EdgeInsets.only(top: 7),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: line.time,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: Colors.white.withValues(alpha: 0.35),
+                      letterSpacing: 0.3,
+                    ),
+                  ),
+                  const TextSpan(text: '  '),
+                  TextSpan(text: line.message),
+                ],
+              ),
+              style: TextStyle(
+                fontFamily: 'Tajawal',
+                fontSize: 12.5,
+                height: 1.6,
+                color: color,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -540,23 +587,23 @@ class _ErrorBanner extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: SolverTheme.error.withValues(alpha: 0.12),
+        color: context.t.error.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: SolverTheme.error.withValues(alpha: 0.4)),
+        border: Border.all(color: context.t.error.withValues(alpha: 0.4)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              const Icon(Icons.error_outline,
-                  color: SolverTheme.error, size: 20),
+              Icon(Icons.error_outline,
+                  color: context.t.error, size: 20),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
                   info.title,
-                  style: const TextStyle(
-                    color: SolverTheme.error,
+                  style: TextStyle(
+                    color: context.t.error,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
@@ -568,7 +615,7 @@ class _ErrorBanner extends StatelessWidget {
           Text(
             info.message,
             style: TextStyle(
-              color: SolverTheme.onSurface.withValues(alpha: 0.8),
+              color: context.t.onSurface.withValues(alpha: 0.8),
               fontSize: 13,
               height: 1.4,
             ),
@@ -578,7 +625,7 @@ class _ErrorBanner extends StatelessWidget {
             Text(
               info.hint!,
               style: TextStyle(
-                color: SolverTheme.onSurface.withValues(alpha: 0.55),
+                color: context.t.onSurface.withValues(alpha: 0.55),
                 fontSize: 12,
                 height: 1.4,
               ),
@@ -593,7 +640,6 @@ class _ErrorBanner extends StatelessWidget {
                   icon: const Icon(Icons.refresh, size: 16),
                   label: const Text('إعادة المحاولة'),
                   style: TextButton.styleFrom(
-                    foregroundColor: SolverTheme.gold,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                   ),
                 ),
@@ -603,7 +649,7 @@ class _ErrorBanner extends StatelessWidget {
                   icon: const Icon(Icons.info_outline, size: 16),
                   label: const Text('عرض التفاصيل'),
                   style: TextButton.styleFrom(
-                    foregroundColor: SolverTheme.onSurfaceVariant,
+                    foregroundColor: context.t.onSurfaceVariant,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                   ),
                 ),

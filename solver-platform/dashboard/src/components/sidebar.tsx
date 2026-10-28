@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import Link, { useLinkStatus } from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   Users,
@@ -26,28 +26,45 @@ const navItems = [
   { href: '/audit', label: 'سجل التدقيق', icon: Shield },
 ];
 
-export function Sidebar() {
-  const pathname = usePathname();
-
-  if (pathname === '/login') {
-    return null;
-  }
+function PendingHint() {
+  const { pending } = useLinkStatus();
 
   return (
-    <aside className="w-64 bg-[#1E1E1E] border-l border-[#2A2A2A] min-h-screen p-4 flex flex-col">
+    <span
+      aria-hidden
+      className={`ms-auto h-1.5 w-1.5 rounded-full bg-current transition-opacity duration-150 ${
+        pending ? 'animate-pulse opacity-100' : 'opacity-0'
+      }`}
+    />
+  );
+}
+
+export function Sidebar({
+  className = '',
+  onNavigate,
+}: {
+  className?: string;
+  onNavigate?: () => void;
+}) {
+  const pathname = usePathname();
+
+  return (
+    <aside
+      className={`flex-col border-l border-[#2A2A2A] bg-[#1E1E1E] p-4 ${className}`}
+    >
       {/* Logo */}
-      <div className="flex items-center gap-3 px-3 py-4 mb-6">
-        <div className="w-10 h-10 bg-[#800020] rounded-xl flex items-center justify-center">
-          <span className="text-[#D4AF37] font-bold text-xl">S</span>
+      <div className="mb-6 flex items-center gap-3 px-3 py-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#800020]">
+          <span className="text-xl font-bold text-[#D4AF37]">S</span>
         </div>
         <div>
-          <h1 className="text-[#D4AF37] font-bold text-lg">Solver</h1>
-          <p className="text-[#9E9E9E] text-xs">لوحة الإدارة</p>
+          <h1 className="text-lg font-bold text-[#D4AF37]">Solver</h1>
+          <p className="text-xs text-[#9E9E9E]">لوحة الإدارة</p>
         </div>
       </div>
 
       {/* Nav */}
-      <nav className="flex-1 space-y-1">
+      <nav className="flex-1 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive =
             pathname === item.href ||
@@ -58,22 +75,25 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors ${
+              prefetch={false}
+              onClick={onNavigate}
+              className={`flex touch-manipulation items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
                 isActive
-                  ? 'bg-[#800020]/20 text-[#D4AF37] font-medium'
-                  : 'text-[#9E9E9E] hover:bg-[#2A2A2A] hover:text-[#E0E0E0]'
+                  ? 'bg-[#800020]/20 font-medium text-[#D4AF37]'
+                  : 'text-[#9E9E9E] hover:bg-[#2A2A2A] hover:text-[#E0E0E0] active:bg-[#2A2A2A]'
               }`}
             >
               <Icon size={18} />
               <span>{item.label}</span>
+              <PendingHint />
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="mt-auto pt-4 border-t border-[#2A2A2A]">
-        <p className="text-[#D4AF37]/50 text-xs text-center">
+      <div className="mt-auto border-t border-[#2A2A2A] pt-4">
+        <p className="text-center text-xs text-[#D4AF37]/50">
           Developed by Omar Sayed
         </p>
       </div>

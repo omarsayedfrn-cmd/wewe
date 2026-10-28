@@ -27,19 +27,17 @@ class EnginesTab extends ConsumerWidget {
         ],
       ),
       body: enginesAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: SolverTheme.gold),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ErrorView(
           error: e,
           onRetry: () => ref.invalidate(myEnginesProvider),
         ),
         data: (engines) {
           if (engines.isEmpty) {
-            return const Center(
+            return Center(
               child: Text(
                 'لا توجد محركات متاحة',
-                style: TextStyle(color: SolverTheme.onSurfaceVariant),
+                style: TextStyle(color: context.t.onSurfaceVariant),
               ),
             );
           }
@@ -56,14 +54,14 @@ class EnginesTab extends ConsumerWidget {
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: SolverTheme.gold,
+                    color: context.t.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   '${engines.length} محرك',
                   style: TextStyle(
-                    color: SolverTheme.onSurface.withValues(alpha: 0.6),
+                    color: context.t.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -79,27 +77,27 @@ class EnginesTab extends ConsumerWidget {
                         child: Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
-                            color: SolverTheme.surface,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: SolverTheme.surfaceVariant,
-                            ),
+                            color: context.t.surface,
+                            borderRadius: BorderRadius.circular(
+                                SolverTheme.radiusCard),
+                            border: Border.all(color: context.t.line),
                           ),
                           child: Row(
                             children: [
                               // Engine icon
                               Container(
-                                width: 56,
-                                height: 56,
+                                width: 52,
+                                height: 52,
                                 decoration: BoxDecoration(
-                                  color: SolverTheme.burgundy
-                                      .withValues(alpha: 0.2),
-                                  borderRadius: BorderRadius.circular(14),
+                                  color: context.t.burgundy
+                                      .withValues(alpha: 0.07),
+                                  borderRadius: BorderRadius.circular(13),
                                 ),
                                 child: Center(
-                                  child: Text(
+                                  child: Icon(
                                     engine.icon,
-                                    style: const TextStyle(fontSize: 28),
+                                    size: 26,
+                                    color: context.t.burgundy,
                                   ),
                                 ),
                               ),
@@ -112,28 +110,28 @@ class EnginesTab extends ConsumerWidget {
                                   children: [
                                     Text(
                                       engine.displayName(lang),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
-                                        color: SolverTheme.onSurface,
+                                        color: context.t.onSurface,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      '${engine.maxChapter} فصل • ${engine.platform.toUpperCase()}',
+                                      '${engine.maxChapter} فصل · ${engine.platformLabel}',
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: SolverTheme.onSurface
+                                        color: context.t.onSurface
                                             .withValues(alpha: 0.5),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              const Icon(
-                                Icons.arrow_forward_ios,
-                                color: SolverTheme.gold,
-                                size: 18,
+                              Icon(
+                                Icons.arrow_back_ios,
+                                color: context.t.onSurfaceVariant,
+                                size: 16,
                               ),
                             ],
                           ),

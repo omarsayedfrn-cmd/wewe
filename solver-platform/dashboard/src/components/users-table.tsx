@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useDeferredValue } from 'react';
 import Link from 'next/link';
-import { gradeLabels, trackLabels, languageLabels } from '@/lib/types';
-import { Eye, MessageCircle, Search, Filter, Phone, CheckCircle, Clock } from 'lucide-react';
+import { gradeLabels, trackLabels } from '@/lib/types';
+import { Eye, MessageCircle, Search, CheckCircle, Clock } from 'lucide-react';
 
 export interface UserRow {
   id: string;
@@ -22,6 +22,7 @@ export interface UserRow {
 export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
   const [filter, setFilter] = useState<'all' | 'pending' | 'active'>('all');
   const [search, setSearch] = useState('');
+  const deferredSearch = useDeferredValue(search);
 
   const filteredUsers = useMemo(() => {
     return initialUsers.filter((user) => {
@@ -30,17 +31,23 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
       if (filter === 'active' && user.is_pending) return false;
 
       // Search query
-      if (!search.trim()) return true;
-      const q = search.toLowerCase();
+      if (!deferredSearch.trim()) return true;
+      const q = deferredSearch.toLowerCase();
       const name = (user.display_name || '').toLowerCase();
       const phone = (user.phone || '').toLowerCase();
       const id = user.id.toLowerCase();
       return name.includes(q) || phone.includes(q) || id.includes(q);
     });
-  }, [initialUsers, filter, search]);
+  }, [initialUsers, filter, deferredSearch]);
 
-  const pendingCount = initialUsers.filter((u) => u.is_pending).length;
-  const activeCount = initialUsers.filter((u) => !u.is_pending).length;
+  const pendingCount = useMemo(
+    () => initialUsers.filter((u) => u.is_pending).length,
+    [initialUsers]
+  );
+  const activeCount = useMemo(
+    () => initialUsers.filter((u) => !u.is_pending).length,
+    [initialUsers]
+  );
 
   return (
     <div className="space-y-4">
@@ -81,7 +88,7 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
           </button>
         </div>
 
-        <div className="relative min-w-[260px]">
+        <div className="relative w-full sm:w-auto sm:min-w-[260px]">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9E9E9E]" size={16} />
           <input
             type="text"
@@ -96,16 +103,16 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
       {/* Users Table */}
       <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl overflow-hidden shadow-lg">
         <div className="overflow-x-auto">
-          <table className="w-full text-right text-sm">
+          <table className="w-full min-w-[760px] text-right text-sm">
             <thead className="bg-[#2A2A2A] text-[#E0E0E0] border-b border-[#3A3A3A]">
               <tr>
-                <th className="p-4">اسم الطالب</th>
-                <th className="p-4">رقم الهاتف / WhatsApp</th>
-                <th className="p-4">الحالة</th>
-                <th className="p-4">المرحلة / المسار</th>
-                <th className="p-4">الرصيد</th>
-                <th className="p-4">التاريخ</th>
-                <th className="p-4 text-center">إجراءات</th>
+                <th className="p-3 sm:p-4">اسم الطالب</th>
+                <th className="p-3 sm:p-4">رقم الهاتف / WhatsApp</th>
+                <th className="p-3 sm:p-4">الحالة</th>
+                <th className="p-3 sm:p-4">المرحلة / المسار</th>
+                <th className="p-3 sm:p-4">الرصيد</th>
+                <th className="p-3 sm:p-4">التاريخ</th>
+                <th className="p-3 sm:p-4 text-center">إجراءات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#2A2A2A]">
@@ -123,16 +130,16 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
 
                   return (
                     <tr key={user.id} className="hover:bg-[#252525] transition-colors">
-                      <td className="p-4">
+                      <td className="p-3 sm:p-4">
                         <div className="font-semibold text-[#E0E0E0]">
                           {user.display_name || 'بدون اسم'}
                         </div>
                         <div className="text-xs text-[#757575] font-mono">{user.id.slice(0, 8)}...</div>
                       </td>
 
-                      <td className="p-4">
+                      <td className="p-3 sm:p-4">
                         {user.phone ? (
-                          <div className="flex items-center gap-2">
+<div className="flex flex-wrap items-center gap-2">
                             <span className="font-mono text-xs text-[#E0E0E0]" dir="ltr">
                               {user.phone}
                             </span>
@@ -154,7 +161,7 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
                         )}
                       </td>
 
-                      <td className="p-4">
+                      <td className="p-3 sm:p-4">
                         {user.is_pending ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
                             <Clock size={11} />
@@ -168,7 +175,7 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
                         )}
                       </td>
 
-                      <td className="p-4">
+                      <td className="p-3 sm:p-4">
                         <div className="text-xs">
                           {user.grade ? gradeLabels[user.grade] || user.grade : '—'}
                         </div>
@@ -179,17 +186,18 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
                         )}
                       </td>
 
-                      <td className="p-4 font-bold text-[#E0E0E0]">
+                      <td className="p-3 sm:p-4 font-bold text-[#E0E0E0]">
                         {user.balance} 🪙
                       </td>
 
-                      <td className="p-4 text-xs text-[#9E9E9E]">
+                      <td className="p-3 sm:p-4 text-xs text-[#9E9E9E]">
                         {new Date(user.created_at).toLocaleDateString('ar-EG')}
                       </td>
 
-                      <td className="p-4 text-center">
+                      <td className="p-3 sm:p-4 text-center">
                         <Link
                           href={`/users/${user.id}`}
+                          prefetch={false}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#800020]/25 hover:bg-[#800020]/50 text-[#D4AF37] rounded-lg transition-colors text-xs font-semibold"
                         >
                           <Eye size={13} />

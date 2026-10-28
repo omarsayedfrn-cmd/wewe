@@ -143,9 +143,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           // Messages
           Expanded(
             child: _loading
-                ? const Center(
-                    child: CircularProgressIndicator(
-                        color: SolverTheme.gold, strokeWidth: 2))
+                ? const Center(child: CircularProgressIndicator(strokeWidth: 2))
                 : _loadError != null
                     ? ErrorView(
                         error: _loadError!,
@@ -156,7 +154,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                         child: Text(
                           'ابدأ المحادثة...',
                           style: TextStyle(
-                            color: SolverTheme.onSurface
+                            color: context.t.onSurface
                                 .withValues(alpha: 0.4),
                           ),
                         ),
@@ -176,9 +174,9 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: SolverTheme.surface,
+              color: context.t.surface,
               border: Border(
-                top: BorderSide(color: SolverTheme.surfaceVariant),
+                top: BorderSide(color: context.t.surfaceVariant),
               ),
             ),
             child: SafeArea(
@@ -194,7 +192,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                           borderSide: BorderSide.none,
                         ),
                         filled: true,
-                        fillColor: SolverTheme.surfaceVariant,
+                        fillColor: context.t.surfaceVariant,
                         contentPadding: const EdgeInsets.symmetric(
                             horizontal: 20, vertical: 12),
                       ),
@@ -205,7 +203,7 @@ class _ChatScreenState extends ConsumerState<ChatScreen> {
                   ),
                   const SizedBox(width: 8),
                   CircleAvatar(
-                    backgroundColor: SolverTheme.burgundy,
+                    backgroundColor: context.t.burgundy,
                     radius: 24,
                     child: _sending
                         ? const SizedBox(
@@ -250,7 +248,7 @@ class _MessageBubble extends StatelessWidget {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            color: isUser ? SolverTheme.burgundy : SolverTheme.surfaceVariant,
+            color: isUser ? context.t.burgundy : context.t.surfaceVariant,
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(16),
               topRight: const Radius.circular(16),
@@ -264,19 +262,19 @@ class _MessageBubble extends StatelessWidget {
               if (!isUser)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 4),
-                  child: Text(
-                    'الدعم',
-                    style: TextStyle(
-                      color: SolverTheme.gold,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
+                    child: Text(
+                      'الدعم',
+                      style: TextStyle(
+                        color: context.t.burgundy,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
                 ),
               Text(
                 message.body,
                 style: TextStyle(
-                  color: isUser ? Colors.white : SolverTheme.onSurface,
+                  color: isUser ? Colors.white : context.t.onSurface,
                   fontSize: 15,
                 ),
               ),
@@ -286,7 +284,7 @@ class _MessageBubble extends StatelessWidget {
                 style: TextStyle(
                   color: isUser
                       ? Colors.white.withValues(alpha: 0.6)
-                      : SolverTheme.onSurface.withValues(alpha: 0.4),
+                      : context.t.onSurface.withValues(alpha: 0.4),
                   fontSize: 11,
                 ),
               ),

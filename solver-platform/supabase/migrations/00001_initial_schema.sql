@@ -785,8 +785,8 @@ INSERT INTO engines (code, name_ar, name_en, platform, course, language, max_cha
     ('qureo_js_en', 'كيوريو جافاسكريبت إنجليزي',           'QUREO JavaScript EN',         'qureo', 'javascript_en',   'en', 54),
     ('qureo2',      'كيوريو2 بايثون',                       'QUREO2 Python',               'qureo', 'python_short_ar', 'ar', 25),
     ('qureo2_en',   'كيوريو2 بايثون إنجليزي',               'QUREO2 Python EN',            'qureo', 'python_short_en', 'en', 10),
-    ('sprix',       'سبركس الثقافة المالية',                'SPRIX Financial Literacy',    'sprix', 'subject_7',       'ar', 54),
-    ('sprix_en',    'سبركس الثقافة المالية إنجليزي',        'SPRIX Financial Literacy EN', 'sprix', 'subject_3',       'en', 137);
+    ('sprix',       'سبركس الثقافة المالية',                'SPRIX Financial Literacy',    'sprix', 'subject_7',       'ar', 6),
+    ('sprix_en',    'سبركس الثقافة المالية إنجليزي',        'SPRIX Financial Literacy EN', 'sprix', 'subject_3',       'en', 6);
 
 -- ── الإعدادات الافتراضية ─────────────────────────────────────────────────────
 INSERT INTO settings (key, value) VALUES

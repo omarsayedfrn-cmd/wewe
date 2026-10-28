@@ -87,13 +87,13 @@ export default async function UserDetailPage({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           {waUrl && (
             <a
               href={waUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-xl text-xs font-bold transition-all shadow-md"
+              className="flex touch-manipulation items-center justify-center gap-2 px-4 py-2 bg-[#25D366] hover:bg-[#20ba59] text-white rounded-xl text-xs font-bold transition-all shadow-md active:scale-95"
             >
               <MessageCircle size={15} />
               مراسلة عبر WhatsApp
@@ -106,7 +106,7 @@ export default async function UserDetailPage({
       {/* Grid Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Profile Card */}
-        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
           <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
             <User size={18} />
             <span>البيانات الشخصية والأكاديمية</span>
@@ -159,7 +159,7 @@ export default async function UserDetailPage({
         </div>
 
         {/* Wallet Card */}
-        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
           <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
             <Wallet size={18} />
             <span>المحفظة والرصيد</span>
@@ -179,7 +179,7 @@ export default async function UserDetailPage({
         </div>
 
         {/* Engine Access */}
-        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+        <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
           <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
             <Shield size={18} />
             <span>المحركات المتاحة للطالب</span>
@@ -208,14 +208,14 @@ export default async function UserDetailPage({
       </div>
 
       {/* Entitlements Table */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
           <Key size={18} />
           <span>الصلاحيات المفتوحة (Entitlements)</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-right text-sm">
+          <table className="w-full min-w-[640px] text-right text-sm">
             <thead className="bg-[#2A2A2A] text-[#E0E0E0] border-b border-[#3A3A3A]">
               <tr>
                 <th className="p-3">المحرك</th>
@@ -261,14 +261,14 @@ export default async function UserDetailPage({
       </div>
 
       {/* Transactions Table */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
           <History size={18} />
           <span>سجل حركات المحفظة (Wallet Ledger)</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-right text-sm">
+          <table className="w-full min-w-[640px] text-right text-sm">
             <thead className="bg-[#2A2A2A] text-[#E0E0E0] border-b border-[#3A3A3A]">
               <tr>
                 <th className="p-3">القيمة</th>

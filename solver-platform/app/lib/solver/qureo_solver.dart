@@ -229,7 +229,7 @@ class QureoSolver {
 
       if (trialMode) {
         log('--------------------------------------------------');
-        log('⭐ [تمت التجربة بنجاح] تم حل فصل واحد ($cid) بنجاح للتأكد!');
+        log('التجربة: تم حل فصل التأكيد ($cid) بنجاح');
         log('--------------------------------------------------');
         onProgress?.call(1, 1, 'تمت التجربة');
         return;
@@ -279,7 +279,7 @@ class QureoSolver {
       try {
         await _completeLectures(cid);
       } catch (_) {
-        log('⚠ تم تخطي الفصل $cid (غير متاح أو مغلق على المنصة)');
+        log('تنبيه: تم تخطي الفصل $cid (غير متاح أو مغلق على المنصة)');
         continue;
       }
 
@@ -290,7 +290,7 @@ class QureoSolver {
       final prefix = ctype == 'test' ? 'test-questions' : 'review-questions';
       final completed = await _solveTestEn(cid, ctype, prefix);
       if (!completed) {
-        log('⚠ اختبار الفصل $cid غير مكتمل، سيتم تخطي الفصل التالي');
+        log('تنبيه: اختبار الفصل $cid غير مكتمل، سيتم تخطي الفصل التالي');
         continue;
       }
 
@@ -302,7 +302,7 @@ class QureoSolver {
       }
 
       if (trialMode) {
-        log('⭐ [Trial done] Chapter $cid solved successfully!');
+        log('Trial done: chapter $cid solved successfully');
         onProgress?.call(1, 1, 'trial done');
         return;
       }

@@ -50,7 +50,7 @@ class _ErrorViewState extends State<ErrorView> {
       children: [
         Icon(
           Icons.error_outline,
-          color: SolverTheme.error,
+          color: context.t.error,
           size: widget.compact ? 36 : 52,
         ),
         const SizedBox(height: 16),
@@ -60,7 +60,7 @@ class _ErrorViewState extends State<ErrorView> {
           style: TextStyle(
             fontSize: widget.compact ? 16 : 20,
             fontWeight: FontWeight.bold,
-            color: SolverTheme.onSurface,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -70,7 +70,7 @@ class _ErrorViewState extends State<ErrorView> {
           style: TextStyle(
             fontSize: 14,
             height: 1.5,
-            color: SolverTheme.onSurface.withValues(alpha: 0.75),
+            color: context.t.onSurface.withValues(alpha: 0.75),
           ),
         ),
         if (_info.hint != null) ...[
@@ -81,7 +81,7 @@ class _ErrorViewState extends State<ErrorView> {
             style: TextStyle(
               fontSize: 13,
               height: 1.5,
-              color: SolverTheme.onSurface.withValues(alpha: 0.55),
+              color: context.t.onSurface.withValues(alpha: 0.55),
             ),
           ),
         ],
@@ -129,7 +129,7 @@ void showErrorSnack(BuildContext context, Object error, {String? action}) {
   messenger.hideCurrentSnackBar();
   messenger.showSnackBar(
     SnackBar(
-      backgroundColor: SolverTheme.error,
+      backgroundColor: context.t.error,
       duration: const Duration(seconds: 7),
       content: Row(
         children: [
@@ -162,16 +162,16 @@ Future<void> showErrorDetailsDialog(
   return showDialog<void>(
     context: context,
     builder: (ctx) => AlertDialog(
-      backgroundColor: SolverTheme.surface,
+      backgroundColor: context.t.surface,
       title: Row(
         children: [
-          const Icon(Icons.error_outline, color: SolverTheme.error),
+          Icon(Icons.error_outline, color: context.t.error),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               info.title,
-              style: const TextStyle(
-                color: SolverTheme.onSurface,
+              style: TextStyle(
+                color: context.t.onSurface,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -186,8 +186,8 @@ Future<void> showErrorDetailsDialog(
           children: [
             Text(
               info.message,
-              style: const TextStyle(
-                color: SolverTheme.onSurface,
+              style: TextStyle(
+                color: context.t.onSurface,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -197,7 +197,7 @@ Future<void> showErrorDetailsDialog(
               Text(
                 info.hint!,
                 style: TextStyle(
-                  color: SolverTheme.onSurface.withValues(alpha: 0.65),
+                  color: context.t.onSurface.withValues(alpha: 0.65),
                   fontSize: 13,
                   height: 1.5,
                 ),
@@ -205,12 +205,12 @@ Future<void> showErrorDetailsDialog(
             ],
             if (info.details != null) ...[
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'التفاصيل التقنية',
                 style: TextStyle(
-                  color: SolverTheme.gold,
+                  color: context.t.onSurfaceVariant,
                   fontSize: 13,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 6),
@@ -240,7 +240,7 @@ class _DetailsBox extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: SolverTheme.surfaceVariant,
+        color: context.t.surfaceVariant,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -260,7 +260,6 @@ class _DetailsBox extends StatelessWidget {
               icon: const Icon(Icons.copy, size: 14),
               label: const Text('نسخ', style: TextStyle(fontSize: 12)),
               style: TextButton.styleFrom(
-                foregroundColor: SolverTheme.gold,
                 minimumSize: const Size(0, 28),
                 padding: const EdgeInsets.symmetric(horizontal: 4),
               ),
@@ -272,7 +271,7 @@ class _DetailsBox extends StatelessWidget {
               fontFamily: 'monospace',
               fontSize: 11,
               height: 1.5,
-              color: SolverTheme.onSurface.withValues(alpha: 0.7),
+              color: context.t.onSurface.withValues(alpha: 0.7),
             ),
           ),
         ],

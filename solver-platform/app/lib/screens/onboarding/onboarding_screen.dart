@@ -69,7 +69,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     }
 
     return Scaffold(
-      backgroundColor: SolverTheme.background,
+      backgroundColor: context.t.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -108,19 +108,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'اختر المرحلة الدراسية',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: SolverTheme.gold,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'هذا الاختيار نهائي ولا يمكن تغييره بعد التسجيل',
           style: TextStyle(
-            color: SolverTheme.onSurface.withValues(alpha: 0.6),
+            color: context.t.onSurface.withValues(alpha: 0.6),
             fontSize: 14,
           ),
         ),
@@ -128,7 +128,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _buildOptionCard(
           title: 'أولى ثانوي',
           subtitle: 'QUREO جافاسكريبت (42 فصل)',
-          icon: '📚',
+          icon: Icons.menu_book_outlined,
           selected: _grade == AppConstants.grade1,
           onTap: () {
             setState(() {
@@ -141,7 +141,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _buildOptionCard(
           title: 'تانية ثانوي',
           subtitle: 'اختر المسار في الخطوة التالية',
-          icon: '🎓',
+          icon: Icons.school_outlined,
           selected: _grade == AppConstants.grade2,
           onTap: () {
             setState(() => _grade = AppConstants.grade2);
@@ -157,19 +157,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'اختر المسار',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: SolverTheme.gold,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'المسار يحدد المحركات المتاحة لك',
           style: TextStyle(
-            color: SolverTheme.onSurface.withValues(alpha: 0.6),
+            color: context.t.onSurface.withValues(alpha: 0.6),
             fontSize: 14,
           ),
         ),
@@ -177,7 +177,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ...AppConstants.trackLabels.entries.map((entry) {
           final trackKey = entry.key;
           final trackLabel = entry.value;
-          final icon = AppConstants.trackIcons[trackKey] ?? '📖';
+          final icon = AppConstants.trackIcons[trackKey] ??
+              Icons.auto_stories_outlined;
           final subtitle = trackKey == AppConstants.trackEngineering
               ? 'SPRIX + QUREO + QUREO2 (بايثون)'
               : 'SPRIX (الثقافة المالية)';
@@ -203,19 +204,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'اختر اللغة',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: SolverTheme.gold,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'لا يمكن تغيير اللغة بعد التسجيل',
           style: TextStyle(
-            color: SolverTheme.onSurface.withValues(alpha: 0.6),
+            color: context.t.onSurface.withValues(alpha: 0.6),
             fontSize: 14,
           ),
         ),
@@ -223,7 +224,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _buildOptionCard(
           title: 'عام',
           subtitle: 'المحركات باللغة العربية',
-          icon: '🇪🇬',
+          icon: Icons.language,
           selected: _language == AppConstants.langAr,
           onTap: () => setState(() => _language = AppConstants.langAr),
         ),
@@ -231,7 +232,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _buildOptionCard(
           title: 'لغات',
           subtitle: 'المحركات باللغة الإنجليزية',
-          icon: '🇬🇧',
+          icon: Icons.translate,
           selected: _language == AppConstants.langEn,
           onTap: () => setState(() => _language = AppConstants.langEn),
         ),
@@ -251,32 +252,32 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'تأكيد الاختيارات',
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: SolverTheme.gold,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: SolverTheme.error.withValues(alpha: 0.15),
+            color: context.t.error.withValues(alpha: 0.15),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: SolverTheme.error.withValues(alpha: 0.3)),
+                color: context.t.error.withValues(alpha: 0.3)),
           ),
-          child: const Row(
+          child: Row(
             children: [
               Icon(Icons.warning_amber_rounded,
-                  color: SolverTheme.error, size: 20),
+                  color: context.t.error, size: 20),
               SizedBox(width: 8),
               Expanded(
                 child: Text(
                   'هذه الاختيارات نهائية ولا يمكن تغييرها',
-                  style: TextStyle(color: SolverTheme.error, fontSize: 13),
+                  style: TextStyle(color: context.t.error, fontSize: 13),
                 ),
               ),
             ],
@@ -293,14 +294,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         _buildSummaryRow(
             'اللغة', AppConstants.languageLabels[_language] ?? ''),
         const SizedBox(height: 16),
-        const Divider(color: SolverTheme.surfaceVariant),
+        Divider(color: context.t.surfaceVariant),
         const SizedBox(height: 16),
-        const Text(
+        Text(
           'المحركات المتاحة:',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: SolverTheme.onSurface,
+            color: context.t.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -308,15 +309,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 children: [
-                  Text(
-                    AppConstants.engineIcons[code] ?? '📦',
-                    style: const TextStyle(fontSize: 24),
+                  Icon(
+                    AppConstants.engineIcons[code] ??
+                        Icons.extension_outlined,
+                    size: 24,
+                    color: context.t.onSurfaceVariant,
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    AppConstants.engineLabels[code] ?? code,
-                    style: const TextStyle(
-                        color: SolverTheme.onSurface, fontSize: 16),
+                    AppConstants.engineArNameOverrides[code] ??
+                        AppConstants.engineLabels[code] ??
+                        code,
+                    style: TextStyle(
+                        color: context.t.onSurface, fontSize: 16),
                   ),
                 ],
               ),
@@ -328,7 +333,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         TextField(
           decoration: const InputDecoration(
             labelText: 'كود الإحالة (اختياري)',
-            prefixIcon: Icon(Icons.card_giftcard, color: SolverTheme.gold),
+            prefixIcon: Icon(Icons.card_giftcard),
           ),
           onChanged: (v) => _referralCode = v.trim(),
         ),
@@ -342,12 +347,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           child: ElevatedButton(
             onPressed: _loading ? null : _confirmOnboarding,
             style: ElevatedButton.styleFrom(
-              backgroundColor: SolverTheme.gold,
-              foregroundColor: Colors.black,
+              backgroundColor: context.t.burgundy,
+              foregroundColor: Colors.white,
             ),
             child: _loading
                 ? const CircularProgressIndicator(
-                    color: Colors.black, strokeWidth: 2)
+                    color: Colors.white, strokeWidth: 2)
                 : const Text(
                     'تأكيد وبدء الاستخدام',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -361,7 +366,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   Widget _buildOptionCard({
     required String title,
     required String subtitle,
-    required String icon,
+    required IconData icon,
     required bool selected,
     required VoidCallback onTap,
   }) {
@@ -372,17 +377,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: selected
-              ? SolverTheme.burgundy.withValues(alpha: 0.2)
-              : SolverTheme.surface,
+              ? context.t.burgundy.withValues(alpha: 0.05)
+              : context.t.surface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: selected ? SolverTheme.gold : SolverTheme.surfaceVariant,
+            color: selected ? context.t.burgundy : context.t.line,
             width: selected ? 2 : 1,
           ),
         ),
         child: Row(
           children: [
-            Text(icon, style: const TextStyle(fontSize: 36)),
+            Icon(
+              icon,
+              size: 30,
+              color:
+                  selected ? context.t.burgundy : context.t.onSurfaceVariant,
+            ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -393,7 +403,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: selected ? SolverTheme.gold : SolverTheme.onSurface,
+                      color:
+                          selected ? context.t.burgundy : context.t.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -401,14 +412,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     subtitle,
                     style: TextStyle(
                       fontSize: 13,
-                      color: SolverTheme.onSurface.withValues(alpha: 0.6),
+                      color: context.t.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
               ),
             ),
             if (selected)
-              const Icon(Icons.check_circle, color: SolverTheme.gold, size: 28),
+              Icon(Icons.check_circle, color: context.t.burgundy,
+                  size: 28),
           ],
         ),
       ),
@@ -424,15 +436,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             '$label: ',
             style: TextStyle(
               fontSize: 16,
-              color: SolverTheme.onSurface.withValues(alpha: 0.6),
+              color: context.t.onSurface.withValues(alpha: 0.6),
             ),
           ),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: SolverTheme.gold,
+              color: context.t.burgundy,
             ),
           ),
         ],
@@ -451,7 +463,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           children: [
             Text('التالي', style: TextStyle(fontSize: 18)),
             SizedBox(width: 8),
-            Icon(Icons.arrow_forward_ios, size: 18),
+            Icon(Icons.arrow_back_ios, size: 18),
           ],
         ),
       ),

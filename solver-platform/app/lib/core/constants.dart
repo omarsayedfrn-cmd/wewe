@@ -1,4 +1,8 @@
 /// App-wide constants for the Solver Platform.
+library;
+
+import 'package:flutter/material.dart';
+
 class AppConstants {
   AppConstants._();
 
@@ -34,11 +38,11 @@ class AppConstants {
     trackEngineering: 'الهندسة وعلوم الحاسب',
   };
 
-  static const Map<String, String> trackIcons = {
-    trackMedicine: '🧬',
-    trackBusiness: '📊',
-    trackArts: '🎨',
-    trackEngineering: '⚙️',
+  static const Map<String, IconData> trackIcons = {
+    trackMedicine: Icons.biotech_outlined,
+    trackBusiness: Icons.query_stats,
+    trackArts: Icons.palette_outlined,
+    trackEngineering: Icons.engineering_outlined,
   };
 
   // ── Languages ─────────────────────────────────────────────────────────
@@ -67,13 +71,19 @@ class AppConstants {
     engineSprixEn: 'SPRIX Financial Literacy',
   };
 
-  static const Map<String, String> engineIcons = {
-    engineQureo: '💻',
-    engineQureoJsEn: '💻',
-    engineQureo2: '🐍',
-    engineQureo2En: '🐍',
-    engineSprix: '💰',
-    engineSprixEn: '💰',
+  /// Display-name overrides (كريو + language in parentheses).
+  static const Map<String, String> engineArNameOverrides = {
+    engineQureo: 'كريو (جافاسكربت)',
+    engineQureo2: 'كريو (بايثون)',
+  };
+
+  static const Map<String, IconData> engineIcons = {
+    engineQureo: Icons.code_outlined,
+    engineQureoJsEn: Icons.code_outlined,
+    engineQureo2: Icons.terminal_outlined,
+    engineQureo2En: Icons.terminal_outlined,
+    engineSprix: Icons.savings_outlined,
+    engineSprixEn: Icons.savings_outlined,
   };
 
   /// Returns the list of engine codes available for a given grade/track/language.

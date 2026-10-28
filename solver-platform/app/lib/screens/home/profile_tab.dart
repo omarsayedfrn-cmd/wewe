@@ -20,9 +20,7 @@ class ProfileTab extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('حسابي')),
       body: profileAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: SolverTheme.gold),
-        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => ErrorView(
           error: e,
           onRetry: () => ref.invalidate(profileProvider),
@@ -37,16 +35,16 @@ class ProfileTab extends ConsumerWidget {
                 // Avatar & name
                 CircleAvatar(
                   radius: 45,
-                  backgroundColor: SolverTheme.burgundy,
+                  backgroundColor: context.t.burgundy,
                   backgroundImage: profile.avatar != null
                       ? NetworkImage(profile.avatar!)
                       : null,
                   child: profile.avatar == null
                       ? Text(
                           (profile.displayName ?? 'S')[0].toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 36,
-                            color: SolverTheme.gold,
+                            color: context.t.gold,
                             fontWeight: FontWeight.bold,
                           ),
                         )
@@ -55,17 +53,17 @@ class ProfileTab extends ConsumerWidget {
                 const SizedBox(height: 12),
                 Text(
                   profile.displayName ?? 'مستخدم',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
-                    color: SolverTheme.onSurface,
+                    color: context.t.onSurface,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   ref.read(supabaseProvider).auth.currentUser?.email ?? '',
                   style: TextStyle(
-                    color: SolverTheme.onSurface.withValues(alpha: 0.5),
+                    color: context.t.onSurface.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                 ),
@@ -126,22 +124,22 @@ class ProfileTab extends ConsumerWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: SolverTheme.surface,
+                    color: context.t.surface,
                     borderRadius: BorderRadius.circular(16),
                     border:
-                        Border.all(color: SolverTheme.gold.withValues(alpha: 0.3)),
+                        Border.all(color: context.t.gold.withValues(alpha: 0.3)),
                   ),
                   child: Column(
                     children: [
-                      const Row(
+                      Row(
                         children: [
                           Icon(Icons.card_giftcard,
-                              color: SolverTheme.gold, size: 20),
+                              color: context.t.gold, size: 20),
                           SizedBox(width: 8),
                           Text(
                             'كود الإحالة',
                             style: TextStyle(
-                              color: SolverTheme.gold,
+                              color: context.t.gold,
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
@@ -154,17 +152,17 @@ class ProfileTab extends ConsumerWidget {
                         children: [
                           Text(
                             profile.referralCode,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
-                              color: SolverTheme.onSurface,
+                              color: context.t.onSurface,
                               letterSpacing: 4,
                             ),
                           ),
                           const SizedBox(width: 12),
                           IconButton(
-                            icon: const Icon(Icons.copy,
-                                color: SolverTheme.gold),
+                            icon: Icon(Icons.copy,
+                                color: context.t.gold),
                             onPressed: () {
                               Clipboard.setData(
                                   ClipboardData(text: profile.referralCode));
@@ -181,7 +179,7 @@ class ProfileTab extends ConsumerWidget {
                         'شارك الكود مع أصدقائك واحصل على مكافآت',
                         style: TextStyle(
                           color:
-                              SolverTheme.onSurface.withValues(alpha: 0.5),
+                              context.t.onSurface.withValues(alpha: 0.5),
                           fontSize: 13,
                         ),
                       ),
@@ -201,18 +199,18 @@ class ProfileTab extends ConsumerWidget {
                 _MenuTile(
                   icon: Icons.logout,
                   label: 'تسجيل الخروج',
-                  color: SolverTheme.error,
+                  color: context.t.error,
                   onTap: () async {
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (ctx) => AlertDialog(
-                        backgroundColor: SolverTheme.surface,
-                        title: const Text('تسجيل الخروج',
+                        backgroundColor: context.t.surface,
+                        title: Text('تسجيل الخروج',
                             style:
-                                TextStyle(color: SolverTheme.onSurface)),
-                        content: const Text('هل تريد تسجيل الخروج؟',
+                                TextStyle(color: context.t.onSurface)),
+                        content: Text('هل تريد تسجيل الخروج؟',
                             style:
-                                TextStyle(color: SolverTheme.onSurface)),
+                                TextStyle(color: context.t.onSurface)),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
@@ -220,9 +218,9 @@ class ProfileTab extends ConsumerWidget {
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, true),
-                            child: const Text('خروج',
+                            child: Text('خروج',
                                 style:
-                                    TextStyle(color: SolverTheme.error)),
+                                    TextStyle(color: context.t.error)),
                           ),
                         ],
                       ),
@@ -237,7 +235,7 @@ class ProfileTab extends ConsumerWidget {
                 Text(
                   'Developed by Omar Sayed',
                   style: TextStyle(
-                    color: SolverTheme.gold.withValues(alpha: 0.5),
+                    color: context.t.onSurfaceVariant.withValues(alpha: 0.6),
                     fontSize: 13,
                   ),
                 ),
@@ -267,20 +265,20 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: SolverTheme.surface,
+        color: context.t.surface,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: SolverTheme.gold, size: 20),
+          Icon(icon, color: context.t.onSurfaceVariant, size: 20),
           const SizedBox(height: 8),
           Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: SolverTheme.onSurface,
+              color: context.t.onSurface,
             ),
           ),
           const SizedBox(height: 2),
@@ -288,7 +286,7 @@ class _StatCard extends StatelessWidget {
             label,
             style: TextStyle(
               fontSize: 12,
-              color: SolverTheme.onSurface.withValues(alpha: 0.5),
+              color: context.t.onSurface.withValues(alpha: 0.5),
             ),
           ),
         ],
@@ -313,13 +311,16 @@ class _MenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: color ?? SolverTheme.gold),
+      leading: Icon(icon, color: color ?? context.t.onSurfaceVariant),
       title: Text(label,
-          style: TextStyle(color: color ?? SolverTheme.onSurface)),
-      trailing: Icon(Icons.arrow_forward_ios,
-          size: 16, color: color ?? SolverTheme.onSurfaceVariant),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      tileColor: SolverTheme.surface,
+          style: TextStyle(color: color ?? context.t.onSurface)),
+      trailing: Icon(Icons.chevron_left,
+          size: 18,
+          color: color ?? context.t.onSurfaceVariant),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(SolverTheme.radiusControl + 2),
+      ),
+      tileColor: context.t.surface,
       onTap: onTap,
     );
   }

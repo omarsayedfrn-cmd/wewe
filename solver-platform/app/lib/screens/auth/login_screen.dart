@@ -129,7 +129,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     showModalBottomSheet(
       context: context,
       isDismissible: !isPendingSession,
-      backgroundColor: SolverTheme.surface,
+      backgroundColor: context.t.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -142,31 +142,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
               width: 48,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white24,
+                color: context.t.line,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
             const SizedBox(height: 20),
-            const Icon(
+            Icon(
               Icons.mark_chat_read_rounded,
-              color: SolverTheme.gold,
-              size: 56,
+              color: context.t.success,
+              size: 52,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'تم إرسال طلبك بنجاح!',
+            Text(
+              'تم إرسال طلبك بنجاح',
               style: TextStyle(
-                color: SolverTheme.gold,
+                color: context.t.onSurface,
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w800,
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
+            Text(
               'حسابك قيد المراجعة حالياً من قِبل الإدارة.\nسيتم التواصل معك عبر WhatsApp لتأكيد البيانات وتفعيل المحركات.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: SolverTheme.onSurface,
+                color: context.t.onSurface,
                 fontSize: 14,
                 height: 1.5,
               ),
@@ -196,10 +196,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
             if (!isPendingSession)
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text(
-                  'متابعة إلى التطبيق',
-                  style: TextStyle(color: SolverTheme.gold),
-                ),
+                child: const Text('متابعة إلى التطبيق'),
               ),
           ],
         ),
@@ -225,16 +222,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              SolverTheme.burgundyDark,
-              SolverTheme.background,
-            ],
-          ),
-        ),
+        color: context.t.background,
         child: SafeArea(
           child: FadeTransition(
             opacity: _fadeAnim,
@@ -247,52 +235,31 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       // App Logo
-                      Container(
-                        width: 90,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: SolverTheme.burgundy,
-                          borderRadius: BorderRadius.circular(24),
-                          boxShadow: [
-                            BoxShadow(
-                              color: SolverTheme.burgundy.withValues(alpha: 0.5),
-                              blurRadius: 30,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                          border: Border.all(
-                            color: SolverTheme.gold.withValues(alpha: 0.3),
-                            width: 2,
-                          ),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'S',
-                            style: TextStyle(
-                              color: SolverTheme.gold,
-                              fontSize: 52,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(22),
+                        child: Image.asset(
+                          'assets/branding/logo.png',
+                          width: 90,
+                          height: 90,
+                          fit: BoxFit.cover,
                         ),
                       ),
                       const SizedBox(height: 16),
 
                       // App name
-                      const Text(
+                      Text(
                         'Solver',
                         style: TextStyle(
-                          color: SolverTheme.gold,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2,
+                          color: context.t.onSurface,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'منصة الحل الذكي — واجبات QUREO و SPRIX',
+                        'حل واجبات QUREO و SPRIX',
                         style: TextStyle(
-                          color: SolverTheme.onSurface.withValues(alpha: 0.7),
+                          color: context.t.onSurface.withValues(alpha: 0.7),
                           fontSize: 13,
                         ),
                       ),
@@ -302,9 +269,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: SolverTheme.surface,
+                          color: context.t.surface,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: SolverTheme.surfaceVariant),
+                          border: Border.all(color: context.t.surfaceVariant),
                         ),
                         child: Row(
                           children: [
@@ -314,14 +281,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: !_isRegister ? SolverTheme.burgundy : Colors.transparent,
+                                    color: !_isRegister ? context.t.burgundy : Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     'تسجيل الدخول',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: !_isRegister ? Colors.white : SolverTheme.onSurfaceVariant,
+                                      color: !_isRegister ? Colors.white : context.t.onSurfaceVariant,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
                                     ),
@@ -335,14 +302,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(vertical: 10),
                                   decoration: BoxDecoration(
-                                    color: _isRegister ? SolverTheme.burgundy : Colors.transparent,
+                                    color: _isRegister ? context.t.burgundy : Colors.transparent,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Text(
                                     'حساب جديد',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: _isRegister ? Colors.white : SolverTheme.onSurfaceVariant,
+                                      color: _isRegister ? Colors.white : context.t.onSurfaceVariant,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 14,
                                     ),
@@ -359,9 +326,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: SolverTheme.surface,
+                          color: context.t.surface,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: SolverTheme.surfaceVariant),
+                          border: Border.all(color: context.t.surfaceVariant),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -374,7 +341,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 decoration: InputDecoration(
                                   labelText: 'اسم الطالب ثلاثي',
                                   hintText: 'مثال: أحمد محمد علي',
-                                  prefixIcon: const Icon(Icons.person_outline, color: SolverTheme.gold),
+                                  prefixIcon: const Icon(Icons.person_outline),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -397,7 +364,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               decoration: InputDecoration(
                                 labelText: 'رقم الهاتف / WhatsApp',
                                 hintText: '01012345678',
-                                prefixIcon: const Icon(Icons.phone_android, color: SolverTheme.gold),
+                                prefixIcon: const Icon(Icons.phone_android),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -422,11 +389,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               textDirection: TextDirection.ltr,
                               decoration: InputDecoration(
                                 labelText: 'كلمة المرور',
-                                prefixIcon: const Icon(Icons.lock_outline, color: SolverTheme.gold),
+                                prefixIcon: const Icon(Icons.lock_outline),
                                 suffixIcon: IconButton(
                                   icon: Icon(
                                     _obscurePassword ? Icons.visibility_off : Icons.visibility,
-                                    color: SolverTheme.onSurfaceVariant,
+                                    color: context.t.onSurfaceVariant,
                                   ),
                                   onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
                                 ),
@@ -451,11 +418,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                                 textDirection: TextDirection.ltr,
                                 decoration: InputDecoration(
                                   labelText: 'تأكيد كلمة المرور',
-                                  prefixIcon: const Icon(Icons.lock_reset, color: SolverTheme.gold),
+                                  prefixIcon: const Icon(Icons.lock_reset),
                                   suffixIcon: IconButton(
                                     icon: Icon(
                                       _obscureConfirm ? Icons.visibility_off : Icons.visibility,
-                                      color: SolverTheme.onSurfaceVariant,
+                                      color: context.t.onSurfaceVariant,
                                     ),
                                     onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
                                   ),
@@ -480,7 +447,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                               child: ElevatedButton(
                                 onPressed: _loading ? null : _submit,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: SolverTheme.burgundy,
+                                  backgroundColor: context.t.burgundy,
                                   foregroundColor: Colors.white,
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(14),
@@ -514,54 +481,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                         decoration: BoxDecoration(
-                          color: SolverTheme.gold.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: SolverTheme.gold.withValues(alpha: 0.3),
-                          ),
+                          color: context.t.surfaceVariant,
+                          borderRadius: BorderRadius.circular(SolverTheme.radiusControl),
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.verified_user_outlined,
-                              color: SolverTheme.gold,
-                              size: 26,
+                              color: context.t.onSurfaceVariant,
+                              size: 24,
                             ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(
                                 'تتم مراجعة وتفعيل الحسابات والتواصل معك عبر WhatsApp من قِبل الإدارة.',
                                 style: TextStyle(
-                                  color: SolverTheme.onSurface.withValues(alpha: 0.85),
+                                  color: context.t.onSurface.withValues(alpha: 0.85),
                                   fontSize: 12,
                                   height: 1.4,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            InkWell(
-                              onTap: _openWhatsApp,
-                              borderRadius: BorderRadius.circular(8),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF25D366),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(Icons.chat, size: 14, color: Colors.white),
-                                    SizedBox(width: 4),
-                                    Text(
-                                      'واتساب',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
                                 ),
                               ),
                             ),
@@ -573,21 +510,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       // Google Sign-In Secondary Option (Preserved)
                       TextButton.icon(
                         onPressed: _loading ? null : _signInGoogle,
-                        icon: const Text(
-                          'G',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: SolverTheme.gold,
-                          ),
+                        icon: const Icon(
+                          Icons.account_circle_outlined,
+                          size: 20,
                         ),
-                        label: const Text(
-                          'أو تسجيل الدخول بحساب Google',
-                          style: TextStyle(
-                            color: SolverTheme.gold,
-                            fontSize: 13,
-                          ),
-                        ),
+                        label: const Text('أو تسجيل الدخول بحساب Google'),
                       ),
 
                       const SizedBox(height: 12),
@@ -596,7 +523,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       Text(
                         'Developed by Omar Sayed',
                         style: TextStyle(
-                          color: SolverTheme.gold.withValues(alpha: 0.5),
+                          color: context.t.onSurfaceVariant
+                              .withValues(alpha: 0.6),
                           fontSize: 12,
                         ),
                       ),

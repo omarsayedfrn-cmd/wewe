@@ -8,59 +8,40 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SolverTheme.background,
+      backgroundColor: context.t.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // App icon
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: SolverTheme.burgundy,
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                    color: SolverTheme.burgundy.withValues(alpha: 0.4),
-                    blurRadius: 30,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: const Center(
-                child: Text(
-                  'S',
-                  style: TextStyle(
-                    color: SolverTheme.gold,
-                    fontSize: 64,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+            // App mark
+            ClipRRect(
+              borderRadius: BorderRadius.circular(26),
+              child: Image.asset(
+                'assets/branding/logo.png',
+                width: 104,
+                height: 104,
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(height: 24),
-            const Text(
+            Text(
               'Solver',
               style: TextStyle(
-                color: SolverTheme.gold,
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
+                color: context.t.onSurface,
+                fontSize: 30,
+                fontWeight: FontWeight.w800,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
-              'منصة الحل الذكي',
+              'حل واجبات QUREO و SPRIX',
               style: TextStyle(
-                color: SolverTheme.onSurface.withValues(alpha: 0.7),
-                fontSize: 16,
+                color: context.t.onSurfaceVariant,
+                fontSize: 15,
               ),
             ),
             const SizedBox(height: 48),
-            const CircularProgressIndicator(
-              color: SolverTheme.gold,
-              strokeWidth: 3,
-            ),
+            const CircularProgressIndicator(strokeWidth: 3),
           ],
         ),
       ),

@@ -1,4 +1,10 @@
 /// Engine model matching the `engines` DB table.
+library;
+
+import 'package:flutter/material.dart';
+
+import '../core/constants.dart';
+
 class Engine {
   final String code;
   final String nameAr;
@@ -39,13 +45,19 @@ class Engine {
       };
 
   /// Returns localized name based on app language.
-  String displayName(String lang) => lang == 'ar' ? nameAr : nameEn;
+  String displayName(String lang) =>
+      lang == 'ar' ? (AppConstants.engineArNameOverrides[code] ?? nameAr) : nameEn;
 
-  /// Icon emoji for this engine.
-  String get icon {
+  /// Latin platform branding shown in UI (e.g. QUREO/SPRIX).
+  String get platformLabel => platform.toUpperCase();
+
+  /// Icon for this engine (by platform and course).
+  IconData get icon {
     if (platform == 'qureo') {
-      return course.contains('python') ? '🐍' : '💻';
+      return course.contains('python')
+          ? Icons.terminal_outlined
+          : Icons.code_outlined;
     }
-    return '💰';
+    return Icons.savings_outlined;
   }
 }
