@@ -1,10 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Sidebar } from '@/components/sidebar';
+import { AppShell } from '@/components/app-shell';
 
 export const metadata: Metadata = {
   title: 'Solver Dashboard',
   description: 'لوحة إدارة منصة Solver',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#121212',
 };
 
 export default function RootLayout({
@@ -15,10 +22,7 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" className="dark">
       <body className="bg-[#121212] text-[#E0E0E0] antialiased">
-        <div className="flex min-h-screen">
-          <Sidebar />
-          <main className="flex-1 p-6 overflow-auto">{children}</main>
-        </div>
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

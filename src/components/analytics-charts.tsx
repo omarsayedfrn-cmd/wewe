@@ -63,9 +63,9 @@ export function AnalyticsCharts({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       {/* Engine Popularity */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <h3 className="font-bold text-[#D4AF37] mb-4">أكثر المحركات طلباً (Entitlements)</h3>
-        <div className="h-64">
+        <div className="h-56 sm:h-64">
           {engineData.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={engineData}>
@@ -87,9 +87,9 @@ export function AnalyticsCharts({
       </div>
 
       {/* Language Distribution */}
-      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6">
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
         <h3 className="font-bold text-[#D4AF37] mb-4">توزيع طلاب (عام / لغات)</h3>
-        <div className="h-64 flex items-center justify-center">
+        <div className="h-56 sm:h-64 flex items-center justify-center">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie

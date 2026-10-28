@@ -87,7 +87,7 @@ export default async function UsersPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#D4AF37]">إدارة المستخدمين والطلاب</h1>
           <p className="text-sm text-[#9E9E9E] mt-1">

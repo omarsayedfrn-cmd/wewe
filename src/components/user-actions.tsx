@@ -16,8 +16,6 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
   // Entitlement Modal State
   const [entOpen, setEntOpen] = useState(false);
   const [selectedEngine, setSelectedEngine] = useState(engines[0]?.code || '');
-  const [scope, setScope] = useState<'full' | 'chapter'>('full');
-  const [chaptersInput, setChaptersInput] = useState('');
   const [entLoading, setEntLoading] = useState(false);
 
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
@@ -57,22 +55,14 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
     setMessage(null);
 
     try {
-      let chapters: number[] = [];
-      if (scope === 'chapter') {
-        chapters = chaptersInput
-          .split(',')
-          .map((c) => parseInt(c.trim(), 10))
-          .filter((n) => !isNaN(n));
-      }
-
       const res = await fetch('/api/admin/set-entitlement', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId,
           engineCode: selectedEngine,
-          scope,
-          chapters,
+          scope: 'full',
+          chapters: [],
         }),
       });
 
@@ -103,10 +93,10 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
         </div>
       )}
 
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3 sm:flex-row">
         <button
           onClick={() => setCoinsOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#800020] hover:bg-[#A0334A] text-white rounded-xl text-sm font-semibold transition-colors shadow-md"
+          className="flex touch-manipulation items-center justify-center gap-2 rounded-xl bg-[#800020] px-4 py-2.5 text-sm font-semibold text-white shadow-md transition-colors hover:bg-[#A0334A] active:scale-95"
         >
           <PlusCircle size={16} />
           شحن عملات
@@ -114,17 +104,17 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
 
         <button
           onClick={() => setEntOpen(true)}
-          className="flex items-center gap-2 px-4 py-2.5 bg-[#2A2A2A] hover:bg-[#353535] text-[#D4AF37] border border-[#D4AF37]/40 rounded-xl text-sm font-semibold transition-colors shadow-md"
+          className="flex touch-manipulation items-center justify-center gap-2 rounded-xl border border-[#D4AF37]/40 bg-[#2A2A2A] px-4 py-2.5 text-sm font-semibold text-[#D4AF37] shadow-md transition-colors hover:bg-[#353535] active:scale-95"
         >
           <Key size={16} />
-          منح محرك / فصل
+          منح فتح كامل
         </button>
       </div>
 
       {/* Coins Modal */}
       {coinsOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md p-6">
+          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md max-h-[90dvh] overflow-y-auto p-6">
             <h3 className="text-lg font-bold text-[#D4AF37] mb-4">شحن رصيد عملات</h3>
             <form onSubmit={handleGrantCoins} className="space-y-4">
               <div>
@@ -174,7 +164,7 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
       {/* Entitlement Modal */}
       {entOpen && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
-          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md p-6">
+          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md max-h-[90dvh] overflow-y-auto p-6">
             <h3 className="text-lg font-bold text-[#D4AF37] mb-4">منح صلاحية محرك</h3>
             <form onSubmit={handleSetEntitlement} className="space-y-4">
               <div>
@@ -192,44 +182,9 @@ export function UserActions({ userId, engines }: { userId: string; engines: any[
                 </select>
               </div>
 
-              <div>
-                <label className="block text-sm text-[#E0E0E0] mb-1">النطاق</label>
-                <div className="flex gap-4 mt-1">
-                  <label className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input
-                      type="radio"
-                      name="scope"
-                      value="full"
-                      checked={scope === 'full'}
-                      onChange={() => setScope('full')}
-                    />
-                    فتح المحرك بالكامل
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer text-sm">
-                    <input
-                      type="radio"
-                      name="scope"
-                      value="chapter"
-                      checked={scope === 'chapter'}
-                      onChange={() => setScope('chapter')}
-                    />
-                    فصول معينة
-                  </label>
-                </div>
-              </div>
-
-              {scope === 'chapter' && (
-                <div>
-                  <label className="block text-sm text-[#E0E0E0] mb-1">أرقام الفصول (مفصولة بفاصلة)</label>
-                  <input
-                    type="text"
-                    value={chaptersInput}
-                    onChange={(e) => setChaptersInput(e.target.value)}
-                    className="w-full px-3 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0]"
-                    placeholder="مثال: 1, 2, 3"
-                  />
-                </div>
-              )}
+              <p className="text-xs text-[#9E9E9E]">
+                سيتم منح فتح المحرك بالكامل. التجربة المجانية تُمنح تلقائيًا للطالب حسب إعدادات الفصول التجريبية.
+              </p>
 
               <div className="flex justify-end gap-2 pt-2">
                 <button

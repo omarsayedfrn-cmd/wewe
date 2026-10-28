@@ -28,7 +28,7 @@ export default async function AuditPage() {
       ) : (
         <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl overflow-hidden shadow-lg">
           <div className="overflow-x-auto">
-            <table className="w-full text-right text-sm">
+            <table className="w-full min-w-[720px] text-right text-sm">
               <thead className="bg-[#2A2A2A] text-[#E0E0E0] border-b border-[#3A3A3A]">
                 <tr>
                   <th className="p-4">الإجراء</th>
@@ -55,7 +55,7 @@ export default async function AuditPage() {
                         </div>
                       </td>
                       <td className="p-4">
-                        <pre className="text-xs bg-[#121212] p-2 rounded-lg font-mono text-[#E0E0E0] max-w-md overflow-x-auto">
+                        <pre className="text-xs bg-[#121212] p-2 rounded-lg font-mono text-[#E0E0E0] max-w-[220px] overflow-x-auto sm:max-w-md">
                           {JSON.stringify(log.payload, null, 2)}
                         </pre>
                       </td>

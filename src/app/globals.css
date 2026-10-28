@@ -129,8 +129,17 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-tap-highlight-color: transparent;
   }
   html {
     @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  button,
+  a,
+  [role='button'] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 }

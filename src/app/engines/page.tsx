@@ -14,7 +14,7 @@ export default async function EnginesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#D4AF37]">كتالوج المحركات</h1>
           <p className="text-sm text-[#9E9E9E] mt-1">
@@ -32,7 +32,7 @@ export default async function EnginesPage() {
           {engines?.map((eng) => (
             <div
               key={eng.code}
-              className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-6 hover:border-[#800020]/50 transition-colors"
+              className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-5 sm:p-6 hover:border-[#800020]/50 transition-colors"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 bg-[#800020]/20 rounded-xl flex items-center justify-center text-xl">
