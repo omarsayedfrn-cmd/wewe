@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { PlusCircle, Key, Unlink, CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { PlusCircle, Key, Unlink, CheckCircle, XCircle, Loader2, Store, GraduationCap } from 'lucide-react';
 
 export function UserActions({
   userId,
@@ -36,6 +36,10 @@ export function UserActions({
 
   // Approval loading state
   const [approvalLoading, setApprovalLoading] = useState(false);
+
+  // Role (merchant) state
+  const [roleOpen, setRoleOpen] = useState(false);
+  const [roleLoading, setRoleLoading] = useState(false);
 
   const [message, setMessage] = useState<{ text: string; error?: boolean } | null>(null);
 
@@ -145,6 +149,36 @@ export function UserActions({
     }
   }
 
+  const isMerchant = role === 'merchant';
+  const canManageRole = role === 'student' || role === 'merchant';
+
+  async function handleSetRole() {
+    setRoleLoading(true);
+    setMessage(null);
+
+    try {
+      const res = await fetch('/api/admin/set-role', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          role: isMerchant ? 'student' : 'merchant',
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'فشل تحديث دور الحساب');
+
+      setMessage({ text: isMerchant ? 'تم تحويل الحساب إلى طالب' : 'تمت ترقية الحساب إلى تاجر' });
+      setRoleOpen(false);
+      router.refresh();
+    } catch (err: any) {
+      setMessage({ text: err.message, error: true });
+    } finally {
+      setRoleLoading(false);
+    }
+  }
+
   return (
     <div className="space-y-4">
       {message && (
@@ -196,6 +230,16 @@ export function UserActions({
           <Key size={16} />
           منح فتح كامل
         </button>
+
+        {canManageRole && (
+          <button
+            onClick={() => setRoleOpen(true)}
+            className="flex touch-manipulation items-center justify-center gap-2 rounded-xl border border-[#4CAF50]/40 bg-[#2A2A2A] px-4 py-2.5 text-sm font-semibold text-[#4CAF50] shadow-md transition-colors hover:bg-[#353535] active:scale-95"
+          >
+            {isMerchant ? <GraduationCap size={16} /> : <Store size={16} />}
+            {isMerchant ? 'تحويل لطالب' : 'ترقية لتاجر'}
+          </button>
+        )}
 
         {platformLogin && (
           <button
@@ -333,6 +377,39 @@ export function UserActions({
                 className="px-4 py-2 bg-[#CF6679] hover:bg-[#b85566] text-white rounded-xl text-sm font-semibold"
               >
                 {unbindLoading ? 'جاري الفك...' : 'تأكيد فك الربط'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Role Modal */}
+      {roleOpen && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl w-full max-w-md max-h-[90dvh] overflow-y-auto p-6">
+            <h3 className="text-lg font-bold text-[#D4AF37] mb-4">
+              {isMerchant ? 'تحويل الحساب إلى طالب' : 'ترقية الحساب إلى تاجر'}
+            </h3>
+            <p className="text-sm text-[#E0E0E0] leading-relaxed">
+              {isMerchant
+                ? 'سيتم استرجاع دور الطالب وإعادة بناء المحركات المتاحة حسب المرحلة والمسار واللغة. أي محركات خارج نطاقه الأكاديمي ستُزال.'
+                : 'سيتم منح الحساب دور تاجر مع الوصول لكل المحركات، وتفعيله تلقائياً، بدون تجربة مجانية وبدون إحالة. نفس نظام ربط الحساب والاشتراك يبقى كما هو.'}
+            </p>
+            <div className="flex justify-end gap-2 pt-4">
+              <button
+                type="button"
+                onClick={() => setRoleOpen(false)}
+                className="px-4 py-2 bg-[#2A2A2A] hover:bg-[#353535] text-[#E0E0E0] rounded-xl text-sm"
+              >
+                إلغاء
+              </button>
+              <button
+                type="button"
+                onClick={handleSetRole}
+                disabled={roleLoading}
+                className="px-4 py-2 bg-[#4CAF50] hover:bg-[#43a047] text-white rounded-xl text-sm font-semibold disabled:opacity-60"
+              >
+                {roleLoading ? 'جاري التحديث...' : 'تأكيد'}
               </button>
             </div>
           </div>

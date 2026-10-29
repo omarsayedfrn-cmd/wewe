@@ -1,0 +1,1947 @@
+{
+  "30050": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30050010,
+        "qtype": "choice",
+        "choice_id": 300500101
+      },
+      {
+        "qid": 30050020,
+        "qtype": "choice",
+        "choice_id": 300500201
+      },
+      {
+        "qid": 30050040,
+        "qtype": "choice",
+        "choice_id": 300500401
+      },
+      {
+        "qid": 30050030,
+        "qtype": "description",
+        "answer_code": "const scoreList = [40, 55, 67, 52, 120];\nlet sum = 0;\n\nfor (const score of scoreList) {\n  sum = sum + score;\n}\nconsole.log(sum);"
+      },
+      {
+        "qid": 30050050,
+        "qtype": "description",
+        "answer_code": "const scoreList = [40, 55, 67, 52, 120];\nlet sum = 0;\nfor (const score of scoreList) {\n  sum += score;\n}\nconsole.log(sum / scoreList.length);"
+      }
+    ]
+  },
+  "30051": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30051020,
+        "qtype": "choice",
+        "choice_id": 300510201
+      },
+      {
+        "qid": 30051010,
+        "qtype": "description",
+        "answer_code": "let year = 2024;\n\nwhile (year <= 2200) {\n  if (year % 4 == 0) {\n    console.log(year + \" is an Olympic year\");\n  }\n  year += 1;\n}"
+      },
+      {
+        "qid": 30051030,
+        "qtype": "description",
+        "answer_code": "let a = 0;\nlet b = 0;\n\nwhile (a <= 10) {\n  if (a == 5) {\n    a = a + 1;\n    continue;\n  }\n  b = b + 1;\n  a = a + 1;\n}\nconsole.log(\"a: \"+ a +\" times\");\nconsole.log(\"b: \"+ b +\" times\");"
+      },
+      {
+        "qid": 30051040,
+        "qtype": "description",
+        "answer_code": "const scoreList = [40, 55, 67, 52, 120];\nlet sum = 0;\n\nfor (const score of scoreList) {\n  sum = sum + score;\n}\nconsole.log(sum);"
+      },
+      {
+        "qid": 30051050,
+        "qtype": "description",
+        "answer_code": "const scoreList = [40, 55, 67, 52, 120];\nlet sum = 0;\nfor (const score of scoreList) {\n  sum += score;\n}\nconsole.log(sum / scoreList.length);"
+      }
+    ]
+  },
+  "30052": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30052010,
+        "qtype": "choice",
+        "choice_id": 300520101
+      },
+      {
+        "qid": 30052020,
+        "qtype": "choice",
+        "choice_id": 300520201
+      },
+      {
+        "qid": 30052030,
+        "qtype": "choice",
+        "choice_id": 300520301
+      },
+      {
+        "qid": 30052040,
+        "qtype": "choice",
+        "choice_id": 300520401
+      },
+      {
+        "qid": 30052050,
+        "qtype": "description",
+        "answer_code": "let guestList = [\"Johnson\", \"Smith\", \"Brown\", \"Davis\", \"Wilson\"];\n\nconsole.log(guestList.includes(\"Wilson\"));"
+      },
+      {
+        "qid": 30052060,
+        "qtype": "description",
+        "answer_code": "let guestList = [\"Johnson\", \"Smith\", \"Brown\", \"Davis\", \"Wilson\"];\n\nguestList.sort();\nconsole.log(guestList);"
+      }
+    ]
+  },
+  "30053": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30053010,
+        "qtype": "choice",
+        "choice_id": 300530101
+      },
+      {
+        "qid": 30053020,
+        "qtype": "choice",
+        "choice_id": 300530201
+      },
+      {
+        "qid": 30053030,
+        "qtype": "choice",
+        "choice_id": 300530301
+      },
+      {
+        "qid": 30053040,
+        "qtype": "choice",
+        "choice_id": 300530401
+      },
+      {
+        "qid": 30053050,
+        "qtype": "description",
+        "answer_code": "let letterList = [\"p\", \"r\", \"o\", \"g\", \"r\", \"a\", \"m\", \"y\"];\n\nletterList.pop();\nconsole.log(letterList);"
+      },
+      {
+        "qid": 30053060,
+        "qtype": "description",
+        "answer_code": "let colorList = [\"red\", \"blue\", \"yellow\"];\n\ncolorList.unshift(\"green\");\nconsole.log(colorList);"
+      }
+    ]
+  },
+  "30054": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30054010,
+        "qtype": "choice",
+        "choice_id": 300540101
+      },
+      {
+        "qid": 30054020,
+        "qtype": "choice",
+        "choice_id": 300540201
+      },
+      {
+        "qid": 30054030,
+        "qtype": "choice",
+        "choice_id": 300540301
+      },
+      {
+        "qid": 30054040,
+        "qtype": "choice",
+        "choice_id": 300540401
+      },
+      {
+        "qid": 30054050,
+        "qtype": "description",
+        "answer_code": "let guestList = [\"Johnson\", \"Smith\", \"Brown\", \"Davis\", \"Wilson\"];\n\nconsole.log(guestList.includes(\"Wilson\"));"
+      },
+      {
+        "qid": 30054060,
+        "qtype": "description",
+        "answer_code": "let guestList = [\"Johnson\", \"Smith\", \"Brown\", \"Davis\", \"Wilson\"];\n\nguestList.sort();\nconsole.log(guestList);"
+      },
+      {
+        "qid": 30054070,
+        "qtype": "description",
+        "answer_code": "let letterList = [\"p\", \"r\", \"o\", \"g\", \"r\", \"a\", \"m\", \"y\"];\n\nletterList.pop();\nconsole.log(letterList);"
+      },
+      {
+        "qid": 30054080,
+        "qtype": "description",
+        "answer_code": "let colorList = [\"red\", \"blue\", \"yellow\"];\n\ncolorList.unshift(\"green\");\nconsole.log(colorList);"
+      }
+    ]
+  },
+  "30001": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30001010,
+        "qtype": "choice",
+        "choice_id": 300010101
+      },
+      {
+        "qid": 30001050,
+        "qtype": "choice",
+        "choice_id": 300010501
+      },
+      {
+        "qid": 30001020,
+        "qtype": "description",
+        "answer_code": "console.log(\"Good morning\");"
+      },
+      {
+        "qid": 30001030,
+        "qtype": "description",
+        "answer_code": "console.log(\"Programming\");"
+      },
+      {
+        "qid": 30001040,
+        "qtype": "description",
+        "answer_code": "console.log(\"Hello\");"
+      },
+      {
+        "qid": 30001060,
+        "qtype": "description",
+        "answer_code": "console.log(\"Hello.\");\nconsole.log(\"My name is\");\n//console.log(\"Rick.\");\nconsole.log(\"Cody.\");"
+      }
+    ]
+  },
+  "30002": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30002010,
+        "qtype": "choice",
+        "choice_id": 300020101
+      },
+      {
+        "qid": 30002020,
+        "qtype": "choice",
+        "choice_id": 300020201
+      },
+      {
+        "qid": 30002060,
+        "qtype": "choice",
+        "choice_id": 300020601
+      },
+      {
+        "qid": 30002030,
+        "qtype": "description",
+        "answer_code": "console.log(19 + 40);"
+      },
+      {
+        "qid": 30002040,
+        "qtype": "description",
+        "answer_code": "console.log(7 - 2);"
+      },
+      {
+        "qid": 30002050,
+        "qtype": "description",
+        "answer_code": "console.log(15 / 5);"
+      },
+      {
+        "qid": 30002070,
+        "qtype": "description",
+        "answer_code": "console.log(\"The answer is \" + (2 * 5) + \".\");"
+      }
+    ]
+  },
+  "30003": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30003010,
+        "qtype": "choice",
+        "choice_id": 300030101
+      },
+      {
+        "qid": 30003020,
+        "qtype": "choice",
+        "choice_id": 300030201
+      },
+      {
+        "qid": 30003030,
+        "qtype": "description",
+        "answer_code": "let number;"
+      },
+      {
+        "qid": 30003040,
+        "qtype": "description",
+        "answer_code": "let number;\nnumber = 100;"
+      },
+      {
+        "qid": 30003050,
+        "qtype": "description",
+        "answer_code": "let number;\nnumber = 10;\nconsole.log(number);"
+      },
+      {
+        "qid": 30003060,
+        "qtype": "description",
+        "answer_code": "let number;\nnumber = 3;\nnumber = number + 10;\nconsole.log(number);"
+      }
+    ]
+  },
+  "30004": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30004010,
+        "qtype": "choice",
+        "choice_id": 300040101
+      },
+      {
+        "qid": 30004040,
+        "qtype": "choice",
+        "choice_id": 300040401
+      },
+      {
+        "qid": 30004050,
+        "qtype": "choice",
+        "choice_id": 300040501
+      },
+      {
+        "qid": 30004070,
+        "qtype": "choice",
+        "choice_id": 300040701
+      },
+      {
+        "qid": 30004020,
+        "qtype": "description",
+        "answer_code": "console.log(\"Hello\");"
+      },
+      {
+        "qid": 30004030,
+        "qtype": "description",
+        "answer_code": "//Leave this text.\nconsole.log(\"Make the first line a comment.\");"
+      },
+      {
+        "qid": 30004060,
+        "qtype": "description",
+        "answer_code": "console.log(\"The answer is \" + (3 * 5) + \".\");"
+      },
+      {
+        "qid": 30004080,
+        "qtype": "description",
+        "answer_code": "let num;\nnum = 5;\nconsole.log(num);"
+      }
+    ]
+  },
+  "30005": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30005020,
+        "qtype": "choice",
+        "choice_id": 300050201
+      },
+      {
+        "qid": 30005030,
+        "qtype": "choice",
+        "choice_id": 300050301
+      },
+      {
+        "qid": 30005050,
+        "qtype": "choice",
+        "choice_id": 300050501
+      },
+      {
+        "qid": 30005010,
+        "qtype": "description",
+        "answer_code": "let num = 5;\nconsole.log(num);"
+      },
+      {
+        "qid": 30005040,
+        "qtype": "description",
+        "answer_code": "let num = 100;\nif (num == 100){console.log(\"Correct\");}"
+      }
+    ]
+  },
+  "30006": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30006010,
+        "qtype": "choice",
+        "choice_id": 300060101
+      },
+      {
+        "qid": 30006030,
+        "qtype": "choice",
+        "choice_id": 300060301
+      },
+      {
+        "qid": 30006040,
+        "qtype": "choice",
+        "choice_id": 300060401
+      },
+      {
+        "qid": 30006020,
+        "qtype": "description",
+        "answer_code": "let num = 5;\nif (num == 10){console.log(\"Win\");}\nelse {console.log(\"Lose\");}"
+      },
+      {
+        "qid": 30006050,
+        "qtype": "description",
+        "answer_code": "let score = 80;\nif (score >= 60){console.log(\"Pass\");}\nelse {console.log(\"Fail\");}"
+      }
+    ]
+  },
+  "30007": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30007010,
+        "qtype": "choice",
+        "choice_id": 300070101
+      },
+      {
+        "qid": 30007040,
+        "qtype": "choice",
+        "choice_id": 300070401
+      },
+      {
+        "qid": 30007020,
+        "qtype": "description",
+        "answer_code": "let num = 2;\nif (num == 1){console.log(\"One\");}\nelse if (num == 2){console.log(\"Two\");}"
+      },
+      {
+        "qid": 30007030,
+        "qtype": "description",
+        "answer_code": "let score = 82;\nif (score == 100){console.log(\"Perfect score\");}\nelse if(score >= 80){console.log(\"Pass\");}"
+      },
+      {
+        "qid": 30007050,
+        "qtype": "description",
+        "answer_code": "let egg = 5;\nif (egg == 0){console.log(\"No stock\");}\nelse if (egg <= 3){console.log(\"Low stock\");}\nelse{console.log(\"In stock\");}"
+      }
+    ]
+  },
+  "30008": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30008020,
+        "qtype": "choice",
+        "choice_id": 300080201
+      },
+      {
+        "qid": 30008040,
+        "qtype": "choice",
+        "choice_id": 300080401
+      },
+      {
+        "qid": 30008060,
+        "qtype": "choice",
+        "choice_id": 300080601
+      },
+      {
+        "qid": 30008010,
+        "qtype": "description",
+        "answer_code": "let num = 7;\nif (num == 7){console.log(\"Correct\");}"
+      },
+      {
+        "qid": 30008030,
+        "qtype": "description",
+        "answer_code": "let score = 70;\nif(score >= 60){console.log(\"Pass\");}\nelse{console.log(\"Fail\");}"
+      },
+      {
+        "qid": 30008050,
+        "qtype": "description",
+        "answer_code": "let num = 100;\nif (num == 100){console.log(\"correct\");}\nelse {console.log(\"miss\");}"
+      },
+      {
+        "qid": 30008070,
+        "qtype": "description",
+        "answer_code": "let num = 4;\nif (num <= 3){console.log(\"A\");}\nelse if (num >= 6){console.log(\"B\");}\nelse{console.log(\"C\");}"
+      }
+    ]
+  },
+  "30009": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30009010,
+        "qtype": "choice",
+        "choice_id": 300090101
+      },
+      {
+        "qid": 30009020,
+        "qtype": "choice",
+        "choice_id": 300090201
+      },
+      {
+        "qid": 30009030,
+        "qtype": "choice",
+        "choice_id": 300090301
+      },
+      {
+        "qid": 30009040,
+        "qtype": "description",
+        "answer_code": "let a = 5;\nlet b = 10;\nif (a == 5 || b == 10){console.log(\"Condition met\");}"
+      },
+      {
+        "qid": 30009050,
+        "qtype": "description",
+        "answer_code": "let a = 4;\nlet b = 3;\nif (a >= 2 && b >=3){console.log(\"Condition met\");}"
+      }
+    ]
+  },
+  "30010": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30010010,
+        "qtype": "choice",
+        "choice_id": 300100101
+      },
+      {
+        "qid": 30010020,
+        "qtype": "choice",
+        "choice_id": 300100201
+      },
+      {
+        "qid": 30010030,
+        "qtype": "choice",
+        "choice_id": 300100301
+      },
+      {
+        "qid": 30010040,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 5 ; i++) {\n console.log(\"Hello\");\n}"
+      },
+      {
+        "qid": 30010050,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 7 ; i++) {\n console.log(\"Hello\");\n}"
+      }
+    ]
+  },
+  "30011": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30011010,
+        "qtype": "choice",
+        "choice_id": 300110101
+      },
+      {
+        "qid": 30011020,
+        "qtype": "choice",
+        "choice_id": 300110201
+      },
+      {
+        "qid": 30011030,
+        "qtype": "choice",
+        "choice_id": 300110301
+      },
+      {
+        "qid": 30011040,
+        "qtype": "choice",
+        "choice_id": 300110401
+      },
+      {
+        "qid": 30011050,
+        "qtype": "choice",
+        "choice_id": 300110501
+      },
+      {
+        "qid": 30011060,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 10 ; i++) {\n console.log(\"Good morning\");\n}"
+      },
+      {
+        "qid": 30011070,
+        "qtype": "description",
+        "answer_code": "let a = 4;\nlet b = 3;\nif (a >= 2 && b >=3) {\nconsole.log(\"Condition met\");\n}"
+      },
+      {
+        "qid": 30011080,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 3 ; i++) {\n console.log(\"Hello\");\n}"
+      }
+    ]
+  },
+  "30012": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30012010,
+        "qtype": "choice",
+        "choice_id": 300120101
+      },
+      {
+        "qid": 30012020,
+        "qtype": "choice",
+        "choice_id": 300120201
+      },
+      {
+        "qid": 30012030,
+        "qtype": "choice",
+        "choice_id": 300120301
+      },
+      {
+        "qid": 30012040,
+        "qtype": "choice",
+        "choice_id": 300120401
+      },
+      {
+        "qid": 30012050,
+        "qtype": "description",
+        "answer_code": "function calc(num) { \n　let result = num * 5;\n　return result;\n}\nconsole.log(calc(3));"
+      },
+      {
+        "qid": 30012060,
+        "qtype": "description",
+        "answer_code": "function calc(num) { \n　let result = num * 7;\n　return result;\n}\nconsole.log(calc(10));"
+      }
+    ]
+  },
+  "30013": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30013010,
+        "qtype": "choice",
+        "choice_id": 300130101
+      },
+      {
+        "qid": 30013020,
+        "qtype": "choice",
+        "choice_id": 300130201
+      },
+      {
+        "qid": 30013030,
+        "qtype": "choice",
+        "choice_id": 300130301
+      },
+      {
+        "qid": 30013040,
+        "qtype": "description",
+        "answer_code": "console.log(Math.round(5.5));\nconsole.log(Math.floor(8.8));"
+      },
+      {
+        "qid": 30013050,
+        "qtype": "description",
+        "answer_code": "if (Math.random() >= 0.5) {\n  console.log(\"Excellent luck\");\n} else {\n  console.log(\"Bad luck\");\n}"
+      },
+      {
+        "qid": 30013060,
+        "qtype": "description",
+        "answer_code": "console.log(Math.floor(Math.random() * 10));"
+      }
+    ]
+  },
+  "30014": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30014010,
+        "qtype": "choice",
+        "choice_id": 300140101
+      },
+      {
+        "qid": 30014020,
+        "qtype": "choice",
+        "choice_id": 300140201
+      },
+      {
+        "qid": 30014030,
+        "qtype": "choice",
+        "choice_id": 300140301
+      },
+      {
+        "qid": 30014040,
+        "qtype": "choice",
+        "choice_id": 300140401
+      },
+      {
+        "qid": 30014060,
+        "qtype": "choice",
+        "choice_id": 300140601
+      },
+      {
+        "qid": 30014050,
+        "qtype": "description",
+        "answer_code": "console.log(Math.floor(Math.random() * 10));"
+      },
+      {
+        "qid": 30014070,
+        "qtype": "description",
+        "answer_code": "function calc(num) { \n　let result = num * 7;\n　return result;\n}\nconsole.log(calc(10));"
+      },
+      {
+        "qid": 30014080,
+        "qtype": "description",
+        "answer_code": "function calc(num) { \n　let result = num * 5;\n　return result;\n}\nconsole.log(calc(7));"
+      }
+    ]
+  },
+  "30015": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30015010,
+        "qtype": "choice",
+        "choice_id": 300150101
+      },
+      {
+        "qid": 30015020,
+        "qtype": "choice",
+        "choice_id": 300150201
+      },
+      {
+        "qid": 30015030,
+        "qtype": "choice",
+        "choice_id": 300150301
+      },
+      {
+        "qid": 30015040,
+        "qtype": "choice",
+        "choice_id": 300150401
+      },
+      {
+        "qid": 30015050,
+        "qtype": "description",
+        "answer_code": "console.log(typeof \"7\");"
+      }
+    ]
+  },
+  "30016": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30016020,
+        "qtype": "choice",
+        "choice_id": 300160201
+      },
+      {
+        "qid": 30016040,
+        "qtype": "choice",
+        "choice_id": 300160401
+      },
+      {
+        "qid": 30016010,
+        "qtype": "description",
+        "answer_code": "let num = [5, 10, 15];"
+      },
+      {
+        "qid": 30016030,
+        "qtype": "description",
+        "answer_code": "let num = [5, 10, 15, 20, 25];\nconsole.log(num);"
+      },
+      {
+        "qid": 30016050,
+        "qtype": "description",
+        "answer_code": "let num = [5, 10, 15, 20, 25];\nconsole.log(num.length);"
+      }
+    ]
+  },
+  "30017": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30017010,
+        "qtype": "choice",
+        "choice_id": 300170101
+      },
+      {
+        "qid": 30017020,
+        "qtype": "choice",
+        "choice_id": 300170201
+      },
+      {
+        "qid": 30017030,
+        "qtype": "choice",
+        "choice_id": 300170301
+      },
+      {
+        "qid": 30017040,
+        "qtype": "choice",
+        "choice_id": 300170401
+      },
+      {
+        "qid": 30017070,
+        "qtype": "choice",
+        "choice_id": 300170701
+      },
+      {
+        "qid": 30017090,
+        "qtype": "choice",
+        "choice_id": 300170901
+      },
+      {
+        "qid": 30017050,
+        "qtype": "description",
+        "answer_code": "console.log(typeof 100);"
+      },
+      {
+        "qid": 30017060,
+        "qtype": "description",
+        "answer_code": "let num = [10, 50, 100 ,150];"
+      },
+      {
+        "qid": 30017080,
+        "qtype": "description",
+        "answer_code": "let num = [2, 4, 6, 8, 10];\nconsole.log(num);"
+      },
+      {
+        "qid": 30017100,
+        "qtype": "description",
+        "answer_code": "let num = [2, 4, 6, 8, 10];\nconsole.log(num.length);"
+      }
+    ]
+  },
+  "30018": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30018020,
+        "qtype": "choice",
+        "choice_id": 300180201
+      },
+      {
+        "qid": 30018030,
+        "qtype": "choice",
+        "choice_id": 300180301
+      },
+      {
+        "qid": 30018040,
+        "qtype": "choice",
+        "choice_id": 300180401
+      },
+      {
+        "qid": 30018050,
+        "qtype": "choice",
+        "choice_id": 300180501
+      },
+      {
+        "qid": 30018060,
+        "qtype": "choice",
+        "choice_id": 300180601
+      },
+      {
+        "qid": 30018070,
+        "qtype": "choice",
+        "choice_id": 300180701
+      },
+      {
+        "qid": 30018010,
+        "qtype": "description",
+        "answer_code": "<h1>Hello</h1>"
+      },
+      {
+        "qid": 30018080,
+        "qtype": "description",
+        "answer_code": "<!--The h1 tag is a heading.-->\n<h1>Hello</h1>"
+      }
+    ]
+  },
+  "30019": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30019030,
+        "qtype": "choice",
+        "choice_id": 300190301
+      },
+      {
+        "qid": 30019040,
+        "qtype": "choice",
+        "choice_id": 300190401
+      },
+      {
+        "qid": 30019050,
+        "qtype": "choice",
+        "choice_id": 300190501
+      },
+      {
+        "qid": 30019060,
+        "qtype": "choice",
+        "choice_id": 300190601
+      },
+      {
+        "qid": 30019010,
+        "qtype": "description",
+        "answer_code": "h1 {\n  color: red;\n}"
+      },
+      {
+        "qid": 30019020,
+        "qtype": "description",
+        "answer_code": "h1 {\n  color:blue;\n}"
+      },
+      {
+        "qid": 30019070,
+        "qtype": "description",
+        "answer_code": ".dog {\n  color: blue;\n}"
+      },
+      {
+        "qid": 30019080,
+        "qtype": "description",
+        "answer_code": "/*Change the text color to navy.*/\np {\n  color: navy;\n}"
+      }
+    ]
+  },
+  "30020": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30020020,
+        "qtype": "choice",
+        "choice_id": 300200201
+      },
+      {
+        "qid": 30020030,
+        "qtype": "choice",
+        "choice_id": 300200301
+      },
+      {
+        "qid": 30020040,
+        "qtype": "choice",
+        "choice_id": 300200401
+      },
+      {
+        "qid": 30020060,
+        "qtype": "choice",
+        "choice_id": 300200601
+      },
+      {
+        "qid": 30020070,
+        "qtype": "choice",
+        "choice_id": 300200701
+      },
+      {
+        "qid": 30020010,
+        "qtype": "description",
+        "answer_code": "<p>Good morning</p>"
+      },
+      {
+        "qid": 30020050,
+        "qtype": "description",
+        "answer_code": "h1 {\n  color: yellow;\n}"
+      },
+      {
+        "qid": 30020080,
+        "qtype": "description",
+        "answer_code": "h3 {\n  color: red;\n}"
+      },
+      {
+        "qid": 30020090,
+        "qtype": "description",
+        "answer_code": ".fish {\n  color: blue;\n}"
+      }
+    ]
+  },
+  "30021": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30021010,
+        "qtype": "choice",
+        "choice_id": 300210101
+      },
+      {
+        "qid": 30021030,
+        "qtype": "choice",
+        "choice_id": 300210301
+      },
+      {
+        "qid": 30021040,
+        "qtype": "choice",
+        "choice_id": 300210401
+      },
+      {
+        "qid": 30021050,
+        "qtype": "choice",
+        "choice_id": 300210501
+      },
+      {
+        "qid": 30021060,
+        "qtype": "choice",
+        "choice_id": 300210601
+      },
+      {
+        "qid": 30021080,
+        "qtype": "choice",
+        "choice_id": 300210801
+      },
+      {
+        "qid": 30021020,
+        "qtype": "description",
+        "answer_code": "let A = 5\nlet B = 10\nif (A > B) {\n  console.log(\"A is larger\");\n} else if (A < B) {\n  console.log(\"B is larger\");\n}"
+      },
+      {
+        "qid": 30021070,
+        "qtype": "description",
+        "answer_code": "let numberOfPeople = 8;\nlet weight = 400;\nif (numberOfPeople <= 10 || weight <= 800) {\n  console.log(\"You can ride the elevator\");\n}"
+      },
+      {
+        "qid": 30021090,
+        "qtype": "description",
+        "answer_code": "let math = 100;\nlet science = 100;\nif (math == 100) {\n  console.log(\"Math is 100 points\");\n  if (science == 100) {\n    console.log(\"Math and science are 100 points\");\n  }\n}"
+      }
+    ]
+  },
+  "30022": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30022010,
+        "qtype": "choice",
+        "choice_id": 300220101
+      },
+      {
+        "qid": 30022020,
+        "qtype": "choice",
+        "choice_id": 300220201
+      },
+      {
+        "qid": 30022030,
+        "qtype": "choice",
+        "choice_id": 300220301
+      },
+      {
+        "qid": 30022060,
+        "qtype": "choice",
+        "choice_id": 300220601
+      },
+      {
+        "qid": 30022080,
+        "qtype": "choice",
+        "choice_id": 300220801
+      },
+      {
+        "qid": 30022090,
+        "qtype": "choice",
+        "choice_id": 300220901
+      },
+      {
+        "qid": 30022040,
+        "qtype": "description",
+        "answer_code": "for (let i = 0; i < 3; i++) {\n  console.log(\"Programming\");\n}"
+      },
+      {
+        "qid": 30022050,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 7 ; i++){\n console.log(\"Good morning\");\n}"
+      },
+      {
+        "qid": 30022070,
+        "qtype": "description",
+        "answer_code": "for (let i = 0; i < 5; i++) {\n    console.log(\"sit-ups\");\n    if (i == 4) {\n        console.log(\"End\");\n    }\n}"
+      }
+    ]
+  },
+  "30023": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30023010,
+        "qtype": "choice",
+        "choice_id": 300230101
+      },
+      {
+        "qid": 30023020,
+        "qtype": "choice",
+        "choice_id": 300230201
+      },
+      {
+        "qid": 30023030,
+        "qtype": "choice",
+        "choice_id": 300230301
+      },
+      {
+        "qid": 30023050,
+        "qtype": "choice",
+        "choice_id": 300230501
+      },
+      {
+        "qid": 30023040,
+        "qtype": "description",
+        "answer_code": "function divide5(total) {\n    let num = total / 5;\n    return num;\n}\nconsole.log(divide5(35));"
+      },
+      {
+        "qid": 30023060,
+        "qtype": "description",
+        "answer_code": "function goodNight() {\n  let greeting = \"Good night!\";\n  return greeting;\n}\nconsole.log(goodNight());"
+      },
+      {
+        "qid": 30023070,
+        "qtype": "description",
+        "answer_code": "function mul(num1, num2) {\n  let answer = num1 * num2;\n  return answer;\n}\nconsole.log(mul(9, 7));"
+      }
+    ]
+  },
+  "30024": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30024020,
+        "qtype": "choice",
+        "choice_id": 300240201
+      },
+      {
+        "qid": 30024050,
+        "qtype": "choice",
+        "choice_id": 300240501
+      },
+      {
+        "qid": 30024060,
+        "qtype": "choice",
+        "choice_id": 300240601
+      },
+      {
+        "qid": 30024070,
+        "qtype": "choice",
+        "choice_id": 300240701
+      },
+      {
+        "qid": 30024090,
+        "qtype": "choice",
+        "choice_id": 300240901
+      },
+      {
+        "qid": 30024010,
+        "qtype": "description",
+        "answer_code": "let A = 5\nlet B = 10\nif (A > B) {\n  console.log(\"A is larger\");\n} else if (A < B) {\n  console.log(\"B is larger\");\n}"
+      },
+      {
+        "qid": 30024030,
+        "qtype": "description",
+        "answer_code": "let science = 100;\nlet math = 100;\nif (science == 100) {\n  console.log(\"Science is 100 points\");\n  if (math == 100) {\n    console.log(\"Science and Math are 100 points\");\n  }\n}"
+      },
+      {
+        "qid": 30024040,
+        "qtype": "description",
+        "answer_code": "for (let i=0 ; i < 7 ; i++){\n console.log(\"Good morning\");\n}"
+      },
+      {
+        "qid": 30024080,
+        "qtype": "description",
+        "answer_code": "function divide3(num) {\n    let result = num / 3;\n    return result;\n}\nconsole.log(divide3(12345));"
+      },
+      {
+        "qid": 30024100,
+        "qtype": "description",
+        "answer_code": "function mul(num1, num2) {\n    let result = num1 * num2;\n    return result;\n}\nconsole.log(mul(9, 7));"
+      }
+    ]
+  },
+  "30025": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30025010,
+        "qtype": "choice",
+        "choice_id": 300250101
+      },
+      {
+        "qid": 30025030,
+        "qtype": "choice",
+        "choice_id": 300250301
+      },
+      {
+        "qid": 30025020,
+        "qtype": "description",
+        "answer_code": "let num = 1;\nfor(let i = 0; i < 5; i++){\n  num = num * 7;\n}\nconsole.log(num);"
+      },
+      {
+        "qid": 30025040,
+        "qtype": "description",
+        "answer_code": "let num = 0;\nfor (let i = 0; i < 6; i++) {\n  num = num + i;\n}\nconsole.log(num);"
+      },
+      {
+        "qid": 30025050,
+        "qtype": "description",
+        "answer_code": "let num = 5040;\nfor(let i = 1; i <= 5; i++){\n  num = num / i;\n}\nconsole.log(num);"
+      }
+    ]
+  },
+  "30026": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30026010,
+        "qtype": "choice",
+        "choice_id": 300260101
+      },
+      {
+        "qid": 30026020,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 60, 79, 82, 66, 59, 88];\nconsole.log(scoreList[5]);"
+      },
+      {
+        "qid": 30026030,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 60, 79, 82, 66, 59, 88];\nlet sum = 0;\nfor(let i = 0; i < 7; i++){\n  sum = sum + scoreList[i];\n}\nconsole.log(sum / 7);"
+      },
+      {
+        "qid": 30026040,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 60, 79, 82, 66, 59, 88];\nconsole.log(scoreList.length);"
+      },
+      {
+        "qid": 30026050,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 60, 79, 82, 66, 59, 88];\nfor (let i = 0; i < scoreList.length; i++) {\n  if (scoreList[i] >= 80) {\n    console.log(\"80 points or higher\");\n  }\n}"
+      }
+    ]
+  },
+  "30027": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30027020,
+        "qtype": "choice",
+        "choice_id": 300270201
+      },
+      {
+        "qid": 30027010,
+        "qtype": "description",
+        "answer_code": "let num = 1;\nfor (let i = 0; i < 3; i++) {\n  num = num * 9;\n}\nconsole.log(num);"
+      },
+      {
+        "qid": 30027030,
+        "qtype": "description",
+        "answer_code": "let num = 5040;\nfor (let i = 1; i <= 5; i++) {\n  num = num / i;\n}\nconsole.log(num);"
+      },
+      {
+        "qid": 30027040,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 90, 70, 83, 63, 72, 89];\nconsole.log(scoreList[4]);"
+      },
+      {
+        "qid": 30027050,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 90, 70, 83, 63, 72, 89];\nconsole.log(scoreList.length);"
+      },
+      {
+        "qid": 30027060,
+        "qtype": "description",
+        "answer_code": "let scoreList = [52, 90, 70, 83, 63, 72, 89];\nfor (let i = 0; i < scoreList.length; i++) {\n  if (scoreList[i] >= 80) {\n    console.log(\"Pass\");\n  }\n}"
+      }
+    ]
+  },
+  "30028": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30028010,
+        "qtype": "choice",
+        "choice_id": 300280101
+      },
+      {
+        "qid": 30028020,
+        "qtype": "choice",
+        "choice_id": 300280201
+      },
+      {
+        "qid": 30028030,
+        "qtype": "choice",
+        "choice_id": 300280301
+      },
+      {
+        "qid": 30028040,
+        "qtype": "description",
+        "answer_code": "let numList = [2, 4, 6, 8];\nfor (let num of numList) {\n  console.log(num);\n}"
+      },
+      {
+        "qid": 30028050,
+        "qtype": "description",
+        "answer_code": "let wordList = [\"Good morning\", \"Good night\", \"Hello\"];\nfor (let word of wordList) {\n  console.log(word);\n}"
+      }
+    ]
+  },
+  "30029": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30029020,
+        "qtype": "choice",
+        "choice_id": 300290201
+      },
+      {
+        "qid": 30029030,
+        "qtype": "choice",
+        "choice_id": 300290301
+      },
+      {
+        "qid": 30029010,
+        "qtype": "description",
+        "answer_code": "let A = 5\nlet B = 10\nif (A > B) {\n  console.log(\"A is bigger\");\n} else if (A < B) {\n  console.log(\"B is bigger\");\n}"
+      },
+      {
+        "qid": 30029040,
+        "qtype": "description",
+        "answer_code": "let weather = \"sunny\";\nlet shop = \"OPEN\";\n\nif (weather == \"sunny\") {\n  if (shop == \"OPEN\") {\n    console.log(\"Go to the store\");\n  }\n} else {\n  console.log(\"Staying at home\");\n}"
+      },
+      {
+        "qid": 30029050,
+        "qtype": "description",
+        "answer_code": "let weather = \"rain\";\nlet time = \"morning\";\n\nif (weather == \"rain\") {\n  if (time == \"morning\") {\n    console.log(\"Let's go to the movie theater\");\n  } else if (time == \"noon\") {\n    console.log(\"Let's go to the library\");\n  } else {\n    console.log(\"Let's stay at home\");\n  }\n} else {\n  console.log(\"Let's go for a walk\");\n}"
+      }
+    ]
+  },
+  "30030": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30030010,
+        "qtype": "choice",
+        "choice_id": 300300101
+      },
+      {
+        "qid": 30030040,
+        "qtype": "choice",
+        "choice_id": 300300401
+      },
+      {
+        "qid": 30030050,
+        "qtype": "choice",
+        "choice_id": 300300501
+      },
+      {
+        "qid": 30030020,
+        "qtype": "description",
+        "answer_code": "let numList = [2, 4, 6, 8];\nfor (let num of numList) {\n  console.log(num);\n}"
+      },
+      {
+        "qid": 30030030,
+        "qtype": "description",
+        "answer_code": "let wordList = [\"Good morning\", \"Good night\", \"Hello\"];\nfor (let word of wordList) {\n  console.log(word);\n}"
+      },
+      {
+        "qid": 30030060,
+        "qtype": "description",
+        "answer_code": "let weather = \"rain\";\nlet time = \"morning\";\n\nif (weather == \"rain\") {\n  if (time == \"morning\") {\n    console.log(\"Let's go to the movie theater\");\n  } else if (time == \"noon\") {\n    console.log(\"Let's go to the library\");\n  } else {\n    console.log(\"Let's stay at home\");\n  }\n} else {\n  console.log(\"Let's go for a walk\");\n}"
+      }
+    ]
+  },
+  "30031": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30031020,
+        "qtype": "choice",
+        "choice_id": 300310201
+      },
+      {
+        "qid": 30031050,
+        "qtype": "choice",
+        "choice_id": 300310501
+      },
+      {
+        "qid": 30031010,
+        "qtype": "description",
+        "answer_code": "function calculation3(a, b, c){\n  let result = a * b * c;\n  return result;\n}\nconsole.log(calculation3(2, 3, 4));"
+      },
+      {
+        "qid": 30031030,
+        "qtype": "description",
+        "answer_code": "function calculation3(a, b, c) {\n  let result = a * b * c;\n  return result;\n}\nlet num1 = calculation3(5, 10, 15);\nconsole.log(num1);"
+      },
+      {
+        "qid": 30031040,
+        "qtype": "description",
+        "answer_code": "function calculation3(a, b, c) {\n  let result = a * b * c;\n  return result;\n}\nlet num1 = calculation3(5, 10, 15);\nconsole.log(num1);\nlet num2 = calculation3(4, 4, 4);\nconsole.log(num2);"
+      }
+    ]
+  },
+  "30032": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30032010,
+        "qtype": "choice",
+        "choice_id": 300320101
+      },
+      {
+        "qid": 30032020,
+        "qtype": "choice",
+        "choice_id": 300320201
+      },
+      {
+        "qid": 30032040,
+        "qtype": "choice",
+        "choice_id": 300320401
+      },
+      {
+        "qid": 30032030,
+        "qtype": "description",
+        "answer_code": "let heightList = [154, 138, 140, 180, 170];\n\nfor (let height of heightList) {\n  if (height >= 150) {\n    console.log(height);\n  }\n}"
+      },
+      {
+        "qid": 30032050,
+        "qtype": "description",
+        "answer_code": "let height = 148;\nlet age = 14;\n\nif (height >= 140) {\n  if (age >= 12) {\n    console.log(\"You can ride alone\");\n  } else {\n    console.log(\"Please ride with someone who is 18 years or older\");\n  }\n} else {\n  console.log(\"You cannot ride\");\n}"
+      }
+    ]
+  },
+  "30033": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30033010,
+        "qtype": "choice",
+        "choice_id": 300330101
+      },
+      {
+        "qid": 30033040,
+        "qtype": "choice",
+        "choice_id": 300330401
+      },
+      {
+        "qid": 30033050,
+        "qtype": "choice",
+        "choice_id": 300330501
+      },
+      {
+        "qid": 30033070,
+        "qtype": "choice",
+        "choice_id": 300330701
+      },
+      {
+        "qid": 30033020,
+        "qtype": "description",
+        "answer_code": "function calc3(a, b, c) {\n  let result = a * b * c;\n  return result;\n}\nlet num1 = calc3(5, 10, 15);\nconsole.log(num1);"
+      },
+      {
+        "qid": 30033030,
+        "qtype": "description",
+        "answer_code": "function calc3(a, b, c) {\n  let result = a * b * c;\n  return result;\n}\nlet num1 = calc3(5, 10, 15);\nconsole.log(num1);\nlet num2 = calc3(4, 4, 4);\nconsole.log(num2);"
+      },
+      {
+        "qid": 30033060,
+        "qtype": "description",
+        "answer_code": "let heightList = [154, 138, 140, 180, 170];\n\nfor (let height of heightList) {\n  if (height >= 150) {\n    console.log(height);\n  }\n}"
+      }
+    ]
+  },
+  "30034": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30034020,
+        "qtype": "choice",
+        "choice_id": 300340201
+      },
+      {
+        "qid": 30034030,
+        "qtype": "choice",
+        "choice_id": 300340301
+      },
+      {
+        "qid": 30034040,
+        "qtype": "choice",
+        "choice_id": 300340401
+      },
+      {
+        "qid": 30034010,
+        "qtype": "description",
+        "answer_code": "<p>Menu</p>\n<ul>\n    <li>Hamburger</li>\n    <li>Pizza</li>\n    <li>Sandwich</li>\n</ul>"
+      },
+      {
+        "qid": 30034050,
+        "qtype": "description",
+        "answer_code": "<input type=\"button\" value=\"Submit\">"
+      }
+    ]
+  },
+  "30035": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30035010,
+        "qtype": "choice",
+        "choice_id": 300350101
+      },
+      {
+        "qid": 30035020,
+        "qtype": "choice",
+        "choice_id": 300350201
+      },
+      {
+        "qid": 30035030,
+        "qtype": "choice",
+        "choice_id": 300350301
+      },
+      {
+        "qid": 30035040,
+        "qtype": "choice",
+        "choice_id": 300350401
+      },
+      {
+        "qid": 30035050,
+        "qtype": "choice",
+        "choice_id": 300350501
+      }
+    ]
+  },
+  "30036": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30036020,
+        "qtype": "choice",
+        "choice_id": 300360201
+      },
+      {
+        "qid": 30036030,
+        "qtype": "choice",
+        "choice_id": 300360301
+      },
+      {
+        "qid": 30036050,
+        "qtype": "choice",
+        "choice_id": 300360501
+      },
+      {
+        "qid": 30036060,
+        "qtype": "choice",
+        "choice_id": 300360601
+      },
+      {
+        "qid": 30036070,
+        "qtype": "choice",
+        "choice_id": 300360701
+      },
+      {
+        "qid": 30036080,
+        "qtype": "choice",
+        "choice_id": 300360801
+      },
+      {
+        "qid": 30036010,
+        "qtype": "description",
+        "answer_code": "<p>Menu</p>\n<ul>\n    <li>Hamburger</li>\n    <li>Pizza</li>\n    <li>Sandwich</li>\n</ul>"
+      },
+      {
+        "qid": 30036040,
+        "qtype": "description",
+        "answer_code": "<input type=\"button\" value=\"Submit\">"
+      }
+    ]
+  },
+  "30037": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30037020,
+        "qtype": "choice",
+        "choice_id": 300370201
+      },
+      {
+        "qid": 30037030,
+        "qtype": "choice",
+        "choice_id": 300370301
+      },
+      {
+        "qid": 30037010,
+        "qtype": "description",
+        "answer_code": "let color = \"green\";\n\nif (color == \"red\") {\n  console.log(\"Red\");\n} else if (color == \"blue\") {\n  console.log(\"Blue\");\n} else if (color == \"green\") {\n  console.log(\"Green\");\n}"
+      },
+      {
+        "qid": 30037040,
+        "qtype": "description",
+        "answer_code": "let letter = \"B\";\n\nswitch (letter) {\n  case \"A\":\n    console.log(\"Well done!\");\n    break;\n  case \"B\":\n    console.log(\"Keep up the good work\");\n    break;\n  case \"C\":\n    console.log(\"Let's try a little harder\");\n    break;\n}"
+      },
+      {
+        "qid": 30037050,
+        "qtype": "description",
+        "answer_code": "let letter = \"D\";\n\nswitch (letter) {\n  case \"A\":\n    console.log(\"Well done!\");\n    break;\n  case \"B\":\n    console.log(\"Keep up the good work\");\n    break;\n  case \"C\":\n    console.log(\"Let's try a little harder\");\n    break;\n  default:\n    console.log(\"The notation is incorrect\");\n    break;\n}"
+      }
+    ]
+  },
+  "30038": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30038010,
+        "qtype": "choice",
+        "choice_id": 300380101
+      },
+      {
+        "qid": 30038020,
+        "qtype": "choice",
+        "choice_id": 300380201
+      },
+      {
+        "qid": 30038030,
+        "qtype": "description",
+        "answer_code": "let dayCount = 14;\n\nif (dayCount % 7 == 0) {\n  console.log(\"Let's eat a hamburger!\");\n}"
+      },
+      {
+        "qid": 30038040,
+        "qtype": "description",
+        "answer_code": "let dayCount = 11;\n\nswitch (dayCount % 7) {\n  case 0:\n    console.log(\"Let's eat a hamburger!\");\n    break;\n  case 4:\n    console.log(\"Let's eat steak!\");\n    break;\n}"
+      },
+      {
+        "qid": 30038050,
+        "qtype": "description",
+        "answer_code": "let number = 20;\n\nswitch (number % 3) {\n  case 0:\n    console.log(\"Group A\");\n    break;\n  case 1:\n    console.log(\"Group B\");\n    break;\n  case 2:\n    console.log(\"Group C\");\n    break;\n}"
+      }
+    ]
+  },
+  "30039": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30039010,
+        "qtype": "choice",
+        "choice_id": 300390101
+      },
+      {
+        "qid": 30039020,
+        "qtype": "choice",
+        "choice_id": 300390201
+      },
+      {
+        "qid": 30039040,
+        "qtype": "choice",
+        "choice_id": 300390401
+      },
+      {
+        "qid": 30039030,
+        "qtype": "description",
+        "answer_code": "let letter = \"B\";\n\nswitch (letter) {\n  case \"A\":\n    console.log(\"Well done!\");\n    break;\n  case \"B\":\n    console.log(\"Keep up the good work\");\n    break;\n  case \"C\":\n    console.log(\"Let's try a little harder\");\n    break;\n}"
+      },
+      {
+        "qid": 30039050,
+        "qtype": "description",
+        "answer_code": "let dayCount = 14;\n\nif (dayCount % 7 == 0) {\n  console.log(\"Let's eat a hamburger!\");\n}"
+      },
+      {
+        "qid": 30039060,
+        "qtype": "description",
+        "answer_code": "let number = 20;\n\nswitch (number % 3) {\n  case 0:\n    console.log(\"Group A\");\n    break;\n  case 1:\n    console.log(\"Group B\");\n    break;\n  case 2:\n    console.log(\"Group C\");\n    break;\n}"
+      }
+    ]
+  },
+  "30040": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30040010,
+        "qtype": "choice",
+        "choice_id": 300400101
+      },
+      {
+        "qid": 30040020,
+        "qtype": "choice",
+        "choice_id": 300400201
+      },
+      {
+        "qid": 30040040,
+        "qtype": "choice",
+        "choice_id": 300400401
+      },
+      {
+        "qid": 30040030,
+        "qtype": "description",
+        "answer_code": "let num;\nnum = 3;\nnum = 5;\nconsole.log(num);"
+      },
+      {
+        "qid": 30040050,
+        "qtype": "description",
+        "answer_code": "const answer1 = 1023;\nconst answer2 = 1024;\n\nif (answer1 != answer2) {\n  console.log(\"Let's review once more!\");\n}"
+      }
+    ]
+  },
+  "30041": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30041020,
+        "qtype": "choice",
+        "choice_id": 300410201
+      },
+      {
+        "qid": 30041030,
+        "qtype": "choice",
+        "choice_id": 300410301
+      },
+      {
+        "qid": 30041010,
+        "qtype": "description",
+        "answer_code": "for (let i = 0; i < 3; i++) {\n  console.log(\"Programming\");\n}"
+      },
+      {
+        "qid": 30041040,
+        "qtype": "description",
+        "answer_code": "let money = 1000;\nconst snacks = 230;\nwhile (money > snacks) {\n  money = money - snacks;\n  console.log(money);\n}"
+      },
+      {
+        "qid": 30041050,
+        "qtype": "description",
+        "answer_code": "let money = 600;\nlet month = 0;\nwhile (money < 4000) {\n  month ++;\n  money += 800;\n}\nconsole.log(\"Save for \" + month + \" months\");"
+      }
+    ]
+  },
+  "30042": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30042010,
+        "qtype": "choice",
+        "choice_id": 300420101
+      },
+      {
+        "qid": 30042030,
+        "qtype": "choice",
+        "choice_id": 300420301
+      },
+      {
+        "qid": 30042040,
+        "qtype": "choice",
+        "choice_id": 300420401
+      },
+      {
+        "qid": 30042020,
+        "qtype": "description",
+        "answer_code": "let num;\nnum = 3;\nnum = 5;\nconsole.log(num);"
+      },
+      {
+        "qid": 30042050,
+        "qtype": "description",
+        "answer_code": "let money = 1000;\nconst snacks = 230;\nwhile (money > snacks) {\n  money = money - snacks;\n  console.log(money);\n}"
+      },
+      {
+        "qid": 30042060,
+        "qtype": "description",
+        "answer_code": "let money = 600;\nlet month = 0;\nwhile (money < 4000) {\n  month ++;\n  money += 800;\n}\nconsole.log(\"Save for \" + month + \" months\");"
+      }
+    ]
+  },
+  "30043": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30043010,
+        "qtype": "choice",
+        "choice_id": 300430101
+      },
+      {
+        "qid": 30043020,
+        "qtype": "choice",
+        "choice_id": 300430201
+      },
+      {
+        "qid": 30043030,
+        "qtype": "choice",
+        "choice_id": 300430301
+      },
+      {
+        "qid": 30043040,
+        "qtype": "choice",
+        "choice_id": 300430401
+      },
+      {
+        "qid": 30043050,
+        "qtype": "choice",
+        "choice_id": 300430501
+      }
+    ]
+  },
+  "30044": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30044010,
+        "qtype": "choice",
+        "choice_id": 300440101
+      },
+      {
+        "qid": 30044020,
+        "qtype": "choice",
+        "choice_id": 300440201
+      },
+      {
+        "qid": 30044040,
+        "qtype": "choice",
+        "choice_id": 300440401
+      },
+      {
+        "qid": 30044050,
+        "qtype": "choice",
+        "choice_id": 300440501
+      },
+      {
+        "qid": 30044030,
+        "qtype": "description",
+        "answer_code": "<div class=\"mountains\">\n  <h1>World Mountains</h1>\n  <ul>\n    <li>Mount Everest</li>\n    <li>Mount McKinley</li>\n    <li>Mount Kilimanjaro</li>\n  </ul>\n</div>"
+      }
+    ]
+  },
+  "30045": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30045010,
+        "qtype": "choice",
+        "choice_id": 300450101
+      },
+      {
+        "qid": 30045020,
+        "qtype": "choice",
+        "choice_id": 300450201
+      },
+      {
+        "qid": 30045030,
+        "qtype": "choice",
+        "choice_id": 300450301
+      },
+      {
+        "qid": 30045040,
+        "qtype": "choice",
+        "choice_id": 300450401
+      },
+      {
+        "qid": 30045060,
+        "qtype": "choice",
+        "choice_id": 300450601
+      },
+      {
+        "qid": 30045070,
+        "qtype": "choice",
+        "choice_id": 300450701
+      },
+      {
+        "qid": 30045050,
+        "qtype": "description",
+        "answer_code": "<div class=\"mountains\">\n  <h1>Mountains of the World</h1>\n  <ul>\n    <li>Mount Everest</li>\n    <li>Mount McKinley</li>\n    <li>Mount Kilimanjaro</li>\n  </ul>\n</div>"
+      }
+    ]
+  },
+  "30046": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30046010,
+        "qtype": "choice",
+        "choice_id": 300460101
+      },
+      {
+        "qid": 30046030,
+        "qtype": "choice",
+        "choice_id": 300460301
+      },
+      {
+        "qid": 30046050,
+        "qtype": "choice",
+        "choice_id": 300460501
+      },
+      {
+        "qid": 30046020,
+        "qtype": "description",
+        "answer_code": "const numList = [2, 4, 6, 8];\nfor (const num of numList) {\n  console.log(num);\n}"
+      },
+      {
+        "qid": 30046040,
+        "qtype": "description",
+        "answer_code": "for (let i = 1; i < 5; i++) {\n  if (i % 3 == 0) {\n    console.log(i);\n  }\n}"
+      }
+    ]
+  },
+  "30047": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30047030,
+        "qtype": "choice",
+        "choice_id": 300470301
+      },
+      {
+        "qid": 30047050,
+        "qtype": "choice",
+        "choice_id": 300470501
+      },
+      {
+        "qid": 30047010,
+        "qtype": "description",
+        "answer_code": "const weather = \"sunny\";\n\nswitch (weather) {\n  case \"sunny\":\n    console.log(\"Let's go shopping\");\n    break;\n  case \"cloudy\":\n    console.log(\"Let's go shopping\");\n    break;\n  case \"rainy\":\n    console.log(\"Let's stay home\");\n    break;\n}"
+      },
+      {
+        "qid": 30047020,
+        "qtype": "description",
+        "answer_code": "const weather = \"sunny\";\n\nswitch (weather) {\n  case \"sunny\":\n  case \"cloudy\":\n    console.log(\"Let's go shopping\");\n    break;\n  case \"rainy\":\n    console.log(\"Let's stay home\");\n    break;\n}"
+      },
+      {
+        "qid": 30047040,
+        "qtype": "description",
+        "answer_code": "for (let i = 1; i <= 10; i++) {\n  switch (i % 3) {\n    case 0:\n      console.log(\"Student \" + i + \" is in Group C\");\n      break;\n    case 1:\n      console.log(\"Student \" + i + \" is in Group A\");\n      break;\n    case 2:\n      console.log(\"Student \" + i + \" is in Group B\");\n      break;\n  }\n}"
+      }
+    ]
+  },
+  "30048": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 30048010,
+        "qtype": "choice",
+        "choice_id": 300480101
+      },
+      {
+        "qid": 30048030,
+        "qtype": "choice",
+        "choice_id": 300480301
+      },
+      {
+        "qid": 30048040,
+        "qtype": "choice",
+        "choice_id": 300480401
+      },
+      {
+        "qid": 30048070,
+        "qtype": "choice",
+        "choice_id": 300480701
+      },
+      {
+        "qid": 30048020,
+        "qtype": "description",
+        "answer_code": "const numList = [2, 4, 6, 8];\nfor (const num of numList) {\n  console.log(num);\n}"
+      },
+      {
+        "qid": 30048050,
+        "qtype": "description",
+        "answer_code": "const weather = \"sunny\";\n\nswitch (weather) {\n  case \"sunny\":\n    console.log(\"Let's go shopping\");\n    break;\n  case \"cloudy\":\n    console.log(\"Let's go shopping\");\n    break;\n  case \"rainy\":\n    console.log(\"Let's stay home\");\n    break;\n}"
+      },
+      {
+        "qid": 30048060,
+        "qtype": "description",
+        "answer_code": "for (let i = 1; i <= 10; i++) {\n  switch (i % 3) {\n    case 0:\n      console.log(\"Student \" + i + \" is in Group C\");\n      break;\n    case 1:\n      console.log(\"Student \" + i + \" is in Group A\");\n      break;\n    case 2:\n      console.log(\"Student \" + i + \" is in Group B\");\n      break;\n  }\n}"
+      }
+    ]
+  },
+  "30049": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 30049020,
+        "qtype": "choice",
+        "choice_id": 300490201
+      },
+      {
+        "qid": 30049040,
+        "qtype": "choice",
+        "choice_id": 300490401
+      },
+      {
+        "qid": 30049010,
+        "qtype": "description",
+        "answer_code": "let num = 0;\nlet count = 0;\n\nwhile (num < 100) {\n  num += 7;\n  count++;\n}\nconsole.log(count);"
+      },
+      {
+        "qid": 30049030,
+        "qtype": "description",
+        "answer_code": "let year = 2024;\n\nwhile (year <= 2200) {\n  if (year % 4 == 0) {\n    console.log(year + \" is an Olympic year\");\n  }\n  year += 1;\n}"
+      },
+      {
+        "qid": 30049050,
+        "qtype": "description",
+        "answer_code": "let a = 0;\nlet b = 0;\n\nwhile (a <= 10) {\n  if (a == 5) {\n    a = a + 1;\n    continue;\n  }\n  b = b + 1;\n  a = a + 1;\n}\nconsole.log(\"a: \"+ a +\" times\");\nconsole.log(\"b: \"+ b +\" times\");"
+      }
+    ]
+  }
+}

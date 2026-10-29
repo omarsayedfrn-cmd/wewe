@@ -77,7 +77,10 @@ final trialInfoProvider = FutureProvider<TrialInfo?>((ref) async {
 
   try {
     final profile = await ref.watch(profileProvider.future);
-    if (profile == null || profile.grade == null) return null;
+    // Merchants buy at normal prices and have no free trial.
+    if (profile == null || profile.grade == null || profile.isMerchant) {
+      return null;
+    }
 
     final engineCode = trialEngineFor(profile);
     final settingKey = trialSettingKeyFor(profile);

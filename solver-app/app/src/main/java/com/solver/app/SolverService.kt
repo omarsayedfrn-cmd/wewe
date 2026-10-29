@@ -227,6 +227,7 @@ class SolverService : Service() {
             // One pacing governor per session; survives network auto-retries so
             // the rate-limit counter is not reset between attempts.
             val pace = Pace(s.boost, s.platform, log)
+            var lastProgress = -1
             while (true) {
                 // Resume point (updated live by solvers); fall back to original start.
                 val fromRaw = s.resumeStart.takeIf { it.isNotEmpty() && it != "done" } ?: s.start
@@ -265,6 +266,11 @@ class SolverService : Service() {
                     push(s.id, "ERROR: ${e.message}")
                     s.result = "ERROR"
                     break
+                }
+                // Reset autoRetries on progress (new chapter/unit completed)
+                if (s.progressDone > lastProgress) {
+                    lastProgress = s.progressDone
+                    s.autoRetries = 0
                 }
             }
             s.finished = true

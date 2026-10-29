@@ -17,6 +17,9 @@
     <string name="boost_on_log">⚡ تم تفعيل الـ Boost — تسريع خطوات الحل بنسبة %1$s مع تفعيل الحارس الذكي</string>
     <string name="footer_by">تم التطوير بواسطة</string>
     <string name="footer_name">Omar Sayed</string>
+    <string name="lang_ar">العربية</string>
+    <string name="lang_en">English</string>
+    <string name="language">اختر اللغة</string>
     <string name="license_activate_btn">تفعيل</string>
     <string name="license_active_status">✅ النسخة الكاملة مفعلة بالكامل للأبد</string>
     <string name="license_code_copied">تم نسخ كود الجهاز! أرسله للمطور للحصول على كود التفعيل.</string>
@@ -49,8 +52,11 @@
     <string name="sessions_title">الجلسات الحالية</string>
     <string name="start_btn">▶  بدء الحل</string>
     <string name="start_point">نقطة البداية</string>
+    <string name="start_qureo2_en_hint">Chapter 1–10 (default: 1)</string>
     <string name="start_qureo2_hint">الفصل 1–25 (الافتراضي: 1)</string>
+    <string name="start_qureo_en_hint">Chapter 1–54 (default: 1)</string>
     <string name="start_qureo_hint">الفصل 1–54 (الافتراضي: 1)</string>
+    <string name="start_sprix_en_hint">Unit 1–6 (default: 1)</string>
     <string name="start_sprix_hint">الوحدة 1–6 (الافتراضي: 1)</string>
     <string name="stop_all_btn">■ إيقاف الكل</string>
     <string name="stop_btn">■ إيقاف</string>

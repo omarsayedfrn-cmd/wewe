@@ -8,8 +8,13 @@ typealias IdPair = Pair<Long, Long>
 
 object Answers {
     private fun readAsset(ctx: Context, name: String): JSONObject {
-        ctx.assets.open(name).use { ins ->
-            return JSONObject(ins.readBytes().toString(Charsets.UTF_8))
+        return try {
+            ctx.assets.open(name).use { ins ->
+                JSONObject(ins.readBytes().toString(Charsets.UTF_8))
+            }
+        } catch (e: Exception) {
+            android.util.Log.w("Answers", "asset $name unavailable: ${e.message}")
+            JSONObject()
         }
     }
 
@@ -19,13 +24,13 @@ object Answers {
             Pair(p.getLong(0), p.getLong(1))
         }
 
-    fun sprixChapters(ctx: Context): Map<String, List<IdPair>> {
-        val o = readAsset(ctx, "sprix_answers.json").getJSONObject("chapters")
+    fun sprixChapters(ctx: Context, asset: String = "sprix_answers.json"): Map<String, List<IdPair>> {
+        val o = readAsset(ctx, asset).optJSONObject("chapters") ?: JSONObject()
         return o.keys().asSequence().associateWith { pairs(o.getJSONArray(it)) }
     }
 
-    fun sprixTests(ctx: Context): Map<String, List<IdPair>> {
-        val o = readAsset(ctx, "sprix_answers.json").getJSONObject("tests")
+    fun sprixTests(ctx: Context, asset: String = "sprix_answers.json"): Map<String, List<IdPair>> {
+        val o = readAsset(ctx, asset).optJSONObject("tests") ?: JSONObject()
         return o.keys().asSequence().associateWith { pairs(o.getJSONArray(it)) }
     }
 

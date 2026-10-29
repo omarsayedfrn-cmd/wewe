@@ -60,6 +60,35 @@ class ProfileTab extends ConsumerWidget {
                     color: context.t.onSurface,
                   ),
                 ),
+                if (profile.isMerchant) ...[
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: context.t.gold.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(999),
+                      border: Border.all(
+                          color: context.t.gold.withValues(alpha: 0.4)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.storefront_outlined,
+                            size: 15, color: context.t.gold),
+                        const SizedBox(width: 6),
+                        Text(
+                          'حساب تاجر',
+                          style: TextStyle(
+                            color: context.t.gold,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 4),
                 Text(
                   ref.read(supabaseProvider).auth.currentUser?.email ?? '',
@@ -120,8 +149,9 @@ class ProfileTab extends ConsumerWidget {
 
                 const SizedBox(height: 24),
 
-                // Referral code
-                Container(
+                // Referral code (students only — merchants have no referral)
+                if (!profile.isMerchant)
+                  Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(

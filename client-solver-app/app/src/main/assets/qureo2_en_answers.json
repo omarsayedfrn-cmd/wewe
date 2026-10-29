@@ -1,0 +1,352 @@
+{
+  "531001": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531001010,
+        "qtype": "choice",
+        "choice_id": 5310010101
+      },
+      {
+        "qid": 531001050,
+        "qtype": "choice",
+        "choice_id": 5310010501
+      },
+      {
+        "qid": 531001020,
+        "qtype": "description",
+        "answer_code": "print(\"Good morning\")"
+      },
+      {
+        "qid": 531001030,
+        "qtype": "description",
+        "answer_code": "print(\"programming\")"
+      },
+      {
+        "qid": 531001040,
+        "qtype": "description",
+        "answer_code": "print(\"hello\")"
+      },
+      {
+        "qid": 531001060,
+        "qtype": "description",
+        "answer_code": "print(\"Hello\")\nprint(\"My name is\")\n#print(\"Rick\")\nprint(\"Cody\")"
+      }
+    ]
+  },
+  "531002": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531002010,
+        "qtype": "choice",
+        "choice_id": 5310020101
+      },
+      {
+        "qid": 531002020,
+        "qtype": "choice",
+        "choice_id": 5310020201
+      },
+      {
+        "qid": 531002060,
+        "qtype": "choice",
+        "choice_id": 5310020601
+      },
+      {
+        "qid": 531002080,
+        "qtype": "choice",
+        "choice_id": 5310020801
+      },
+      {
+        "qid": 531002090,
+        "qtype": "choice",
+        "choice_id": 5310020901
+      },
+      {
+        "qid": 531002030,
+        "qtype": "description",
+        "answer_code": "print(19 + 40)"
+      },
+      {
+        "qid": 531002040,
+        "qtype": "description",
+        "answer_code": "print(7 - 2)"
+      },
+      {
+        "qid": 531002050,
+        "qtype": "description",
+        "answer_code": "print(15 / 5)"
+      },
+      {
+        "qid": 531002070,
+        "qtype": "description",
+        "answer_code": "print(\"The answer is \" + str(2 * 5) + \".\")"
+      }
+    ]
+  },
+  "531003": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531003010,
+        "qtype": "choice",
+        "choice_id": 5310030101
+      },
+      {
+        "qid": 531003020,
+        "qtype": "choice",
+        "choice_id": 5310030201
+      },
+      {
+        "qid": 531003030,
+        "qtype": "description",
+        "answer_code": "number = 0"
+      },
+      {
+        "qid": 531003040,
+        "qtype": "description",
+        "answer_code": "number = 0\nnumber = 100"
+      },
+      {
+        "qid": 531003050,
+        "qtype": "description",
+        "answer_code": "number = 0\nnumber = 10\nprint(number)"
+      },
+      {
+        "qid": 531003060,
+        "qtype": "description",
+        "answer_code": "number = 3\nnumber = number + 10\nprint(number)"
+      }
+    ]
+  },
+  "531004": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 531004010,
+        "qtype": "choice",
+        "choice_id": 5310040101
+      },
+      {
+        "qid": 531004040,
+        "qtype": "choice",
+        "choice_id": 5310040401
+      },
+      {
+        "qid": 531004050,
+        "qtype": "choice",
+        "choice_id": 5310040501
+      },
+      {
+        "qid": 531004070,
+        "qtype": "choice",
+        "choice_id": 5310040701
+      },
+      {
+        "qid": 531004020,
+        "qtype": "description",
+        "answer_code": "print(\"hello\")"
+      },
+      {
+        "qid": 531004030,
+        "qtype": "description",
+        "answer_code": "#Leave this text\nprint(\"Make the first line a comment\")"
+      },
+      {
+        "qid": 531004060,
+        "qtype": "description",
+        "answer_code": "print(\"The answer is \" + str(3 * 4))"
+      },
+      {
+        "qid": 531004080,
+        "qtype": "description",
+        "answer_code": "num = 5\nprint(num)"
+      }
+    ]
+  },
+  "531005": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531005010,
+        "qtype": "choice",
+        "choice_id": 5310050101
+      },
+      {
+        "qid": 531005020,
+        "qtype": "choice",
+        "choice_id": 5310050201
+      },
+      {
+        "qid": 531005040,
+        "qtype": "choice",
+        "choice_id": 5310050401
+      },
+      {
+        "qid": 531005030,
+        "qtype": "description",
+        "answer_code": "num = 100\nif num == 100:\n    print(\"Correct\")"
+      }
+    ]
+  },
+  "531006": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531006010,
+        "qtype": "choice",
+        "choice_id": 5310060101
+      },
+      {
+        "qid": 531006030,
+        "qtype": "choice",
+        "choice_id": 5310060301
+      },
+      {
+        "qid": 531006040,
+        "qtype": "choice",
+        "choice_id": 5310060401
+      },
+      {
+        "qid": 531006020,
+        "qtype": "description",
+        "answer_code": "num = 5\nif num == 10:\n print(\"Win\")\nelse:\n print(\"No prize\")"
+      },
+      {
+        "qid": 531006050,
+        "qtype": "description",
+        "answer_code": "score = 80\nif score >= 60:\n  print(\"Pass\")\nelse:\n  print(\"Fail\")"
+      }
+    ]
+  },
+  "531007": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531007010,
+        "qtype": "choice",
+        "choice_id": 5310070101
+      },
+      {
+        "qid": 531007040,
+        "qtype": "choice",
+        "choice_id": 5310070401
+      },
+      {
+        "qid": 531007020,
+        "qtype": "description",
+        "answer_code": "num=2\nif num == 1:\n print(\"It's 1\")\nelif num == 2:\n print(\"It's 2\")"
+      },
+      {
+        "qid": 531007030,
+        "qtype": "description",
+        "answer_code": "score = 82\nif score == 100:\n print(\"Perfect score\")\nelif score >= 80:\n print(\"Pass\")"
+      },
+      {
+        "qid": 531007050,
+        "qtype": "description",
+        "answer_code": "egg = 5\nif egg == 0:\n  print(\"Out of stock\")\nelif egg <= 3:\n  print(\"Low stock\")\nelse:\n  print(\"In stock\")"
+      }
+    ]
+  },
+  "531008": {
+    "type": "test",
+    "questions": [
+      {
+        "qid": 531008020,
+        "qtype": "choice",
+        "choice_id": 5310080201
+      },
+      {
+        "qid": 531008040,
+        "qtype": "choice",
+        "choice_id": 5310080401
+      },
+      {
+        "qid": 531008060,
+        "qtype": "choice",
+        "choice_id": 5310080601
+      },
+      {
+        "qid": 531008010,
+        "qtype": "description",
+        "answer_code": "num = 7\nif num == 7:\n print(\"Win\")"
+      },
+      {
+        "qid": 531008030,
+        "qtype": "description",
+        "answer_code": "score = 70\nif score >= 60:\n print(\"Pass\")\nelse:\n print(\"Fail\")"
+      },
+      {
+        "qid": 531008050,
+        "qtype": "description",
+        "answer_code": "num = 100\nif num == 100:\n  print(\"Win\")\nelse:\n  print(\"No prize\")"
+      },
+      {
+        "qid": 531008070,
+        "qtype": "description",
+        "answer_code": "num=4\nif num <= 3:\n  print(\"It's A\")\nelif num >= 6:\n  print(\"It's B\")\nelse:\n  print(\"It's C\")"
+      }
+    ]
+  },
+  "531009": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531009010,
+        "qtype": "choice",
+        "choice_id": 5310090101
+      },
+      {
+        "qid": 531009020,
+        "qtype": "choice",
+        "choice_id": 5310090201
+      },
+      {
+        "qid": 531009030,
+        "qtype": "choice",
+        "choice_id": 5310090301
+      },
+      {
+        "qid": 531009040,
+        "qtype": "description",
+        "answer_code": "a = 5\nb = 10\nif (a == 5 or b == 10):\n    print(\"Condition met\")"
+      },
+      {
+        "qid": 531009050,
+        "qtype": "description",
+        "answer_code": "a = 4\nb = 3\nif (a >= 2 and b >= 3):\n    print(\"Condition met\")"
+      }
+    ]
+  },
+  "531010": {
+    "type": "review",
+    "questions": [
+      {
+        "qid": 531010010,
+        "qtype": "choice",
+        "choice_id": 5310100101
+      },
+      {
+        "qid": 531010020,
+        "qtype": "choice",
+        "choice_id": 5310100201
+      },
+      {
+        "qid": 531010030,
+        "qtype": "choice",
+        "choice_id": 5310100301
+      },
+      {
+        "qid": 531010040,
+        "qtype": "description",
+        "answer_code": "for i in range(5):\n    print(\"Hello\")"
+      },
+      {
+        "qid": 531010050,
+        "qtype": "description",
+        "answer_code": "for i in range(7):\n    print(\"Hello\")"
+      }
+    ]
+  }
+}

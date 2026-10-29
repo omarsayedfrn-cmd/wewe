@@ -76,12 +76,16 @@ class Api(
             resp = client.newCall(b.build()).execute().use { r ->
                 Resp(r.code, r.body?.string() ?: "")
             }
-            // Rate-limit guard: adaptive cooldown (Pace) then retry the request.
-            if (pace != null && (resp.code == 429 || resp.code == 403) && attempt < MAX_RATE_RETRIES) {
-                pace.onRateLimit(resp.code, attempt)
+            // Rate-limit guard: 429 only. 403 = locked/forbidden, fail fast with context.
+            if (pace != null && resp.code == 429 && attempt < MAX_RATE_RETRIES) {
+                pace.onRateLimit(attempt)
                 attempt++
                 continue
             }
+            if (pace != null && resp.code == 403) {
+                pace.onForbidden(url)
+            }
+            // 403 = locked/forbidden (not rate limit). Don't retry, let caller handle.
             break
         }
         resp
@@ -98,6 +102,23 @@ fun isJson(s: String): Boolean = try {
     JSONObject(s); true
 } catch (_: Exception) {
     try { JSONArray(s); true } catch (_: Exception) { false }
+}
+
+/** True if response is 2xx AND body parses as JSON (object or array). */
+fun isSuccessJson(resp: Resp): Boolean = resp.code in 200..299 && isJson(resp.body)
+
+/** Parse JSON object only if 2xx, else throw SolverStop with context. */
+@Throws(SolverStop::class)
+fun requireJsonObject(resp: Resp, context: String): JSONObject {
+    if (resp.code !in 200..299) throw SolverStop("$context: HTTP ${resp.code} ${resp.body.take(200)}")
+    return try { JSONObject(resp.body) } catch (e: Exception) { throw SolverStop("$context: non-JSON ${resp.body.take(200)}") }
+}
+
+/** Parse JSON array only if 2xx, else throw SolverStop with context. */
+@Throws(SolverStop::class)
+fun requireJsonArray(resp: Resp, context: String): JSONArray {
+    if (resp.code !in 200..299) throw SolverStop("$context: HTTP ${resp.code} ${resp.body.take(200)}")
+    return try { JSONArray(resp.body) } catch (e: Exception) { throw SolverStop("$context: non-JSON-array ${resp.body.take(200)}") }
 }
 
 class SolverStop(msg: String) : Exception(msg)

@@ -48,8 +48,8 @@ class SprixSolver(
         log("[3/3] solving units $start..$unitEnd (subject $subject, ${if (isEn) "EN" else "AR"}) ...")
 
         val cur0 = api.req("GET", "$base/api/v1/subjects/$subject/curriculum")
-        if (!isJson(cur0.body)) throw SolverStop("curriculum non-JSON: ${cur0.body.take(200)}")
-        val units0 = JSONObject(cur0.body).getJSONArray("data")
+        val curObj = requireJsonObject(cur0, "curriculum")
+        val units0 = curObj.getJSONArray("data")
 
         val plan = mutableListOf<Pair<Int, JSONArray>>()
         for (u in start..unitEnd) {
@@ -107,7 +107,7 @@ class SprixSolver(
         }
         log("=== final status ===")
         val st = api.req("GET", "$base/api/v1/subjects/$subject/units")
-        val arr = JSONObject(st.body).getJSONArray("data")
+        val arr = requireJsonArray(st, "final units")
         for (i in 0 until arr.length()) {
             val x = arr.getJSONObject(i)
             log("${x.getInt("id")}: ${x.getInt("completed_items")}/${x.getInt("total_items")} (${x.get("progress_pct")}%)")
@@ -117,8 +117,8 @@ class SprixSolver(
 
     private suspend fun doSimChapter(cid: String) {
         val b = api.req("GET", "$base/api/v1/chapters/$cid/blocks")
-        if (!isJson(b.body)) throw SolverStop("chapter $cid blocks non-JSON: ${b.body.take(200)}")
-        val blocks = JSONObject(b.body).getJSONObject("data").getJSONArray("blocks")
+        val obj = requireJsonObject(b, "chapter $cid blocks")
+        val blocks = obj.getJSONObject("data").getJSONArray("blocks")
         var nq = 0
         for (i in 0 until blocks.length()) {
             if (blocks.getJSONObject(i).optString("type") == "question") nq++
@@ -138,7 +138,7 @@ class SprixSolver(
                 "POST", "$base/api/v1/chapters/$cid/answer",
                 JSONObject().put("block_id", bid).put("selected_option_id", oid).toString(),
             )
-            if (out.body.contains("\"is_correct\":true")) {
+            if (isSuccessJson(out) && out.body.contains("\"is_correct\":true")) {
                 ok++
             } else {
                 log("  chapter $cid block $bid option $oid WRONG — brute-force fallback")
@@ -148,14 +148,15 @@ class SprixSolver(
             pace.step(20)
         }
         log("  chapter $cid: $ok/${ans.size} correct -> complete:")
-        log(api.req("POST", "$base/api/v1/chapters/$cid/complete", "{}").body)
+        val completeResp = api.req("POST", "$base/api/v1/chapters/$cid/complete", "{}")
+        log(completeResp.body.take(200))
         pace.step(30)
     }
 
     private suspend fun bruteForceChapterBlock(cid: String, bid: Long, skipOid: Long): Boolean {
         val blocks = api.req("GET", "$base/api/v1/chapters/$cid/blocks")
-        if (!isJson(blocks.body)) return false
-        val bArr = JSONObject(blocks.body).getJSONObject("data").getJSONArray("blocks")
+        val obj = requireJsonObject(blocks, "chapter $cid blocks for brute-force")
+        val bArr = obj.getJSONObject("data").getJSONArray("blocks")
         for (j in 0 until bArr.length()) {
             val b = bArr.getJSONObject(j)
             if (b.getString("id") != bid.toString()) continue
@@ -168,7 +169,7 @@ class SprixSolver(
                     "POST", "$base/api/v1/chapters/$cid/answer",
                     JSONObject().put("block_id", bid).put("selected_option_id", optId).toString(),
                 )
-                if (retry.body.contains("\"is_correct\":true")) {
+                if (isSuccessJson(retry) && retry.body.contains("\"is_correct\":true")) {
                     log("  chapter $cid block $bid: fallback option $optId CORRECT")
                     return true
                 }
@@ -182,8 +183,8 @@ class SprixSolver(
     /** EN chapter: brute-force each MCQ option until is_correct:true, then complete. */
     private suspend fun doChapterEn(cid: String) {
         val blocksRaw = api.req("GET", "$base/api/v1/chapters/$cid/blocks")
-        if (!isJson(blocksRaw.body)) throw SolverStop("chapter $cid blocks non-JSON: ${blocksRaw.body.take(200)}")
-        val blocks = JSONObject(blocksRaw.body).getJSONObject("data").getJSONArray("blocks")
+        val obj = requireJsonObject(blocksRaw, "chapter $cid blocks")
+        val blocks = obj.getJSONObject("data").getJSONArray("blocks")
         var nq = 0
         for (i in 0 until blocks.length()) {
             if (blocks.getJSONObject(i).optString("type") == "question") nq++
@@ -207,7 +208,7 @@ class SprixSolver(
                     "POST", "$base/api/v1/chapters/$cid/answer",
                     JSONObject().put("block_id", bid).put("selected_option_id", optId).toString(),
                 )
-                if (out.body.contains("\"is_correct\":true")) {
+                if (isSuccessJson(out) && out.body.contains("\"is_correct\":true")) {
                     log("  ch$cid q$qid block$bid: option $optId CORRECT")
                     found = true; break
                 }
@@ -223,8 +224,7 @@ class SprixSolver(
     /** AR test: start -> answer all from answers.json -> submit (>=80). */
     private suspend fun doTestAr(tid: String, ans: List<IdPair>) {
         val raw = api.req("POST", "$base/api/v1/tests/$tid/start", "{}")
-        if (!isJson(raw.body)) throw SolverStop("test $tid start failed: ${raw.body.take(200)}")
-        val start = JSONObject(raw.body)
+        val start = requireJsonObject(raw, "test $tid start")
         val map = mutableMapOf<String, String>()
         val tqs = start.getJSONObject("data").getJSONArray("test_questions")
         for (i in 0 until tqs.length()) {
@@ -243,21 +243,19 @@ class SprixSolver(
             pace.step(20)
         }
         log("  test $tid submit:")
-        log(api.req("POST", "$base/api/v1/tests/$tid/submit", "{}").body.take(300))
+        val submitResp = api.req("POST", "$base/api/v1/tests/$tid/submit", "{}")
+        log(submitResp.body.take(300))
         pace.step(40)
     }
 
     /** EN test: learn pass (guess+submit harvest treasure) -> apply pass (correct+submit 100%). */
     private suspend fun doTestEn(tid: String) {
         val startRaw = api.req("POST", "$base/api/v1/tests/$tid/start", "{}")
-        if (!isJson(startRaw.body)) {
-            log("  test $tid start failed: ${startRaw.body.take(300)}")
-            return
-        }
-        val start = JSONObject(startRaw.body)
+        val start = requireJsonObject(startRaw, "test $tid start")
         val tqs = start.getJSONObject("data").getJSONArray("test_questions")
         val n = tqs.length()
 
+        // Build question_id -> test_question_id map for this attempt
         val tqMap = mutableMapOf<String, String>()
         for (k in 0 until n) {
             val t = tqs.getJSONObject(k)
@@ -266,14 +264,16 @@ class SprixSolver(
             }
         }
 
+        // ---- Learn pass: answer all with FIRST option from .data.options[qid] ----
+        val opts = start.getJSONObject("data").optJSONObject("options") ?: JSONObject()
         for (k in 0 until n) {
             coroutineContext.ensureActive()
             val t = tqs.getJSONObject(k)
             val qid = t.optString("question_id", "")
             if (qid.isEmpty()) continue
             val tqid = tqMap[qid] ?: continue
-            val options = t.optJSONArray("options") ?: JSONArray()
-            val firstOpt = if (options.length() > 0) options.getJSONObject(0).optLong("id", -1) else -1L
+            val optArr = opts.optJSONArray(qid) ?: JSONArray()
+            val firstOpt = if (optArr.length() > 0) optArr.getJSONObject(0).optLong("id", -1) else -1L
             api.req(
                 "PUT", "$base/api/v1/tests/$tid/questions/$tqid/answer",
                 JSONObject().put("selected_option_id", firstOpt).toString(),
@@ -285,6 +285,7 @@ class SprixSolver(
         val sub = api.req("POST", "$base/api/v1/tests/$tid/submit", "{}")
         pace.step(30)
 
+        // ---- Harvest correct answers from submit treasure (.data.options[qid][].is_correct==true) ----
         val ansFile = mutableMapOf<String, Long>()
         try {
             val subObj = JSONObject(sub.body)
@@ -309,9 +310,9 @@ class SprixSolver(
             return
         }
 
+        // ---- Apply pass: restart, answer all correctly, submit ----
         val startRaw2 = api.req("POST", "$base/api/v1/tests/$tid/start", "{}")
-        if (!isJson(startRaw2.body)) return
-        val start2 = JSONObject(startRaw2.body)
+        val start2 = requireJsonObject(startRaw2, "test $tid restart")
         val tqs2 = start2.getJSONObject("data").getJSONArray("test_questions")
         val tqMap2 = mutableMapOf<String, String>()
         for (k in 0 until tqs2.length()) {

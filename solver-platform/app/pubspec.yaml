@@ -1,7 +1,7 @@
 name: solver_app
 description: "Solver Platform - Educational Engine Solver"
 publish_to: 'none'
-version: 1.0.2+3
+version: 1.1.0+4
 
 environment:
   sdk: ^3.7.0

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/server';
-import { gradeLabels, trackLabels, languageLabels, reasonLabels } from '@/lib/types';
+import { gradeLabels, trackLabels, languageLabels, reasonLabels, roleLabels } from '@/lib/types';
 import { UserActions } from '@/components/user-actions';
 import { ArrowRight, User, Wallet, Shield, History, Key, MessageCircle, Phone } from 'lucide-react';
 
@@ -127,7 +127,9 @@ export default async function UserDetailPage({
             )}
             <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
               <span className="text-[#9E9E9E]">الدور:</span>
-              <span className="font-semibold text-[#E0E0E0]">{profile.role}</span>
+              <span className="font-semibold text-[#E0E0E0]">
+                {roleLabels[profile.role] || profile.role}
+              </span>
             </div>
             <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
               <span className="text-[#9E9E9E]">المرحلة:</span>
@@ -200,7 +202,7 @@ export default async function UserDetailPage({
         <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
           <div className="flex items-center gap-2 text-[#D4AF37] font-semibold mb-4">
             <Shield size={18} />
-            <span>المحركات المتاحة للطالب</span>
+            <span>المحركات المتاحة للحساب</span>
           </div>
 
           {access.length > 0 ? (
@@ -220,7 +222,7 @@ export default async function UserDetailPage({
               ))}
             </div>
           ) : (
-            <p className="text-sm text-[#9E9E9E]">لا توجد محركات مسندة لهذا الطالب بعد</p>
+            <p className="text-sm text-[#9E9E9E]">لا توجد محركات مسندة لهذا الحساب بعد</p>
           )}
         </div>
       </div>

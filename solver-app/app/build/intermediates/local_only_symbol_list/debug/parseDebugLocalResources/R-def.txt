@@ -20,6 +20,8 @@ id boostSwitch
 id btnBack
 id btnCopyGeneratedKey
 id btnDoGenerateKey
+id btnLangAr
+id btnLangEn
 id btnMyDeviceCode
 id btnNewSession
 id btnPasteCode
@@ -35,6 +37,7 @@ id inputClientDeviceCode
 id inputLogin
 id inputPassword
 id inputStart
+id langGroup
 id logPane
 id logScroll
 id logView
@@ -55,6 +58,9 @@ string boost_label
 string boost_on_log
 string footer_by
 string footer_name
+string lang_ar
+string lang_en
+string language
 string login_id
 string need_login
 string need_start
@@ -77,8 +83,11 @@ string session_done_title
 string sessions_title
 string start_btn
 string start_point
+string start_qureo2_en_hint
 string start_qureo2_hint
+string start_qureo_en_hint
 string start_qureo_hint
+string start_sprix_en_hint
 string start_sprix_hint
 string stop_all_btn
 string stop_btn

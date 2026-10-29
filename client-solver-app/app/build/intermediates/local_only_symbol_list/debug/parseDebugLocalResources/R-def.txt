@@ -20,6 +20,8 @@ id boostSwitch
 id btnActivate
 id btnBack
 id btnCopyDeviceCode
+id btnLangAr
+id btnLangEn
 id btnNewSession
 id btnQureo
 id btnQureo2
@@ -33,6 +35,7 @@ id inputActivationKey
 id inputLogin
 id inputPassword
 id inputStart
+id langGroup
 id layoutActivationInputs
 id licenseCard
 id logPane
@@ -55,6 +58,9 @@ string boost_label
 string boost_on_log
 string footer_by
 string footer_name
+string lang_ar
+string lang_en
+string language
 string license_activate_btn
 string license_active_status
 string license_code_copied
@@ -87,8 +93,11 @@ string session_done_title
 string sessions_title
 string start_btn
 string start_point
+string start_qureo2_en_hint
 string start_qureo2_hint
+string start_qureo_en_hint
 string start_qureo_hint
+string start_sprix_en_hint
 string start_sprix_hint
 string stop_all_btn
 string stop_btn

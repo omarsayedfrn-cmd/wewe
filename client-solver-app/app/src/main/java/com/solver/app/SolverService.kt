@@ -239,6 +239,7 @@ class SolverService : Service() {
             // One pacing governor per session; survives network auto-retries so
             // the rate-limit counter is not reset between attempts.
             val pace = Pace(s.boost, s.platform, log)
+            var lastProgress = -1
             while (true) {
                 // Resume point (updated live by solvers); fall back to original start.
                 val fromRaw = s.resumeStart.takeIf { it.isNotEmpty() && it != "done" } ?: s.start
@@ -277,6 +278,11 @@ class SolverService : Service() {
                     push(s.id, "ERROR: ${e.message}")
                     s.result = "ERROR"
                     break
+                }
+                // Reset autoRetries on progress (new chapter/unit completed)
+                if (s.progressDone > lastProgress) {
+                    lastProgress = s.progressDone
+                    s.autoRetries = 0
                 }
             }
             s.finished = true
@@ -457,13 +463,6 @@ class SolverService : Service() {
         return START_STICKY
     }
 
-    private fun stopSelfIfIdle() {
-        if (sessions.values.none { it.running || it.queued }) {
-            // Keep finished logs for the UI, but allow the process to stop.
-            try { stopSelf() } catch (_: Exception) { }
-        }
-    }
-
     private suspend fun runSprix(login: String, password: String, start: Int, sessionId: String, pace: Pace, platform: String) {
         val subject = if (platform == "sprix_en") 3 else 7
         val api = Api(
@@ -478,9 +477,10 @@ class SolverService : Service() {
         )
         val log: (String) -> Unit = { push(sessionId, it) }
         val trialMode = !LicenseEngine.isActivated(this)
+        val answersAsset = if (platform == "sprix_en") "sprix_en_answers.json" else "sprix_answers.json"
         SprixSolver(api, log, pace, subject).runWith(
             login, password, start,
-            Answers.sprixChapters(this), Answers.sprixTests(this),
+            Answers.sprixChapters(this, answersAsset), Answers.sprixTests(this, answersAsset),
             trialMode = trialMode,
             onProgress = { d, t, l -> updateProgress(sessionId, d, t, l) },
             onResume = { nx -> sessions[sessionId]?.resumeStart = nx },
@@ -492,8 +492,12 @@ class SolverService : Service() {
 
     private suspend fun runQureo(platform: String, login: String, password: String, start: Int, sessionId: String, pace: Pace) {
         val course = QureoCourse.of(platform)
-        val isEn = QureoCourse.isEn(course)
-        val asset = if (platform == "qureo2" || platform == "qureo2_en") "qureo2_answers.json" else "qureo_answers.json"
+        val asset = when (platform) {
+            "qureo2_en" -> "qureo2_en_answers.json"
+            "qureo_en" -> "qureo_en_answers.json"
+            "qureo2" -> "qureo2_answers.json"
+            else -> "qureo_answers.json"
+        }
         val store = CookieStore()
         val portal = Api(
             mapOf(
@@ -517,7 +521,9 @@ class SolverService : Service() {
         )
         val log: (String) -> Unit = { push(sessionId, it) }
         val trialMode = !LicenseEngine.isActivated(this)
-        val answers = if (isEn) emptyMap() else Answers.qureo(this, asset)
+        val answers = Answers.qureo(this, asset)
+        if (answers.isEmpty()) log("[ANSWERS] ⚠ no static answers in $asset → pure discovery")
+        else log("[ANSWERS] ▶ loaded ${answers.size} chapters from $asset")
         QureoSolver(portal, tp, store, log, pace, course).runWith(
             login, password, start, answers,
             trialMode = trialMode,
@@ -566,6 +572,13 @@ class SolverService : Service() {
                 .build()
             getSystemService(NotificationManager::class.java).notify(NID, n)
         } catch (_: Exception) { }
+    }
+
+    private fun stopSelfIfIdle() {
+        if (sessions.values.none { it.running || it.queued }) {
+            // Keep finished logs for the UI, but allow the process to stop.
+            try { stopSelf() } catch (_: Exception) { }
+        }
     }
 
     override fun onDestroy() {

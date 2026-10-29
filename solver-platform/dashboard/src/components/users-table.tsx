@@ -152,8 +152,20 @@ export function UsersTable({ initialUsers }: { initialUsers: UserRow[] }) {
                   return (
                     <tr key={user.id} className="hover:bg-[#252525] transition-colors">
                       <td className="p-3 sm:p-4">
-                        <div className="font-semibold text-[#E0E0E0]">
-                          {user.display_name || 'بدون اسم'}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-semibold text-[#E0E0E0]">
+                            {user.display_name || 'بدون اسم'}
+                          </span>
+                          {user.role === 'merchant' && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30">
+                              تاجر
+                            </span>
+                          )}
+                          {user.role === 'admin' && (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold bg-[#800020]/25 text-[#D4AF37] border border-[#800020]/40">
+                              أدمن
+                            </span>
+                          )}
                         </div>
                         <div className="text-xs text-[#757575] font-mono">{user.id.slice(0, 8)}...</div>
                       </td>

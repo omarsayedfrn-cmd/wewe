@@ -101,7 +101,7 @@ class QureoSolver(
         pace.auth(500)
 
         if (QureoCourse.isEn(course)) {
-            runEn(start, trialMode, onProgress, onResume)
+            runEn(answers, start, trialMode, onProgress, onResume)
         } else {
             runAr(answers, start, trialMode, onProgress, onResume)
         }
@@ -166,19 +166,18 @@ class QureoSolver(
         logFinalStatus()
     }
 
-    /** EN mode: self-discovering learn+apply pass (no answers.json needed). */
+    /** EN mode: static answers first, per-chapter discovery fallback when a question changed. */
     private suspend fun runEn(
+        answers: Map<String, Answers.QChapter>,
         start: Int,
         trialMode: Boolean,
         onProgress: (Int, Int, String) -> Unit,
         onResume: (String) -> Unit,
     ) {
-        // Fetch chapter list from section API (EN courses expose it dynamically).
         val sectionsRaw = tp.req("GET", "$tpBase/api/study/sections/${course.sectionId}")
-        if (!isJson(sectionsRaw.body)) throw SolverStop("sections non-JSON: ${sectionsRaw.body.take(200)}")
-        val sectionsObj = JSONObject(sectionsRaw.body)
+        val sectionsObj = requireJsonObject(sectionsRaw, "sections")
         val chaptersArr = sectionsObj.optJSONArray("chapters") ?: JSONArray()
-        val chapterList = mutableListOf<Pair<String, String>>() // (rawId, testType)
+        val chapterList = mutableListOf<Pair<String, String>>()
         for (k in 0 until chaptersArr.length()) {
             val c = chaptersArr.getJSONObject(k)
             val cid = c.getString("id")
@@ -196,14 +195,34 @@ class QureoSolver(
             coroutineContext.ensureActive()
             val i = idx + 1
             log("=== [$i/${chapterList.size}] chapter $cid ($ctype) lectures...")
-            completeLectures(cid)
-            log("--- start test $cid")
-            tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
-            pace.step(40)
+            try {
+                completeLectures(cid)
+            } catch (e: SolverStop) {
+                log("⚠ $cid locked (${e.message}), skipping")
+                continue
+            }
             val prefix = if (ctype == "test") "test-questions" else "review-questions"
-            solveTestEn(cid, ctype, prefix)
+            val static = answers[cid]
+            val completed = if (static != null && static.questions.isNotEmpty()) {
+                log("[ANSWERS] ▶ chapter $cid: static (${static.questions.size} Qs)")
+                if (solveChapterStatic(cid, ctype, prefix, static)) {
+                    true
+                } else {
+                    log("[ANSWERS] 🧠 chapter $cid: discovering correct answers...")
+                    val recovered = solveTestEn(cid, ctype, prefix)
+                    if (recovered) log("[ANSWERS] ✅ chapter $cid: recovered via discovery")
+                    recovered
+                }
+            } else {
+                log("[ANSWERS] ℹ chapter $cid: not in answers DB → discovery")
+                solveTestEn(cid, ctype, prefix)
+            }
+            if (!completed) {
+                log("⚠ $cid test incomplete, skipping next")
+                continue
+            }
             onProgress(i, chapterList.size, "chapter $cid")
-            if (idx + 1 < chapterList.size) onResume(cid)
+            if (idx + 1 < chapterList.size) onResume(chapterList[idx + 1].first)
             else onResume("done")
 
             if (trialMode) {
@@ -218,20 +237,100 @@ class QureoSolver(
         logFinalStatus()
     }
 
-    /** EN learn+apply pass: learn pass guesses + harvests correct answers, apply pass re-answers correctly. */
-    private suspend fun solveTestEn(cid: String, ctype: String, prefix: String) {
-        val mapFile = mutableMapOf<String, JSONObject>() // qid -> {type, choice_id|answer_code}
+    /** Try the pre-recorded static answers for one chapter. Returns true only if the platform
+     * confirms completion/diamond 5 and no answer was rejected (i.e. the question bank is unchanged). */
+    private suspend fun solveChapterStatic(
+        cid: String,
+        ctype: String,
+        prefix: String,
+        ch: Answers.QChapter,
+    ): Boolean {
+        tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
+        pace.step(40)
+        // The platform enforces question order, and the harvested JSON may be grouped by type.
+        // Always follow the live order and look each question up by id.
+        val tqRaw = tp.req("GET", "$tpBase/api/study/chapters/$cid/test")
+        val tqArr = requireJsonArray(tqRaw, "chapter $cid questions")
+        val byQid = ch.questions.associateBy { it.qid.toString() }
+        for (k in 0 until tqArr.length()) {
+            coroutineContext.ensureActive()
+            val item = tqArr.getJSONObject(k)
+            val qid = item.optJSONObject("question")?.optString("id")
+                ?: item.optString("question_id", "")
+            val q = byQid[qid]
+            if (q == null) {
+                log("[ANSWERS] ⚠ q $qid: not in DB (new/changed) → discovery fallback")
+                return false
+            }
+            val (body, kind) = if (q.qtype == "choice") {
+                JSONObject().put("choice_id", q.choiceId ?: 0).toString() to "choice"
+            } else {
+                JSONObject().put("answer_code", q.answerCode ?: "").toString() to "description"
+            }
+            val out = tp.req(
+                "PUT",
+                "$tpBase/api/study/students/$prefix/$qid/answer/$kind",
+                body,
+            ).body
+            if (staticAnswerVerdict(out, q) == false) {
+                log("[ANSWERS] ⚠ q $qid ($kind): static answer changed → discovery fallback")
+                return false
+            }
+            pace.step(20)
+        }
+        return verifyChapter(cid, ctype).also { ok ->
+            if (ok) log("[ANSWERS] ✅ chapter $cid: static answers confirmed")
+        }
+    }
 
-        // ---- Learn pass ----
+    /** true/false when the answer response proves correctness; null when it cannot tell. */
+    private fun staticAnswerVerdict(out: String, q: Answers.QChoice): Boolean? {
+        return try {
+            val result = JSONObject(out).optJSONObject("result") ?: return null
+            if (q.qtype == "choice") {
+                val choices = result.optJSONArray("choices") ?: return null
+                for (i in 0 until choices.length()) {
+                    val c = choices.getJSONObject(i)
+                    val cid = c.optJSONObject("choice")?.optLong("id", -1L) ?: -1L
+                    if (cid == (q.choiceId ?: 0L)) return c.optBoolean("correct", false)
+                }
+                null
+            } else {
+                if (!result.has("model_answer")) {
+                    return if (result.has("correct")) result.optBoolean("correct") else null
+                }
+                normCode(result.optString("model_answer", "")) == normCode(q.answerCode ?: "")
+            }
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun normCode(value: String): String =
+        value.trim().replace(Regex("\\s+"), " ")
+
+    private suspend fun verifyChapter(cid: String, ctype: String): Boolean {
+        val verifyRaw = tp.req("GET", "$tpBase/api/study/students/chapters/$cid/$ctype/result")
+        return if (isSuccessJson(verifyRaw)) {
+            try {
+                val res = JSONObject(verifyRaw.body)
+                val result = res.optJSONObject("result") ?: res
+                val diamond = result.optInt("diamond", 0)
+                val completedAt = result.optString("completed_at", "")
+                diamond >= 5 || completedAt.isNotEmpty()
+            } catch (_: Exception) { false }
+        } else false
+    }
+
+    /** EN learn+apply pass: learn pass guesses + harvests correct answers, apply pass re-answers correctly.
+     * Returns true if chapter reached diamond 5 / completed_at after apply pass. */
+    private suspend fun solveTestEn(cid: String, ctype: String, prefix: String): Boolean {
+        val mapFile = mutableMapOf<String, JSONObject>()
         log("--- learn pass $cid ($prefix)")
         tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
         pace.step(40)
         val tqRaw = tp.req("GET", "$tpBase/api/study/chapters/$cid/test")
-        if (!isJson(tqRaw.body)) {
-            log("  test questions non-JSON: ${tqRaw.body.take(200)}")
-            return
-        }
-        val tqArr = JSONArray(tqRaw.body)
+        val tqArr = requireJsonArray(tqRaw, "test questions $cid")
         val nq = tqArr.length()
         for (k in 0 until nq) {
             coroutineContext.ensureActive()
@@ -271,14 +370,10 @@ class QureoSolver(
             }
             pace.step(20)
         }
-
-        // Fallback: harvest from result endpoint
         val resultRaw = tp.req("GET", "$tpBase/api/study/students/chapters/$cid/$ctype/result")
-        if (isJson(resultRaw.body)) {
+        if (isSuccessJson(resultRaw)) {
             harvestFromResult(resultRaw.body, mapFile)
         }
-
-        // ---- Apply pass ----
         log("--- apply pass $cid (restart + answer correct)")
         tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
         pace.step(40)
@@ -311,13 +406,23 @@ class QureoSolver(
             }
             pace.step(20)
         }
+        // Verify completion
+        val verifyRaw = tp.req("GET", "$tpBase/api/study/students/chapters/$cid/$ctype/result")
+        return if (isSuccessJson(verifyRaw)) {
+            try {
+                val res = JSONObject(verifyRaw.body)
+                val result = res.optJSONObject("result") ?: res
+                val diamond = result.optInt("diamond", 0)
+                val completedAt = result.optString("completed_at", "")
+                diamond >= 5 || completedAt.isNotEmpty()
+            } catch (_: Exception) { false }
+        } else false
     }
 
     private suspend fun harvestFromResult(body: String, map: MutableMap<String, JSONObject>) {
         try {
             val res = JSONObject(body)
             val result = res.optJSONObject("result") ?: res
-            // choice results
             val choiceResults = result.optJSONArray("choice_results") ?: result.optJSONArray("choices") ?: JSONArray()
             for (k in 0 until choiceResults.length()) {
                 val cr = choiceResults.getJSONObject(k)
@@ -335,7 +440,6 @@ class QureoSolver(
                     }
                 }
             }
-            // description results
             val descResults = result.optJSONArray("description_results") ?: JSONArray()
             for (k in 0 until descResults.length()) {
                 val dr = descResults.getJSONObject(k)
@@ -385,8 +489,8 @@ class QureoSolver(
 
     private suspend fun logFinalStatus() {
         log("[4/4] final status:")
-        val list = tp.req("GET", "$tpBase/api/study/students/sections/${course.sectionId}/chapters").body
-        val arr = if (isJson(list)) JSONArray(list) else JSONArray()
+        val listRaw = tp.req("GET", "$tpBase/api/study/students/sections/${course.sectionId}/chapters")
+        val arr = requireJsonArray(listRaw, "final chapters")
         var done = 0
         val nonPerfect = mutableListOf<String>()
         for (k in 0 until arr.length()) {
@@ -405,17 +509,16 @@ class QureoSolver(
         var cached = lectureCache[cid]
         if (cached == null) {
             val chapRaw = tp.req("GET", "$tpBase/api/study/chapters/$cid")
-            if (!isJson(chapRaw.body)) throw SolverStop("chapter $cid non-JSON: ${chapRaw.body.take(200)}")
-            val lectures = JSONObject(chapRaw.body).optJSONArray("lectures") ?: JSONArray()
+            val chapObj = requireJsonObject(chapRaw, "chapter $cid")
+            val lectures = chapObj.optJSONArray("lectures") ?: JSONArray()
             if (lectures.length() == 0) throw SolverStop("no lectures for $cid (locked?)")
             val list = mutableListOf<CachedLecture>()
             for (li in 0 until lectures.length()) {
                 val lid = lectures.getJSONObject(li).get("id").toString()
                 val talksRaw = tp.req("GET", "$tpBase/api/study/lectures/$lid")
-                if (!isJson(talksRaw.body)) throw SolverStop("lecture $lid non-JSON")
-                val talksObj = JSONObject(talksRaw.body)
+                val talksObj = requireJsonObject(talksRaw, "lecture $lid")
                 if (!talksObj.has("talks")) {
-                    throw SolverStop("lecture $lid locked (prev chapter not done?). ${talksRaw.body.take(200)}")
+                    throw SolverStop("lecture $lid locked (prev chapter not done?)")
                 }
                 val talks = talksObj.getJSONArray("talks")
                 val talksList = mutableListOf<CachedTalk>()

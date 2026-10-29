@@ -174,8 +174,7 @@ class QureoSolver(
         onResume: (String) -> Unit,
     ) {
         val sectionsRaw = tp.req("GET", "$tpBase/api/study/sections/${course.sectionId}")
-        if (!isJson(sectionsRaw.body)) throw SolverStop("sections non-JSON: ${sectionsRaw.body.take(200)}")
-        val sectionsObj = JSONObject(sectionsRaw.body)
+        val sectionsObj = requireJsonObject(sectionsRaw, "sections")
         val chaptersArr = sectionsObj.optJSONArray("chapters") ?: JSONArray()
         val chapterList = mutableListOf<Pair<String, String>>()
         for (k in 0 until chaptersArr.length()) {
@@ -195,14 +194,23 @@ class QureoSolver(
             coroutineContext.ensureActive()
             val i = idx + 1
             log("=== [$i/${chapterList.size}] chapter $cid ($ctype) lectures...")
-            completeLectures(cid)
+            try {
+                completeLectures(cid)
+            } catch (e: SolverStop) {
+                log("⚠ $cid locked (${e.message}), skipping")
+                continue
+            }
             log("--- start test $cid")
             tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
             pace.step(40)
             val prefix = if (ctype == "test") "test-questions" else "review-questions"
-            solveTestEn(cid, ctype, prefix)
+            val completed = solveTestEn(cid, ctype, prefix)
+            if (!completed) {
+                log("⚠ $cid test incomplete, skipping next")
+                continue
+            }
             onProgress(i, chapterList.size, "chapter $cid")
-            if (idx + 1 < chapterList.size) onResume(cid)
+            if (idx + 1 < chapterList.size) onResume(chapterList[idx + 1].first)
             else onResume("done")
 
             if (trialMode) {
@@ -217,18 +225,15 @@ class QureoSolver(
         logFinalStatus()
     }
 
-    /** EN learn+apply pass: learn pass guesses + harvests correct answers, apply pass re-answers correctly. */
-    private suspend fun solveTestEn(cid: String, ctype: String, prefix: String) {
+    /** EN learn+apply pass: learn pass guesses + harvests correct answers, apply pass re-answers correctly.
+     * Returns true if chapter reached diamond 5 / completed_at after apply pass. */
+    private suspend fun solveTestEn(cid: String, ctype: String, prefix: String): Boolean {
         val mapFile = mutableMapOf<String, JSONObject>()
         log("--- learn pass $cid ($prefix)")
         tp.req("PUT", "$tpBase/api/study/students/chapters/$cid/test", "{}")
         pace.step(40)
         val tqRaw = tp.req("GET", "$tpBase/api/study/chapters/$cid/test")
-        if (!isJson(tqRaw.body)) {
-            log("  test questions non-JSON: ${tqRaw.body.take(200)}")
-            return
-        }
-        val tqArr = JSONArray(tqRaw.body)
+        val tqArr = requireJsonArray(tqRaw, "test questions $cid")
         val nq = tqArr.length()
         for (k in 0 until nq) {
             coroutineContext.ensureActive()
@@ -269,7 +274,7 @@ class QureoSolver(
             pace.step(20)
         }
         val resultRaw = tp.req("GET", "$tpBase/api/study/students/chapters/$cid/$ctype/result")
-        if (isJson(resultRaw.body)) {
+        if (isSuccessJson(resultRaw)) {
             harvestFromResult(resultRaw.body, mapFile)
         }
         log("--- apply pass $cid (restart + answer correct)")
@@ -304,6 +309,17 @@ class QureoSolver(
             }
             pace.step(20)
         }
+        // Verify completion
+        val verifyRaw = tp.req("GET", "$tpBase/api/study/students/chapters/$cid/$ctype/result")
+        return if (isSuccessJson(verifyRaw)) {
+            try {
+                val res = JSONObject(verifyRaw.body)
+                val result = res.optJSONObject("result") ?: res
+                val diamond = result.optInt("diamond", 0)
+                val completedAt = result.optString("completed_at", "")
+                diamond >= 5 || completedAt.isNotEmpty()
+            } catch (_: Exception) { false }
+        } else false
     }
 
     private suspend fun harvestFromResult(body: String, map: MutableMap<String, JSONObject>) {
@@ -376,8 +392,8 @@ class QureoSolver(
 
     private suspend fun logFinalStatus() {
         log("[4/4] final status:")
-        val list = tp.req("GET", "$tpBase/api/study/students/sections/${course.sectionId}/chapters").body
-        val arr = if (isJson(list)) JSONArray(list) else JSONArray()
+        val listRaw = tp.req("GET", "$tpBase/api/study/students/sections/${course.sectionId}/chapters")
+        val arr = requireJsonArray(listRaw, "final chapters")
         var done = 0
         val nonPerfect = mutableListOf<String>()
         for (k in 0 until arr.length()) {
@@ -396,17 +412,16 @@ class QureoSolver(
         var cached = lectureCache[cid]
         if (cached == null) {
             val chapRaw = tp.req("GET", "$tpBase/api/study/chapters/$cid")
-            if (!isJson(chapRaw.body)) throw SolverStop("chapter $cid non-JSON: ${chapRaw.body.take(200)}")
-            val lectures = JSONObject(chapRaw.body).optJSONArray("lectures") ?: JSONArray()
+            val chapObj = requireJsonObject(chapRaw, "chapter $cid")
+            val lectures = chapObj.optJSONArray("lectures") ?: JSONArray()
             if (lectures.length() == 0) throw SolverStop("no lectures for $cid (locked?)")
             val list = mutableListOf<CachedLecture>()
             for (li in 0 until lectures.length()) {
                 val lid = lectures.getJSONObject(li).get("id").toString()
                 val talksRaw = tp.req("GET", "$tpBase/api/study/lectures/$lid")
-                if (!isJson(talksRaw.body)) throw SolverStop("lecture $lid non-JSON")
-                val talksObj = JSONObject(talksRaw.body)
+                val talksObj = requireJsonObject(talksRaw, "lecture $lid")
                 if (!talksObj.has("talks")) {
-                    throw SolverStop("lecture $lid locked (prev chapter not done?). ${talksRaw.body.take(200)}")
+                    throw SolverStop("lecture $lid locked (prev chapter not done?)")
                 }
                 val talks = talksObj.getJSONArray("talks")
                 val talksList = mutableListOf<CachedTalk>()

@@ -3113,6 +3113,8 @@ id bounce
 id btnBack
 id btnCopyGeneratedKey
 id btnDoGenerateKey
+id btnLangAr
+id btnLangEn
 id btnMyDeviceCode
 id btnNewSession
 id btnPasteCode
@@ -3244,6 +3246,7 @@ id item_touch_helper_previous_elevation
 id jumpToEnd
 id jumpToStart
 id labeled
+id langGroup
 id layout
 id left
 id leftToRight
@@ -3761,6 +3764,9 @@ string footer_name
 string hide_bottom_view_on_scroll_behavior
 string icon_content_description
 string item_view_role_description
+string lang_ar
+string lang_en
+string language
 string login_id
 string m3_exceed_max_badge_text_suffix
 string m3_ref_typeface_brand_medium
@@ -3894,8 +3900,11 @@ string side_sheet_accessibility_pane_title
 string side_sheet_behavior
 string start_btn
 string start_point
+string start_qureo2_en_hint
 string start_qureo2_hint
+string start_qureo_en_hint
 string start_qureo_hint
+string start_sprix_en_hint
 string start_sprix_hint
 string status_bar_notification_info_overflow
 string stop_all_btn

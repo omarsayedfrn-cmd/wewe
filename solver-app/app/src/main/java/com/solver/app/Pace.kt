@@ -10,7 +10,7 @@ import kotlin.random.Random
  *
  * Boost scales ONLY solver work-loop delays (lectures/questions/tests) by a
  * platform factor with random jitter and a hard floor. Login/bootstrap delays
- * are never scaled ([auth]). Any HTTP 429/403 escalates the scale, cools down
+ * are never scaled ([auth]). Any HTTP 429 escalates the scale, cools down
  * 15-25s and lets Api retry; after [MAX_INCIDENTS] hits boost disables itself
  * for the rest of the session and pacing returns to normal.
  *
@@ -64,8 +64,8 @@ class Pace(
     /** Unscaled delay for login / session bootstrap steps (never boosted). */
     suspend fun auth(baseMs: Long) = delay(baseMs)
 
-    /** Called by Api on HTTP 429/403: escalate, cool down, maybe disable. */
-    suspend fun onRateLimit(status: Int, attempt: Int) {
+    /** Called by Api on HTTP 429 only: escalate, cool down, maybe disable. */
+    suspend fun onRateLimit(attempt: Int) {
         if (enabled && !disabled) {
             incidents++
             if (incidents >= MAX_INCIDENTS) {
@@ -74,11 +74,16 @@ class Pace(
                 log("⚠ rate limit ×$incidents — Boost auto-disabled, normal pacing")
             } else {
                 effectiveScale = minOf(1.0, effectiveScale + 0.2)
-                log("⚠ HTTP $status — rate guard: Boost slowed to ×${fmtScale(effectiveScale)}")
+                log("⚠ HTTP 429 — rate guard: Boost slowed to ×${fmtScale(effectiveScale)}")
             }
         }
         val backoff = BACKOFF_BASE_MS + attempt * 5_000L + rnd.nextLong(0L, 5_000L)
         log("⏸ rate guard: cooling down ${backoff / 1000}s")
         delay(backoff)
+    }
+
+    /** Called on HTTP 403 (locked/forbidden): log but NO cooldown, fail fast. */
+    suspend fun onForbidden(context: String) {
+        if (enabled) log("⛔ $context: HTTP 403 (locked/forbidden) — not retrying")
     }
 }

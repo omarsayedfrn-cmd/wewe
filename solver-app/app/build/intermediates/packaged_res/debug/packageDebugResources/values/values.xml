@@ -17,6 +17,9 @@
     <string name="boost_on_log">⚡ Boost ON — solver steps ×%1$s, jitter ±25%%, 429 rate guard armed</string>
     <string name="footer_by">Developed by</string>
     <string name="footer_name">Omar Sayed</string>
+    <string name="lang_ar">العربية</string>
+    <string name="lang_en">English</string>
+    <string name="language">Language</string>
     <string name="login_id">Login ID</string>
     <string name="need_login">Login ID and password are required.</string>
     <string name="need_start">Invalid start point.</string>
@@ -39,8 +42,11 @@
     <string name="sessions_title">Sessions</string>
     <string name="start_btn">▶  Start Solving</string>
     <string name="start_point">Start point</string>
+    <string name="start_qureo2_en_hint">Chapter 1–10 (default: 1)</string>
     <string name="start_qureo2_hint">Chapter 1–25 (e.g. 1)</string>
+    <string name="start_qureo_en_hint">Chapter 1–54 (default: 1)</string>
     <string name="start_qureo_hint">Chapter 1–54 (e.g. 1)</string>
+    <string name="start_sprix_en_hint">Unit 1–6 (default: 1)</string>
     <string name="start_sprix_hint">Unit 1–6 (e.g. 1)</string>
     <string name="stop_all_btn">■ Stop all</string>
     <string name="stop_btn">■ Stop</string>
