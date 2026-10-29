@@ -74,14 +74,18 @@
      - أضف الـ **Authorized redirect URIs** المعطى لك من Supabase (مثال: `https://xyzcompany.supabase.co/auth/v1/callback`).
      - انسخ `Client ID` و `Client Secret` وضعهما في إعدادات Supabase واحفظ التغييرات.
      - انسخ أيضاً `Client ID` وضعه في `AppConstants.googleWebClientId` في تطبيق Flutter.
-   - **الخطوة ب: إنشاء Android Client ID (ضروري جداً لعمل الدخول على هواتف الطلاب)**:
-     - أنشئ معرفاً ثانياً بالضغط على **Create Credentials** ← **OAuth client ID**.
-     - اختر نوع التطبيق: **Android**.
-     - أدخل الـ Package name: `com.solver.solver_app`
-     - أدخل بصمة الشهادة SHA-1 الخاصة بالتطبيق:
-       - للنسخة الحالية (Debug Key):
-         `8B:98:C8:6B:25:A4:37:F0:8E:4A:BC:0E:11:03:73:EE:89:5C:9B:60`
-     - احفظ الإعدادات (قد يستغرق 2-5 دقائق ليعمل).
+- **الخطوة ب: إنشاء Android Client ID (ضروري جداً لعمل الدخول على هواتف الطلاب)**:
+      - أنشئ معرفاً ثانياً بالضغط على **Create Credentials** ← **OAuth client ID**.
+      - اختر نوع التطبيق: **Android**.
+      - أدخل الـ Package name: `com.solver.solver_app`
+      - أنشئ **Release Keystore** أولاً ثم استخدم بصمة SHA-1 الخاصة به:
+        ```bash
+        cd solver-platform/app
+        ./tool/generate_release_keystore.sh
+        ```
+        السكربت يطبع `SHA1:` الخاصة بمفتاح الإصدار — استخدمها هنا.
+        > لا تستخدم بصمة الـ Debug Key القديمة؛ تم إلغاء توقيع الإصدارات بمفتاح Debug.
+      - احفظ الإعدادات (قد يستغرق 2-5 دقائق ليعمل).
    - **الخطوة ج: إعداد شاشة الموافقة (OAuth Consent Screen)**:
      - تأكد من إضافة `User support email` و `Developer contact information`.
      - تأكد من تعيين الحالة إلى **Publish App** (أو إضافة حسابات التجربة في Test Users إن كانت قيد الاختبار).
@@ -141,13 +145,22 @@ static const String supabaseAnonKey = 'your-actual-anon-key';
 static const String googleWebClientId = 'your-google-web-client-id.apps.googleusercontent.com';
 ```
 
-### 3.2 تحديث بنك الإجابات وتشفيره
-تم توفير سكربت بايثون يقوم بقراءة ملفات الإجابات الأصلية من المنظومة وتشفيرها بتشفير **AES-256** مع مفتاح مجزأ مبهم:
-```bash
-python3 solver-platform/app/tool/encrypt_answers.py
-```
-سيتولد الملف المشفر داخل أصول التطبيق:
-`solver-platform/app/assets/answers.enc`
+### 3.2 رفع بنك الإجابات إلى السيرفر (لم يعد يُضمَّن في الـ APK)
+بنك الإجابات أصبح **سيرفر-سايد فقط** داخل جدول خاص `solver_answers` لا يستطيع أي عميل قراءته مباشرة. التطبيق يطلب الإجابات من Edge Function اسمها `solver-answers` بعد التحقق من الجلسة والموافقة على الحساب والاشتراك.
+
+1. طبّق الترحيلات الجديدة `00008` و`00009` (عبر `supabase db push` أو SQL Editor).
+2. انشر الـ Edge Function:
+   ```bash
+   supabase functions deploy solver-answers
+   ```
+3. ارفع الإجابات من مجلد `Engines/` إلى الجدول باستخدام مفتاح `service_role`:
+   ```bash
+   export SUPABASE_URL="https://your-project.supabase.co"
+   export SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
+   python3 solver-platform/supabase/scripts/upload_answers.py
+   ```
+
+> لم يعد هناك ملف `assets/answers.enc` ولا مفتاح تشفير داخل التطبيق. أي نسخة قديمة تحتوي عليها يجب التخلص منها.
 
 ### 3.3 التحقق من سلامة الأكواد
 ```bash
@@ -158,6 +171,14 @@ flutter analyze
 يجب أن تحصل على: `No issues found!`.
 
 ### 3.4 بناء الـ Release APK الجاهز للنشر
+أولاً أنشئ مفتاح الإصدار (مرة واحدة فقط، واحتفظ بنسخة احتياطية آمنة منه):
+```bash
+cd solver-platform/app
+./tool/generate_release_keystore.sh
+```
+سيُنشئ `android/app/release-keystore.jks` و`android/key.properties` (كلاهما مستثنى من git).
+
+ثم ابنِ الإصدار:
 ```bash
 cd solver-platform/app
 flutter build apk --release
@@ -166,6 +187,8 @@ flutter build apk --release
 ```
 solver-platform/app/build/app/outputs/flutter-apk/app-release.apk
 ```
+
+> إذا لم يوجد `android/key.properties` سيفشل بناء الإصدار برسالة واضحة. هذا مقصود: لا يُسمح بعد الآن بالتوقيع بمفتاح Debug للتوزيع.
 
 ---
 
@@ -204,7 +227,9 @@ solver-platform/app/build/app/outputs/flutter-apk/app-release.apk
 | **Service Role Key** | التأكد من عدم استخدام الـ Service Role Key في كود التطبيق الموبايل إطلاقاً | ✅ مؤكد |
 | **Ledger Protection** | منع أي تعديل مباشر على المحافظ أو رصيد العملات إلا عبر دوال الـ RPC الآمنة | ✅ مؤكد |
 | **Credential Privacy** | عدم تخزين كلمات مرور الطلاب لمنصات QUREO و SPRIX على أي سيرفر أو قاعدة بيانات | ✅ مؤكد |
-| **Encrypted Assets** | التأكد من تضمين ملف الإجابات المشفر `answers.enc` داخل الـ APK | ✅ مؤكد |
+| **Server-side Answers** | التأكد من نشر `solver-answers` ورفع الإجابات لجدول `solver_answers` الخاص وعدم وجود `answers.enc` في الـ APK | ✅ مؤكد |
+| **Release Signing** | التأكد من وجود `android/key.properties` وتوقيع الـ APK بمفتاح Release (لا Debug) | ✅ مؤكد |
+| **Profiles RLS** | التأكد من تطبيق ترحيل `00008` ومنع تصعيد `role/approved/trial_used` من العميل | ✅ مؤكد |
 | **Rate Limit Guard** | التأكد من تفعيل حاكم السرعة `Pace` وحماية 429 لمنع حظر حسابات الطلاب | ✅ مؤكد |
 
 ---

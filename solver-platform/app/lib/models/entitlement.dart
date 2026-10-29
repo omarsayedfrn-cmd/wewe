@@ -48,11 +48,10 @@ class Entitlement {
   /// True when this entitlement may be used with the given bound account.
   ///
   /// An entitlement with no stamp yet (before the first solve) matches any
-  /// account; once stamped it only matches its own account.
+  /// account; once stamped it only matches its own account. An unbound profile
+  /// (null) matches only unstamped entitlements, never one bound elsewhere.
   bool matchesAccount(String? loginNorm) =>
-      platformLoginNorm == null ||
-      loginNorm == null ||
-      platformLoginNorm == loginNorm;
+      platformLoginNorm == null || platformLoginNorm == loginNorm;
 
   /// Check if a specific chapter number is entitled.
   bool hasChapter(int chapter) {

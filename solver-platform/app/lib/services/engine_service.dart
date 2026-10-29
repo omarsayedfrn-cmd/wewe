@@ -119,8 +119,8 @@ class EngineService {
   /// Check if user has entitlement for a specific engine/chapter.
   ///
   /// When [loginNorm] is given, only entitlements stamped with that account (or
-  /// still unstamped) count; passing null means the account is unknown, so
-  /// every entitlement matches (used before the first solve).
+  /// still unstamped) count. Passing null (unbound profile) matches only
+  /// unstamped entitlements, never one bound to another account.
   bool hasEntitlement(
     List<Entitlement> entitlements,
     String engineCode,

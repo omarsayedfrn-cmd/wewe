@@ -8,7 +8,6 @@ import '../../providers/engine_provider.dart';
 import '../../services/secure_credentials.dart';
 import '../../solver/api.dart';
 import '../../solver/pace.dart';
-import '../../solver/answers.dart';
 import '../../solver/qureo_solver.dart';
 import '../../solver/sprix_solver.dart';
 import '../../widgets/error_view.dart';
@@ -306,9 +305,10 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
       pace: pace,
     );
 
-    _addLog('تحميل الإجابات المشفرة من الأصول...');
-    final answers = await AnswersBundle.getQureo(widget.engineCode);
-    _addLog('تم فك تشفير إجابات ${answers.length} فصلاً بنجاح');
+    _addLog('تحميل الإجابات من السيرفر...');
+    final answers =
+        await ref.read(answersServiceProvider).getQureo(widget.engineCode);
+    _addLog('تم تحميل إجابات ${answers.length} فصلاً بعد التحقق من الاشتراك');
 
     final solver = QureoSolver(
       portal: portal,
@@ -356,9 +356,10 @@ class _SolvingScreenState extends ConsumerState<SolvingScreen> {
       pace: pace,
     );
 
-    _addLog('تحميل إجابات SPRIX المشفرة...');
-    final chapters = await AnswersBundle.getSprixChapters(widget.engineCode);
-    final tests = await AnswersBundle.getSprixTests(widget.engineCode);
+    _addLog('تحميل إجابات SPRIX من السيرفر...');
+    final answersService = ref.read(answersServiceProvider);
+    final chapters = await answersService.getSprixChapters(widget.engineCode);
+    final tests = await answersService.getSprixTests(widget.engineCode);
     _addLog('تم تحميل ${chapters.length} فصلاً و ${tests.length} اختباراً');
 
     final solver = SprixSolver(

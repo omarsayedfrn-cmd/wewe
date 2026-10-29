@@ -4,12 +4,18 @@ import '../models/engine.dart';
 import '../models/entitlement.dart';
 import '../models/product.dart';
 import '../models/trial_info.dart';
+import '../services/answers_service.dart';
 import '../services/engine_service.dart';
 import 'auth_provider.dart';
 
 /// Engine service provider.
 final engineServiceProvider = Provider<EngineService>((ref) {
   return EngineService(ref.watch(supabaseProvider));
+});
+
+/// Server-backed answer bank provider.
+final answersServiceProvider = Provider<AnswersService>((ref) {
+  return AnswersService(ref.watch(supabaseProvider));
 });
 
 /// User's accessible engines.

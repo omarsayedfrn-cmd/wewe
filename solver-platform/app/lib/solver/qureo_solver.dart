@@ -108,6 +108,10 @@ class QureoSolver {
 
   static final Map<String, List<CachedLecture>> _lectureCache = {};
 
+  /// Platform-authoritative chapter type (`review`/`test`) learned while
+  /// fetching chapter details. Falls back to the answer bank when unknown.
+  static final Map<String, String> _ctypeCache = {};
+
   static const String portalBase = 'https://me-portal.qureo.education';
   static const String tpBase = 'https://me-tp.qureo.education';
 
@@ -156,7 +160,7 @@ class QureoSolver {
     await pace.auth(500);
 
     if (course.isEn) {
-      await _runEn(start, end, trialMode, onProgress, onResume);
+      await _runEn(answers, start, end, trialMode, onProgress, onResume);
     } else {
       await _runAr(answers, start, end, trialMode, onProgress, onResume);
     }
@@ -194,31 +198,7 @@ class QureoSolver {
       await _completeLectures(cid.toString());
 
       log('--- بدء اختبار الفصل $cid');
-      await tp.req('PUT', '$tpBase/api/study/students/chapters/$cid/test', body: '{}');
-      await pace.step(40);
-
-      final prefix = ch.type == 'test' ? 'test-questions' : 'review-questions';
-      for (final q in ch.questions) {
-        final body = q.qtype == 'choice'
-            ? jsonEncode({'choice_id': q.choiceId ?? 0})
-            : jsonEncode({'answer_code': q.answerCode ?? ''});
-        final kind = q.qtype == 'choice' ? 'choice' : 'description';
-
-        final out = (await tp.req(
-          'PUT',
-          '$tpBase/api/study/students/$prefix/${q.qid}/answer/$kind',
-          body: body,
-        )).body;
-
-        if (out.contains('"complete"')) {
-          log('  سؤال ${q.qid} ($kind): مكتمل');
-        } else if (out.contains('"correct":true')) {
-          log('  سؤال ${q.qid} ($kind): صحيح');
-        } else {
-          log('  سؤال ${q.qid} ($kind): تم الإرسال');
-        }
-        await pace.step(20);
-      }
+      await _solveChapterVerified(cid.toString(), ch);
 
       onProgress?.call(i, chapters.length, 'فصل $cid');
       if (idx + 1 < chapters.length) {
@@ -240,6 +220,7 @@ class QureoSolver {
   }
 
   Future<void> _runEn(
+    Map<String, QChapter> answers,
     int start,
     int? end,
     bool trialMode,
@@ -284,14 +265,18 @@ class QureoSolver {
       }
 
       log('--- start test $cid');
-      await tp.req('PUT', '$tpBase/api/study/students/chapters/$cid/test', body: '{}');
-      await pace.step(40);
-
-      final prefix = ctype == 'test' ? 'test-questions' : 'review-questions';
-      final completed = await _solveTestEn(cid, ctype, prefix);
-      if (!completed) {
-        log('تنبيه: اختبار الفصل $cid غير مكتمل، سيتم تخطي الفصل التالي');
-        continue;
+      final ch = answers[cid];
+      if (ch != null && ch.questions.isNotEmpty) {
+        await _solveChapterVerified(cid, ch);
+      } else {
+        await tp.req('PUT', '$tpBase/api/study/students/chapters/$cid/test', body: '{}');
+        await pace.step(40);
+        final prefix = ctype == 'test' ? 'test-questions' : 'review-questions';
+        final completed = await _solveTestEn(cid, ctype, prefix);
+        if (!completed) {
+          log('تنبيه: اختبار الفصل $cid غير مكتمل، سيتم تخطي الفصل التالي');
+          continue;
+        }
       }
 
       onProgress?.call(i, chapterList.length, 'chapter $cid');
@@ -483,6 +468,8 @@ class QureoSolver {
     if (cached == null) {
       final chapRaw = await tp.req('GET', '$tpBase/api/study/chapters/$cid');
       final chapObj = requireJsonObject(chapRaw, 'chapter $cid');
+      final tt = chapObj['test_type']?.toString();
+      if (tt == 'test' || tt == 'review') _ctypeCache[cid] = tt!;
       final lectures = (chapObj['lectures'] as List<dynamic>?) ?? [];
       if (lectures.isEmpty) throw SolverStop('no lectures for $cid (locked?)');
 
@@ -543,6 +530,203 @@ class QureoSolver {
       }
       await tp.req('PUT', '$tpBase/api/study/students/lectures/${lec.lid}/complete', body: '{}');
       await pace.step(20);
+    }
+  }
+
+  /// Solves one chapter test from the answer bank, then verifies the platform's
+  /// result and, whenever the chapter is not PERFECT (diamond < 5), harvests the
+  /// platform's own correct answers and re-submits them.
+  ///
+  /// This makes the mobile engine self-healing: even if a bank answer is wrong
+  /// (or the grader disagrees with it), the correct answer is discovered from
+  /// the result endpoint and used until the chapter reaches diamond 5.
+  Future<void> _solveChapterVerified(String cid, QChapter ch) async {
+    final ctype = _resolveCtype(cid, ch.type);
+    final prefix = _prefixFor(ctype);
+
+    await tp.req('PUT', '$tpBase/api/study/students/chapters/$cid/test', body: '{}');
+    await pace.step(40);
+    final live = await _liveQuestions(cid);
+
+    final bank = _bankSource(ch);
+    var res = await _runPass(cid, ctype, prefix, live, bank, restart: false);
+    var diamond = _diamond(res);
+    log('  اختبار $cid: diamond=$diamond/5');
+
+    var attempt = 0;
+    while (diamond < 5 && attempt < 3) {
+      attempt++;
+      final fixes = _harvest(res);
+      if (fixes.isEmpty) {
+        log('  لا توجد إجابات مصححة متاحة للفصل $cid (تعذر الحصد)');
+        break;
+      }
+      log('  إصلاح الفصل $cid (محاولة $attempt): ${fixes.length} إجابة صحيحة من المنصة');
+      final merged = <String, Map<String, String>>{...bank, ...fixes};
+      res = await _runPass(cid, ctype, prefix, live, merged, restart: true);
+      diamond = _diamond(res);
+      log('  بعد الإصلاح: diamond=$diamond/5');
+    }
+
+    if (diamond >= 5) {
+      log('  الفصل $cid مكتمل بدرجة كاملة (PERFECT)');
+    } else {
+      log('  تنبيه: الفصل $cid توقف عند diamond=$diamond/5');
+    }
+  }
+
+  String _prefixFor(String ctype) => ctype == 'test' ? 'test-questions' : 'review-questions';
+
+  /// Platform-authoritative chapter type, falling back to the answer bank.
+  String _resolveCtype(String cid, String fallback) => _ctypeCache[cid] ?? fallback;
+
+  /// Live question list for a chapter (the test must be started first).
+  Future<List<Map<String, dynamic>>> _liveQuestions(String cid) async {
+    final raw = await tp.req('GET', '$tpBase/api/study/chapters/$cid/test');
+    return requireJsonArray(raw, 'live questions $cid')
+        .map((e) => e as Map<String, dynamic>)
+        .toList();
+  }
+
+  /// Answer bank indexed by question id -> {kind, val}.
+  Map<String, Map<String, String>> _bankSource(QChapter ch) {
+    final m = <String, Map<String, String>>{};
+    for (final q in ch.questions) {
+      m[q.qid.toString()] = q.qtype == 'choice'
+          ? {'kind': 'C', 'val': (q.choiceId ?? 0).toString()}
+          : {'kind': 'D', 'val': q.answerCode ?? ''};
+    }
+    return m;
+  }
+
+  /// Builds the answer plan following the platform's live question order, taking
+  /// each answer from [src] (harvested fixes override the bank).
+  List<Map<String, String>> _buildPlan(
+    List<Map<String, dynamic>> live,
+    Map<String, Map<String, String>> src,
+  ) {
+    final defaultCode =
+        course.contentId.contains('python') ? 'print("x")' : 'console.log("x")';
+    final plan = <Map<String, String>>[];
+    for (final item in live) {
+      final q = (item['question'] as Map<String, dynamic>?) ?? const {};
+      final qid = q['id']?.toString() ?? '';
+      if (qid.isEmpty) continue;
+      final qtype = q['type']?.toString() ?? 'choice';
+      final entry = src[qid];
+
+      if (qtype == 'choice') {
+        final choices = (item['choices'] as List<dynamic>?) ?? [];
+        final fallback = choices.isNotEmpty
+            ? ((choices[0] as Map<String, dynamic>)['id']?.toString() ?? '0')
+            : '0';
+        plan.add({'qid': qid, 'kind': 'C', 'val': entry?['val'] ?? fallback});
+      } else {
+        final descs = (item['descriptions'] as List<dynamic>?) ?? [];
+        final fallback = descs.isNotEmpty
+            ? ((descs[0] as Map<String, dynamic>)['code']?.toString() ?? '')
+            : '';
+        var val = entry?['val'] ?? '';
+        if (val.isEmpty) val = fallback.isNotEmpty ? fallback : defaultCode;
+        plan.add({'qid': qid, 'kind': 'D', 'val': val});
+      }
+    }
+    return plan;
+  }
+
+  Future<Map<String, dynamic>?> _runPass(
+    String cid,
+    String ctype,
+    String prefix,
+    List<Map<String, dynamic>> live,
+    Map<String, Map<String, String>> src, {
+    required bool restart,
+  }) async {
+    if (restart) {
+      await tp.req('PUT', '$tpBase/api/study/students/chapters/$cid/test', body: '{}');
+      await pace.step(40);
+    }
+    final plan = _buildPlan(live, src);
+    for (final p in plan) {
+      final qid = p['qid']!;
+      final val = p['val']!;
+      final String out;
+      if (p['kind'] == 'C') {
+        out = (await tp.req(
+          'PUT',
+          '$tpBase/api/study/students/$prefix/$qid/answer/choice',
+          body: jsonEncode({'choice_id': int.tryParse(val) ?? 0}),
+        )).body;
+      } else {
+        out = (await tp.req(
+          'PUT',
+          '$tpBase/api/study/students/$prefix/$qid/answer/description',
+          body: jsonEncode({'answer_code': val}),
+        )).body;
+      }
+      _logAnswer(qid, p['kind'] == 'C' ? 'choice' : 'description', out);
+      await pace.step(20);
+    }
+    return _getResult(cid, ctype);
+  }
+
+  Future<Map<String, dynamic>?> _getResult(String cid, String ctype) async {
+    final raw = await tp.req('GET', '$tpBase/api/study/students/chapters/$cid/$ctype/result');
+    if (!isSuccessJson(raw)) return null;
+    try {
+      final obj = jsonDecode(raw.body) as Map<String, dynamic>;
+      return (obj['result'] as Map<String, dynamic>?) ?? obj;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  int _diamond(Map<String, dynamic>? res) => (res?['diamond'] as num?)?.toInt() ?? 0;
+
+  /// Extracts the platform's correct answers from a result payload.
+  /// (review results are flat; test results are nested under `result`.)
+  Map<String, Map<String, String>> _harvest(Map<String, dynamic>? res) {
+    final m = <String, Map<String, String>>{};
+    if (res == null) return m;
+
+    final choiceResults = (res['choice_results'] as List<dynamic>?) ??
+        (res['choices'] as List<dynamic>?) ??
+        [];
+    for (final item in choiceResults) {
+      final cr = item as Map<String, dynamic>;
+      final qid = cr['question_id']?.toString() ?? '';
+      if (qid.isEmpty) continue;
+      for (final chItem in (cr['choices'] as List<dynamic>?) ?? []) {
+        final c = chItem as Map<String, dynamic>;
+        if (c['correct'] == true) {
+          final id = (c['choice'] as Map<String, dynamic>?)?['id']?.toString() ??
+              c['id']?.toString();
+          if (id != null && id.isNotEmpty) m[qid] = {'kind': 'C', 'val': id};
+          break;
+        }
+      }
+    }
+
+    for (final item in (res['description_results'] as List<dynamic>?) ?? []) {
+      final dr = item as Map<String, dynamic>;
+      final qid = dr['question_id']?.toString() ?? '';
+      final model = dr['model_answer']?.toString() ?? '';
+      if (qid.isNotEmpty && model.isNotEmpty) m[qid] = {'kind': 'D', 'val': model};
+    }
+    return m;
+  }
+
+  void _logAnswer(String qid, String kind, String out) {
+    if (out.contains('"already_answered"')) {
+      log('  سؤال $qid ($kind): تم مسبقاً');
+    } else if (out.contains('"complete"')) {
+      log('  سؤال $qid ($kind): مكتمل');
+    } else if (out.contains('"correct":true')) {
+      log('  سؤال $qid ($kind): صحيح');
+    } else if (out.trim() == '{}') {
+      log('  سؤال $qid ($kind): تم الإرسال');
+    } else {
+      log('  سؤال $qid ($kind): ${out.length > 120 ? out.substring(0, 120) : out}');
     }
   }
 

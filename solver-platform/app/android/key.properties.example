@@ -1,0 +1,6 @@
+# Release signing configuration (copy to key.properties).
+# NEVER commit key.properties or the .jks keystore to git.
+storePassword=CHANGE_ME
+keyPassword=CHANGE_ME
+keyAlias=solver-release
+storeFile=release-keystore.jks

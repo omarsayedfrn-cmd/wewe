@@ -12,6 +12,8 @@ export type Profile = {
   referred_by: string | null;
   trial_used: boolean;
   onboard_locked: boolean;
+  approved: boolean;
+  approved_at: string | null;
   platform_login: string | null;
   platform_login_norm: string | null;
   platform_bound_at: string | null;

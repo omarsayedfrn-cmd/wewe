@@ -92,14 +92,11 @@ class EngineDetailScreen extends ConsumerWidget {
         final loginNorm = profile.valueOrNull?.platformLoginNorm;
 
         final service = ref.read(engineServiceProvider);
-        // Tolerant: shows the engine as open even when the profile is unbound,
-        // so a student can re-bind their account from the solving screen.
+        // Owned and usable now: stamped for the bound account, or still
+        // unstamped (purchased before the first solve).
         final hasFull =
             service.hasEntitlement(userEntitlements, engineCode, null,
                 loginNorm: loginNorm);
-        // Strict: the engine is paid for the account currently bound.
-        final ownsForCurrentAccount =
-            loginNorm != null && hasFull;
 
         final trialInfo = trial.valueOrNull;
         final trialApplies = trialInfo != null &&
@@ -162,7 +159,7 @@ class EngineDetailScreen extends ConsumerWidget {
                     engine,
                     note: isBound
                         ? null
-                        : 'هذه المنصة مفتوحة لحساب محفوظ. اضغط «ابدأ حل المنصة» لإعادة ربط حسابك.',
+                        : 'هذه المنصة مفتوحة. اضغط «ابدأ حل المنصة» لربط حسابك وبدء الحل.',
                     onSolve: () =>
                         context.push('/engine/${engine.code}/solve'),
                   ),
@@ -181,7 +178,7 @@ class EngineDetailScreen extends ConsumerWidget {
                     _buildTrialFinishedCard(context),
                 ],
 
-                if (!ownsForCurrentAccount) ...[
+                if (!hasFull) ...[
                   const SizedBox(height: 16),
                   _buildPurchaseCard(
                     context,
@@ -511,9 +508,8 @@ class EngineDetailScreen extends ConsumerWidget {
         title: Text('فك ربط الحساب',
             style: TextStyle(color: context.t.onSurface)),
         content: Text(
-          'أنت اشتريت حق استخدام حساب واحد فقط. لو فكّيت الربط — حتى لو لسه '
-          'ما حلّيتش المنصة للحساب ده — الحق هيتلغى وتضطر تشتري لحساب تاني.\n\n'
-          'لو هترجّع نفس الحساب تاني، اشتراكاتك هترجع زي ما هي.',
+          'أنت اشتريت حق استخدام حساب واحد فقط. فكّ الربط يلغي اشتراكاتك في '
+          'كل المحركات نهائيًا، وتضطر تشتري من جديد لو حبيت تفتح أي منصة تانية.',
           style: TextStyle(color: context.t.onSurface, height: 1.6),
         ),
         actions: [
@@ -526,6 +522,8 @@ class EngineDetailScreen extends ConsumerWidget {
               Navigator.pop(ctx);
               try {
                 await ref.read(profileProvider.notifier).unbindPlatformAccount();
+                ref.invalidate(entitlementsProvider);
+                ref.invalidate(trialInfoProvider);
                 final userId =
                     ref.read(supabaseProvider).auth.currentUser?.id;
                 if (userId != null) {

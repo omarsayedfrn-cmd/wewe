@@ -42,11 +42,9 @@ export default async function UsersPage() {
     }
 
     const balance = p.wallets?.[0]?.balance ?? p.wallets?.balance ?? 0;
-    const enginesCount = p.engine_access?.[0]?.count ?? 0;
 
-    // Determine pending status:
-    // If student has 0 balance AND no engines granted yet, or onboard not locked
-    const isPending = p.role === 'student' && balance === 0 && enginesCount === 0;
+    // Pending until an admin approves the account (non-students are always on).
+    const isPending = p.role === 'student' && p.approved === false;
 
     userRows.push({
       id: p.id,

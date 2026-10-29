@@ -103,6 +103,8 @@ export default async function UserDetailPage({
             userId={profile.id}
             engines={engines}
             platformLogin={profile.platform_login}
+            approved={profile.approved}
+            role={profile.role}
           />
         </div>
       </div>
@@ -159,6 +161,12 @@ export default async function UserDetailPage({
               <span className="text-[#9E9E9E]">قفل الاختيار (Onboard):</span>
               <span className={profile.onboard_locked ? 'text-[#4CAF50]' : 'text-[#CF6679]'}>
                 {profile.onboard_locked ? 'مقفول ✅' : 'مفتوح ⚠️'}
+              </span>
+            </div>
+            <div className="flex justify-between py-1.5 border-b border-[#2A2A2A]">
+              <span className="text-[#9E9E9E]">حالة الحساب:</span>
+              <span className={profile.approved ? 'text-[#4CAF50]' : 'text-[#D4AF37]'}>
+                {profile.approved ? 'مفعّل' : 'قيد المراجعة'}
               </span>
             </div>
             <div className="flex justify-between py-1.5">

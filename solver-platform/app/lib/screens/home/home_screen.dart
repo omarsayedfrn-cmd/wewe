@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/profile.dart';
 import '../../providers/auth_provider.dart';
+import '../auth/pending_screen.dart';
 import 'engines_tab.dart';
 import 'wallet_tab.dart';
 import 'profile_tab.dart';
@@ -47,6 +48,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) context.go('/onboarding');
       });
+    }
+
+    // New accounts stay locked until an admin approves them (anti-spam).
+    final p = profile.valueOrNull;
+    if (user != null && p != null && p.onboardLocked && !p.isApproved) {
+      return const PendingScreen();
     }
 
     return Scaffold(
