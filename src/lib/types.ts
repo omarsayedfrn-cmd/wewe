@@ -122,6 +122,12 @@ export const languageLabels: Record<string, string> = {
   en: 'لغات',
 };
 
+export const roleLabels: Record<string, string> = {
+  student: 'طالب',
+  merchant: 'تاجر',
+  admin: 'أدمن',
+};
+
 export const reasonLabels: Record<string, string> = {
   purchase: 'شراء',
   recharge: 'شحن',
