@@ -11,6 +11,7 @@ import {
   BarChart3,
   Shield,
   Rocket,
+  Bell,
   Home,
 } from 'lucide-react';
 
@@ -21,6 +22,7 @@ const navItems = [
   { href: '/products', label: 'المنتجات', icon: Package },
   { href: '/pricing', label: 'الأسعار', icon: DollarSign },
   { href: '/support', label: 'الدعم', icon: MessageCircle },
+  { href: '/notifications', label: 'الإشعارات', icon: Bell },
   { href: '/analytics', label: 'التحليلات', icon: BarChart3 },
   { href: '/settings', label: 'الإعدادات', icon: Settings },
   { href: '/audit', label: 'سجل التدقيق', icon: Shield },

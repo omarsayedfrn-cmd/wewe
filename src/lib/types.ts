@@ -90,6 +90,20 @@ export type SupportMessage = {
   created_at: string;
 };
 
+export type NotificationKind = 'info' | 'warning' | 'success';
+
+export type Notification = {
+  id: string;
+  user_id: string;
+  broadcast_id: string;
+  title: string;
+  body: string;
+  kind: NotificationKind;
+  is_read: boolean;
+  created_by: string | null;
+  created_at: string;
+};
+
 export type Setting = {
   key: string;
   value: string | number | Record<string, unknown>;
