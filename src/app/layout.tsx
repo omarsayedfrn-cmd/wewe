@@ -3,13 +3,21 @@ import './globals.css';
 import { AppShell } from '@/components/app-shell';
 
 export const metadata: Metadata = {
-  title: 'Solver Dashboard',
+  title: 'Solver Admin',
   description: 'لوحة إدارة منصة Solver',
+  applicationName: 'Solver Admin',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Solver Admin',
+  },
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 1,
   viewportFit: 'cover',
   themeColor: '#121212',
 };

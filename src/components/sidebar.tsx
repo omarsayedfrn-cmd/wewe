@@ -12,11 +12,13 @@ import {
   Shield,
   Rocket,
   Bell,
+  BellRing,
   Home,
 } from 'lucide-react';
 
 const navItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
+  { href: '/alerts', label: 'التنبيهات', icon: BellRing },
   { href: '/users', label: 'المستخدمين', icon: Users },
   { href: '/engines', label: 'المحركات', icon: Rocket },
   { href: '/products', label: 'المنتجات', icon: Package },
