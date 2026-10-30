@@ -9,6 +9,7 @@ export const config = {
   matcher: [
     // API routes verify the admin session themselves, so skipping the proxy
     // removes two extra Supabase round-trips from every dashboard action.
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    // Static metadata (manifest, icons, robots, sitemap) must stay public too.
+    '/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|robots.txt|sitemap.xml|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|webmanifest)$).*)',
   ],
 };
