@@ -10,6 +10,12 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
     trial_chapters_grade1: initialSettings['trial_chapters_grade1'] ?? 5,
     trial_chapters_grade2_engineering: initialSettings['trial_chapters_grade2_engineering'] ?? 10,
     trial_chapters_grade2_other: initialSettings['trial_chapters_grade2_other'] ?? 1,
+    app_min_build: initialSettings['app_min_build'] ?? 0,
+    app_update_url:
+      initialSettings['app_update_url'] ?? 'https://solver-app.site/downloads/Solver-Platform.apk',
+    app_update_message:
+      initialSettings['app_update_message'] ??
+      'يتوفر إصدار أحدث من التطبيق يتضمن تحسينات وإصلاحات مهمة. يرجى تحديث التطبيق للمتابعة.',
   });
 
   const [saving, setSaving] = useState(false);
@@ -143,6 +149,59 @@ export function SettingsForm({ initialSettings }: { initialSettings: Record<stri
                 })
               }
               className="w-full px-3.5 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0]"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Force Update */}
+      <div className="bg-[#1E1E1E] border border-[#2A2A2A] rounded-2xl p-4 sm:p-6">
+        <h3 className="font-bold text-[#D4AF37] mb-4">تحديثات التطبيق (Force Update)</h3>
+        <p className="text-xs text-[#9E9E9E] mb-4">
+          أدنى رقم بناء مسموح به. الطلاب على نسخة أقدم من هذا الرقم يُقفل التطبيق
+          عندهم حتى التحديث. القيمة 0 تعطّل الإلزام.
+        </p>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm text-[#E0E0E0] mb-1">
+              أدنى رقم بناء إلزامي (Build)
+            </label>
+            <input
+              type="number"
+              min="0"
+              value={form.app_min_build}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  app_min_build: parseInt(e.target.value, 10) || 0,
+                })
+              }
+              className="w-full px-3.5 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-[#E0E0E0] mb-1">
+              رابط تحميل أحدث نسخة (APK)
+            </label>
+            <input
+              type="url"
+              dir="ltr"
+              value={form.app_update_url}
+              onChange={(e) => setForm({ ...form, app_update_url: e.target.value })}
+              className="w-full px-3.5 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-[#E0E0E0] mb-1">
+              رسالة التحديث الظاهرة للطالب
+            </label>
+            <textarea
+              rows={3}
+              value={form.app_update_message}
+              onChange={(e) => setForm({ ...form, app_update_message: e.target.value })}
+              className="w-full px-3.5 py-2 bg-[#2A2A2A] border border-[#3A3A3A] rounded-xl text-[#E0E0E0] resize-none"
             />
           </div>
         </div>
