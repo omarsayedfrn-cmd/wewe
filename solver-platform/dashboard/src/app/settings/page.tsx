@@ -22,7 +22,7 @@ export default async function SettingsPage() {
       <div>
         <h1 className="text-2xl font-bold text-[#D4AF37]">إعدادات المنظومة</h1>
         <p className="text-sm text-[#9E9E9E] mt-1">
-          تعديل مكافآت الإحالة وحدود التجربة المجانية لمختلف المراحل الدراسية
+          تعديل مكافآت الإحالة، حدود التجربة المجانية، وسياسة تحديث التطبيق الإجباري
         </p>
       </div>
 
